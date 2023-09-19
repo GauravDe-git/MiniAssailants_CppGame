@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="inc\aligned_unique_ptr.hpp" />
+    <ClInclude Include="inc\Graphics\BlendMode.hpp" />
+    <ClInclude Include="inc\Graphics\Color.hpp" />
+    <ClInclude Include="inc\Graphics\Config.hpp" />
+    <ClInclude Include="inc\Graphics\Enums.hpp" />
+    <ClInclude Include="inc\Graphics\Events.hpp" />
+    <ClInclude Include="inc\Graphics\File.hpp" />
+    <ClInclude Include="inc\Graphics\Font.hpp" />
+    <ClInclude Include="inc\Graphics\GamePad.hpp" />
+    <ClInclude Include="inc\Graphics\GamePadState.hpp" />
+    <ClInclude Include="inc\Graphics\GamePadStateTracker.hpp" />
+    <ClInclude Include="inc\Graphics\Image.hpp" />
+    <ClInclude Include="inc\Graphics\Input.hpp" />
+    <ClInclude Include="inc\Graphics\Keyboard.hpp" />
+    <ClInclude Include="inc\Graphics\KeyboardState.hpp" />
+    <ClInclude Include="inc\Graphics\KeyboardStateTracker.hpp" />
+    <ClInclude Include="inc\Graphics\KeyCodes.hpp" />
+    <ClInclude Include="inc\Graphics\Mouse.hpp" />
+    <ClInclude Include="inc\Graphics\MouseState.hpp" />
+    <ClInclude Include="inc\Graphics\MouseStateTracker.hpp" />
+    <ClInclude Include="inc\Graphics\ResourceManager.hpp" />
+    <ClInclude Include="inc\Graphics\Sprite.hpp" />
+    <ClInclude Include="inc\Graphics\SpriteAnim.hpp" />
+    <ClInclude Include="inc\Graphics\SpriteSheet.hpp" />
+    <ClInclude Include="inc\Graphics\TileMap.hpp" />
+    <ClInclude Include="inc\Graphics\Timer.hpp" />
+    <ClInclude Include="inc\Graphics\Vertex.hpp" />
+    <ClInclude Include="inc\Graphics\Window.hpp" />
+    <ClInclude Include="inc\Graphics\WindowHandle.hpp" />
+    <ClInclude Include="inc\Graphics\WindowImpl.hpp" />
+    <ClInclude Include="inc\stb_easy_font.h" />
+    <ClInclude Include="inc\stb_image.h" />
+    <ClInclude Include="inc\stb_image_write.h" />
+    <ClInclude Include="inc\stb_truetype.h" />
+    <ClInclude Include="src\Win32\IncludeWin32.hpp" />
+    <ClInclude Include="src\Win32\WindowWin32.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\BlendMode.cpp" />
+    <ClCompile Include="src\Color.cpp" />
+    <ClCompile Include="src\Font.cpp" />
+    <ClCompile Include="src\GamePad.cpp" />
+    <ClCompile Include="src\GamePadStateTracker.cpp" />
+    <ClCompile Include="src\Image.cpp" />
+    <ClCompile Include="src\Input.cpp" />
+    <ClCompile Include="src\Keyboard.cpp" />
+    <ClCompile Include="src\KeyboardState.cpp" />
+    <ClCompile Include="src\KeyboardStateTracker.cpp" />
+    <ClCompile Include="src\Mouse.cpp" />
+    <ClCompile Include="src\ResourceManager.cpp" />
+    <ClCompile Include="src\SpriteAnim.cpp" />
+    <ClCompile Include="src\SpriteSheet.cpp" />
+    <ClCompile Include="src\stb_image.cpp" />
+    <ClCompile Include="src\stb_image_write.cpp" />
+    <ClCompile Include="src\stb_truetype.cpp" />
+    <ClCompile Include="src\TileMap.cpp" />
+    <ClCompile Include="src\Timer.cpp" />
+    <ClCompile Include="src\Win32\GamepadXInput.cpp" />
+    <ClCompile Include="src\Win32\KeyboardWin32.cpp" />
+    <ClCompile Include="src\Win32\MouseWin32.cpp" />
+    <ClCompile Include="src\Win32\WindowWin32.cpp" />
+    <ClCompile Include="src\Window.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="src\FragmentShader.glsl" />
+    <None Include="src\VertexShader.glsl" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>16.0</VCProjectVersion>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectGuid>{b5d1f438-b4bc-4455-bdc9-75e035c86f88}</ProjectGuid>
+    <RootNamespace>graphics</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v143</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <OutDir>$(SolutionDir)lib\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>inc;..\externals\glad\include;..\externals\fmt-10.1.0\include;..\externals\glm-0.9.9.8;..\math\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\lib\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmt.lib;glad.lib;math.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>$(SolutionDir)lib\$(Configuration)\$(TargetName).lib</ImportLibrary>
+      <ProgramDatabaseFile>$(SolutionDir)lib\$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>inc;..\externals\glad\include;..\externals\fmt-10.1.0\include;..\externals\glm-0.9.9.8;..\math\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+    </ClCompile>
+    <Link>
+      <SubSystem>
+      </SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>..\lib\$(Configuration)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>fmt.lib;glad.lib;math.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImportLibrary>$(SolutionDir)lib\$(Configuration)\$(TargetName).lib</ImportLibrary>
+      <ProgramDatabaseFile>$(SolutionDir)lib\$(Configuration)\$(TargetName).pdb</ProgramDatabaseFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
