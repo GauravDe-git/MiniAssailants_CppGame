@@ -7,6 +7,8 @@ using namespace Graphics;
 using WindowType = WindowWin32;
 #endif
 
+Window::Window() = default;
+
 Window::Window(std::wstring_view title, int width, int height)
 {
     create(title, width, height);
