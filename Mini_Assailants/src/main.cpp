@@ -16,10 +16,9 @@ using namespace Graphics;
 
 Window window;
 Image image;
-Sprite sprite;
 
-const int SCREEN_WIDTH = 400;
-const int SCREEN_HEIGHT = 300;
+const int SCREEN_WIDTH = 480;
+const int SCREEN_HEIGHT = 270;
 
 float player_X = SCREEN_WIDTH / 2;
 float player_Y = SCREEN_HEIGHT / 2;
@@ -29,6 +28,9 @@ int main()
 {
 	auto idleSprites = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	SpriteAnim playerIdleAnim(idleSprites,10.0f);
+
+	auto backgroundStage1 = ResourceManager::loadImage("assets/textures/stage1.png");
+	Sprite bg1Sprite(backgroundStage1);
 
 	//Initialization Settings:
 	image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -75,9 +77,11 @@ int main()
 
 		playerIdleAnim.update(timer.elapsedSeconds());
 
-		image.clear(Color::Black);
+		image.clear(Color::White);
 
 		// Draw Sprites here (Render Loop)
+
+		image.drawSprite(bg1Sprite, 0, 0);
 
 		image.drawSprite(playerIdleAnim, static_cast<int>(player_X), static_cast<int>(player_Y));
 
