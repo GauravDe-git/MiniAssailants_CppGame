@@ -5,6 +5,8 @@
 #include"Graphics/ResourceManager.hpp" //It includes font.hpp   *Transitive Includes*
 #include"Graphics/SpriteAnim.hpp"      //It includes spritesheet.hpp
 #include"Graphics/Timer.hpp"
+//#include"Graphics/Keyboard.hpp" for Simple Keyboard mapping
+#include"Graphics/Input.hpp" // For pre-configured mapping
 
 #include <fmt/core.h>
 
@@ -19,10 +21,14 @@ Sprite sprite;
 const int SCREEN_WIDTH = 400;
 const int SCREEN_HEIGHT = 300;
 
+float player_X = SCREEN_WIDTH / 2;
+float player_Y = SCREEN_HEIGHT / 2;
+float playerSpeed = 60.0f;
+
 int main()
 {
 	auto idleSprites = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
-	SpriteAnim idleAnim(idleSprites,10.0f);
+	SpriteAnim playerIdleAnim(idleSprites,10.0f);
 
 	//Initialization Settings:
 	image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -42,13 +48,38 @@ int main()
 
 		// Game Logic Here (Update Loop)
 
-		idleAnim.update(timer.elapsedSeconds());
+		//Updating the input state and mapping player movement
+		Input::update();
+		player_X += Input::getAxis("Horizontal") * playerSpeed * timer.elapsedSeconds();
+		player_Y -= Input::getAxis("Vertical") * playerSpeed * timer.elapsedSeconds();
+
+		//By Simply Using Keyboard class instead of Input.hpp pre-defined mappings:-
+		
+		/*auto keyState = Keyboard::getState();
+		if (keyState.W)
+		{
+			player_Y -= playerSpeed * timer.elapsedSeconds();
+		}
+		if (keyState.S)
+		{
+			player_Y += playerSpeed * timer.elapsedSeconds();
+		}
+		if (keyState.A)
+		{
+			player_X -= playerSpeed * timer.elapsedSeconds();
+		}
+		if (keyState.D)
+		{
+			player_X += playerSpeed * timer.elapsedSeconds();
+		}*/
+
+		playerIdleAnim.update(timer.elapsedSeconds());
 
 		image.clear(Color::Black);
 
 		// Draw Sprites here (Render Loop)
 
-		image.drawSprite(idleAnim, SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+		image.drawSprite(playerIdleAnim, static_cast<int>(player_X), static_cast<int>(player_Y));
 
 		image.drawText(Font::Default, fps, 10, 10, Color::White);
 
@@ -59,18 +90,21 @@ int main()
 		{
 			switch (event.type)
 			{
-			case Event::Close:
-				window.destroy();
-				break;
-			case Event::KeyPressed:
-			{
-				switch (event.key.code)
-				{
-				case KeyCode::Escape:
+				case Event::Close:
 					window.destroy();
 					break;
+				case Event::KeyPressed:
+				{
+					switch (event.key.code)
+					{
+					case KeyCode::Escape:
+						window.destroy();
+						break;
+					case KeyCode::V:
+						window.toggleVSync();
+						break;
+					}
 				}
-			}
 			}
 		}
 
