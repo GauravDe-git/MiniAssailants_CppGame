@@ -1,3 +1,4 @@
+#include "../Player.hpp"
 
 #include"Graphics/Window.hpp"
 #include"Graphics/Image.hpp"
@@ -20,14 +21,13 @@ Image image;
 const int SCREEN_WIDTH = 480;
 const int SCREEN_HEIGHT = 270;
 
-float player_X = SCREEN_WIDTH / 2;
-float player_Y = SCREEN_HEIGHT / 2;
-float playerSpeed = 60.0f;
+Player player;
 
 int main()
 {
 	auto idleSprites = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
-	SpriteAnim playerIdleAnim(idleSprites,10.0f);
+	//SpriteAnim playerIdleAnim(idleSprites,10.0f);
+	player = Player{ {SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 },SpriteAnim{idleSprites,10.0f} };
 
 	auto backgroundStage1 = ResourceManager::loadImage("assets/textures/stage1.png");
 	Sprite bg1Sprite(backgroundStage1);
@@ -50,32 +50,9 @@ int main()
 
 		// Game Logic Here (Update Loop)
 
-		//Updating the input state and mapping player movement
 		Input::update();
-		player_X += Input::getAxis("Horizontal") * playerSpeed * timer.elapsedSeconds();
-		player_Y -= Input::getAxis("Vertical") * playerSpeed * timer.elapsedSeconds();
 
-		//By Simply Using Keyboard class instead of Input.hpp pre-defined mappings:-
-		
-		/*auto keyState = Keyboard::getState();
-		if (keyState.W)
-		{
-			player_Y -= playerSpeed * timer.elapsedSeconds();
-		}
-		if (keyState.S)
-		{
-			player_Y += playerSpeed * timer.elapsedSeconds();
-		}
-		if (keyState.A)
-		{
-			player_X -= playerSpeed * timer.elapsedSeconds();
-		}
-		if (keyState.D)
-		{
-			player_X += playerSpeed * timer.elapsedSeconds();
-		}*/
-
-		playerIdleAnim.update(timer.elapsedSeconds());
+		player.update(timer.elapsedSeconds());
 
 		image.clear(Color::White);
 
@@ -83,7 +60,7 @@ int main()
 
 		image.copy(*backgroundStage1, 0, 0);
 
-		image.drawSprite(playerIdleAnim, static_cast<int>(player_X), static_cast<int>(player_Y));
+		player.Draw(image);
 
 		image.drawText(Font::Default, fps, 10, 10, Color::White);
 
