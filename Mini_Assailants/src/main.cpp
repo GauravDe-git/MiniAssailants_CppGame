@@ -81,7 +81,7 @@ int main()
 
 		// Draw Sprites here (Render Loop)
 
-		image.drawSprite(bg1Sprite, 0, 0);
+		image.copy(*backgroundStage1, 0, 0);
 
 		image.drawSprite(playerIdleAnim, static_cast<int>(player_X), static_cast<int>(player_Y));
 
