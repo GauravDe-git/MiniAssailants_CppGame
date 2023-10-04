@@ -1,13 +1,12 @@
-#include "../Player.hpp"
+#include <Player.hpp>
 
 #include"Graphics/Window.hpp"
 #include"Graphics/Image.hpp"
 #include"Graphics/Sprite.hpp"
-#include"Graphics/ResourceManager.hpp" //It includes font.hpp   *Transitive Includes*
-#include"Graphics/SpriteAnim.hpp"      //It includes spritesheet.hpp
+#include"Graphics/ResourceManager.hpp"
+#include"Graphics/SpriteAnim.hpp"      
 #include"Graphics/Timer.hpp"
-//#include"Graphics/Keyboard.hpp" for Simple Keyboard mapping
-#include"Graphics/Input.hpp" // For pre-configured mapping
+#include"Graphics/Input.hpp" 
 
 #include <fmt/core.h>
 
@@ -26,7 +25,6 @@ Player player;
 int main()
 {
 	auto idleSprites = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
-	//SpriteAnim playerIdleAnim(idleSprites,10.0f);
 	player = Player{ {SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 },SpriteAnim{idleSprites,10.0f} };
 
 	auto backgroundStage1 = ResourceManager::loadImage("assets/textures/stage1.png");
@@ -37,7 +35,6 @@ int main()
 
 	window.create(L"Mini Assailants", SCREEN_WIDTH,SCREEN_HEIGHT);
 	window.show();
-	//window.setVSync(false);
 
 	Timer timer;
 	double      totalTime = 0.0;
