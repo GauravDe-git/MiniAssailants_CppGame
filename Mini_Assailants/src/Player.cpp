@@ -26,10 +26,10 @@ void Player::Draw(Image& image)
 {
 	image.drawSprite(sprite, position.x, position.y);
 
-	//#if _DEBUG
-	//	// Draw AABB
-	//	image.drawAABB(aabb, Color::Yellow, {}, FillMode::WireFrame);
-	//#endif
+	#if _DEBUG
+		// Draw AABB
+		image.drawAABB(aabb, Color::Yellow, {}, FillMode::WireFrame);
+	#endif
 }
 
 void Player::setPosition(const glm::vec2& pos)
