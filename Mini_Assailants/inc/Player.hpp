@@ -20,11 +20,13 @@ public:
 	void setPosition(const glm::vec2& pos);
 	const glm::vec2& getPosition() const;
 
+	void translate(const glm::vec2& t);
+
 	const Math::AABB getAABB() const;
 
 private:
 	glm::vec2 position{ 0 };
-	float speed{ 60.0f };
+	float speed{ 80.0f };
 	Graphics::SpriteAnim sprite;
 	Math::AABB aabb;
 };

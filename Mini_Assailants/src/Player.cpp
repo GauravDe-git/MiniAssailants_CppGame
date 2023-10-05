@@ -9,7 +9,7 @@ Player::Player() = default;
 Player::Player(const glm::vec2& pos, const SpriteAnim& _sprite)
 	:position{ pos }
 	, sprite{ _sprite }
-	, aabb{ {0,0,0},{16,16,0} }
+	, aabb{ {9,65,0},{31,117,0} }
 {
 
 }
@@ -28,7 +28,7 @@ void Player::Draw(Image& image)
 
 	#if _DEBUG
 		// Draw AABB
-		image.drawAABB(aabb, Color::Yellow, {}, FillMode::WireFrame);
+		image.drawAABB(getAABB(), Color::Yellow, {}, FillMode::WireFrame);
 	#endif
 }
 
@@ -40,6 +40,11 @@ void Player::setPosition(const glm::vec2& pos)
 const glm::vec2& Player::getPosition() const
 {
 	return position;
+}
+
+void Player::translate(const glm::vec2& t)
+{
+	position += t;
 }
 
 const Math::AABB Player::getAABB() const

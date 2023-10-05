@@ -47,9 +47,33 @@ int main()
 
 		// Game Logic Here (Update Loop)
 
-		Input::update();
-
+		//Updating Input state
+		Input::update(); 
 		player.update(timer.elapsedSeconds());
+
+		//Check collision with player (screen-space)
+		{
+			auto aabb = player.getAABB();
+			glm::vec2 correction{ 0 };
+			if (aabb.min.x < 0)
+			{
+				correction.x = -aabb.min.x;
+			}
+			if (aabb.min.y < 0)
+			{
+				correction.y = -aabb.min.y;
+			}
+			if (aabb.max.x >= image.getWidth())
+			{
+				correction.x = image.getWidth() - aabb.max.x;
+			}
+			if (aabb.max.y >= image.getHeight())
+			{
+				correction.y = image.getHeight() - aabb.max.y;
+			}
+			//Apply correction
+			player.translate(correction);
+		}
 
 		image.clear(Color::White);
 
