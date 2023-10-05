@@ -8,6 +8,13 @@
 class Player
 {
 public:
+	enum class State
+	{
+		None,
+		Idle,
+		Walking
+	};
+
 	// Default constructor
 	Player();
 
@@ -25,7 +32,11 @@ public:
 	const Math::AABB getAABB() const;
 
 private:
+	void setState(State newState);
+
+	State state = State::None;
 	glm::vec2 position{ 0 };
+	glm::vec2 velocity{ 0 };
 	float speed{ 80.0f };
 	Graphics::SpriteAnim sprite;
 	Math::AABB aabb;
