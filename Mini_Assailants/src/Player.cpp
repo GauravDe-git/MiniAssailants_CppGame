@@ -2,8 +2,10 @@
 
 #include"Graphics/Input.hpp"
 #include"Graphics/Font.hpp"
+#include"Math/Camera2D.hpp"
 
 using namespace Graphics;
+using namespace Math;
 
 Player::Player() = default;
 
@@ -36,7 +38,7 @@ void Player::update(float deltaTime)
 	sprite.update(deltaTime);
 }
 
-void Player::Draw(Image& image)
+void Player::Draw(Image& image, const Camera2D& camera)
 {
 	//Conditionally draw sprite based on state-
 	switch (state)
@@ -46,6 +48,7 @@ void Player::Draw(Image& image)
 		break;
 	case State::Walking:
 		//Draw walking sprite anim
+		image.drawSprite(sprite, position.x, position.y);
 		break;
 	}
 

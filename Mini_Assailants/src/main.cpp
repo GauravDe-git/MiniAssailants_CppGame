@@ -6,16 +6,19 @@
 #include"Graphics/ResourceManager.hpp"
 #include"Graphics/SpriteAnim.hpp"      
 #include"Graphics/Timer.hpp"
-#include"Graphics/Input.hpp" 
+#include"Graphics/Input.hpp"
+#include"Math/Camera2D.hpp"
 
 #include <fmt/core.h>
 
 #include <iostream>
 
 using namespace Graphics;
+using namespace Math;
 
 Window window;
 Image image;
+Camera2D camera;
 
 const int SCREEN_WIDTH = 480;
 const int SCREEN_HEIGHT = 270;
@@ -35,6 +38,7 @@ int main()
 
 	window.create(L"Mini Assailants", SCREEN_WIDTH,SCREEN_HEIGHT);
 	window.show();
+	window.setFullscreen(true);
 
 	Timer timer;
 	double      totalTime = 0.0;
@@ -51,29 +55,31 @@ int main()
 		Input::update(); 
 		player.update(timer.elapsedSeconds());
 
-		//Check collision with player (screen-space)
-		{
-			auto aabb = player.getAABB();
-			glm::vec2 correction{ 0 };
-			if (aabb.min.x < 0)
-			{
-				correction.x = -aabb.min.x;
-			}
-			if (aabb.min.y < 0)
-			{
-				correction.y = -aabb.min.y;
-			}
-			if (aabb.max.x >= image.getWidth())
-			{
-				correction.x = image.getWidth() - aabb.max.x;
-			}
-			if (aabb.max.y >= image.getHeight())
-			{
-				correction.y = image.getHeight() - aabb.max.y;
-			}
-			//Apply correction
-			player.translate(correction);
-		}
+		camera.setPosition(player.getPosition());
+
+		//Check collision with player (screen-space) *Only works with Static_Camera*
+		//{
+		//	auto aabb = player.getAABB();
+		//	glm::vec2 correction{ 0 };
+		//	if (aabb.min.x < 0)
+		//	{
+		//		correction.x = -aabb.min.x;
+		//	}
+		//	if (aabb.min.y < 0)
+		//	{
+		//		correction.y = -aabb.min.y;
+		//	}
+		//	if (aabb.max.x >= image.getWidth())
+		//	{
+		//		correction.x = image.getWidth() - aabb.max.x;
+		//	}
+		//	if (aabb.max.y >= image.getHeight())
+		//	{
+		//		correction.y = image.getHeight() - aabb.max.y;
+		//	}
+		//	//Apply correction
+		//	player.translate(correction);
+		//}
 
 		image.clear(Color::White);
 

@@ -5,6 +5,11 @@
 
 #include <glm/vec2.hpp>
 
+namespace Math
+{
+	class Camera2D;
+}
+
 class Player
 {
 public:
@@ -22,7 +27,7 @@ public:
 
 	void update(float deltaTime);
 
-	void Draw(Graphics::Image& image);
+	void Draw(Graphics::Image& image,const Math::Camera2D& camera);
 
 	void setPosition(const glm::vec2& pos);
 	const glm::vec2& getPosition() const;
