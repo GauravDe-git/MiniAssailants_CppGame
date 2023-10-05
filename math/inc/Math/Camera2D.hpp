@@ -25,6 +25,12 @@ public:
     /// <param name="zoom">The zoom of the camera.</param>
     explicit Camera2D( const glm::vec2& position = glm::vec2 { 0 }, const glm::vec2& origin = glm::vec2 { 0 }, float rotation = 0.0f, float zoom = 1.0f ) noexcept;
 
+    // Allow implicit conversion to mat3.
+    operator const glm::mat3& () const
+    {
+		return getTransform();
+    }
+
     /// <summary>
     /// Reset the camera to its default state.
     /// </summary>

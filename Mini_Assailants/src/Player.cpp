@@ -44,11 +44,11 @@ void Player::Draw(Image& image, const Camera2D& camera)
 	switch (state)
 	{
 	case State::Idle:
-		image.drawSprite(sprite, position.x, position.y);
+		image.drawSprite(sprite, camera.getTransform());
 		break;
 	case State::Walking:
 		//Draw walking sprite anim
-		image.drawSprite(sprite, position.x, position.y);
+		image.drawSprite(sprite, camera.getTransform());
 		break;
 	}
 
