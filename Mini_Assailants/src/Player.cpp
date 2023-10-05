@@ -1,8 +1,8 @@
-#include<Player.hpp>
+#include <Player.hpp>
 
-#include"Graphics/Input.hpp"
-#include"Graphics/Font.hpp"
-#include"Math/Camera2D.hpp"
+#include <Graphics/Input.hpp>
+#include <Graphics/Font.hpp>
+#include <Math/Camera2D.hpp>
 
 using namespace Graphics;
 using namespace Math;
@@ -38,24 +38,24 @@ void Player::update(float deltaTime)
 	sprite.update(deltaTime);
 }
 
-void Player::Draw(Image& image, const Camera2D& camera)
+void Player::Draw(Image& image, const glm::vec2& offset)
 {
 	//Conditionally draw sprite based on state-
 	switch (state)
 	{
 	case State::Idle:
-		image.drawSprite(sprite, camera.getTransform());
+		image.drawSprite(sprite, position + offset);
 		break;
 	case State::Walking:
 		//Draw walking sprite anim
-		image.drawSprite(sprite, camera.getTransform());
+		image.drawSprite(sprite, position + offset);
 		break;
 	}
 
 	#if _DEBUG
 		// Draw AABB
-		image.drawAABB(getAABB(), Color::Yellow, {}, FillMode::WireFrame);
-		image.drawText(Font::Default, "State:..?", position.x, position.y + 50, Color::Yellow);
+	image.drawAABB(getAABB() + glm::vec3{offset, 0}, Color::Yellow, {}, FillMode::WireFrame);
+	image.drawText(Font::Default, "State:..?", position + offset + glm::vec2{0, 50}, Color::Yellow);
 	#endif
 }
 

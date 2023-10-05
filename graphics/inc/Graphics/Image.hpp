@@ -127,6 +127,10 @@ public:
     /// <param name="x">The x-coordinate of the top-left corner of the destination image.</param>
     /// <param name="y">The y-coordinate of the top-left corner of the destination image.</param>
     void copy( const Image& srcImage, int x, int y );
+    void copy(const Image& srcImage, const glm::vec2& v )
+    {
+        copy(srcImage, static_cast<int>( v.x ), static_cast<int>( v.y ) );
+    }
 
     /// <summary>
     /// Draw a line on the image.
@@ -302,6 +306,10 @@ public:
     /// <param name="x">The x-coordinate on the screen.</param>
     /// <param name="y">The y-coordinate on the screen.</param>
     void drawSprite( const Sprite& sprite, int x, int y ) noexcept;
+    void drawSprite( const Sprite& sprite, const glm::vec2& t )
+    {
+        drawSprite(sprite, static_cast<int>( t.x ), static_cast<int>( t.y ) );
+    }
 
     /// <summary>
     /// Draw text to the image.
@@ -313,6 +321,10 @@ public:
     /// <param name="color">The color of the text to draw on the screen.</param>
     void drawText( const Font& font, std::string_view text, int x, int y, const Color& color ) noexcept;
     void drawText( const Font& font, std::wstring_view text, int x, int y, const Color& color ) noexcept;
+    void drawText(const Font& font, std::string_view text, const glm::vec2& v, const Color& color) noexcept
+    {
+        drawText(font, text, static_cast<int>( v.x ), static_cast<int>( v.y ), color);
+    }
 
     /// <summary>
     /// Plot a single pixel to the image. Out-of-bounds coordinates are discarded.

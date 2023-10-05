@@ -32,7 +32,7 @@ public:
 
 	void update(float deltaTime);
 
-	void Draw(Graphics::Image& image,const Math::Camera2D& camera);
+	void Draw(Graphics::Image& image, const glm::vec2& offset);
 
 	void setPosition(const glm::vec2& pos);
 	const glm::vec2& getPosition() const;
