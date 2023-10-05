@@ -23,112 +23,126 @@ Camera2D camera;
 const int SCREEN_WIDTH = 480;
 const int SCREEN_HEIGHT = 270;
 
+glm::vec2 cameraOffset{0};
+
 Player player;
 
 int main()
 {
-	auto idleSprites = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
-	player = Player{ {SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 },SpriteAnim{idleSprites,10.0f} };
+    auto idleSprites = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+    player = Player{ {SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 },SpriteAnim{idleSprites,10.0f} };
 
-	auto backgroundStage1 = ResourceManager::loadImage("assets/textures/stage1.png");
-	Sprite bg1Sprite(backgroundStage1);
+    auto backgroundStage1 = ResourceManager::loadImage("assets/textures/stage1.png");
+    Sprite bg1Sprite(backgroundStage1);
 
-	//Initialization Settings:
-	image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    //Initialization Settings:
+    image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	window.create(L"Mini Assailants", SCREEN_WIDTH,SCREEN_HEIGHT);
-	window.show();
-	window.setFullscreen(true);
+    window.create(L"Mini Assailants", SCREEN_WIDTH, SCREEN_HEIGHT);
+    window.show();
+    window.setFullscreen(true);
+    camera.setSize({ SCREEN_WIDTH, SCREEN_HEIGHT });
+    camera.setPosition({ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 });
 
-	Timer timer;
-	double      totalTime = 0.0;
-	uint64_t    frameCount = 0ull;
-	std::string fps = "FPS: 0";
+    Timer timer;
+    double      totalTime = 0.0;
+    uint64_t    frameCount = 0ull;
+    std::string fps = "FPS: 0";
 
-	while (window)
-	{
-		timer.tick();
+    while (window)
+    {
+        timer.tick();
 
-		// Game Logic Here (Update Loop)
+        // Game Logic Here (Update Loop)
 
-		//Updating Input state
-		Input::update(); 
-		player.update(timer.elapsedSeconds());
+        //Updating Input state
+        Input::update();
 
-		camera.setPosition(player.getPosition());
+        cameraOffset.x += Input::getAxis("Horizontal") * 80.0f * static_cast<float>(timer.elapsedSeconds());
+        cameraOffset.x =  (float)((int)cameraOffset.x % backgroundStage1->getWidth());
 
-		//Check collision with player (screen-space) *Only works with Static_Camera*
-		//{
-		//	auto aabb = player.getAABB();
-		//	glm::vec2 correction{ 0 };
-		//	if (aabb.min.x < 0)
-		//	{
-		//		correction.x = -aabb.min.x;
-		//	}
-		//	if (aabb.min.y < 0)
-		//	{
-		//		correction.y = -aabb.min.y;
-		//	}
-		//	if (aabb.max.x >= image.getWidth())
-		//	{
-		//		correction.x = image.getWidth() - aabb.max.x;
-		//	}
-		//	if (aabb.max.y >= image.getHeight())
-		//	{
-		//		correction.y = image.getHeight() - aabb.max.y;
-		//	}
-		//	//Apply correction
-		//	player.translate(correction);
-		//}
+        player.update(timer.elapsedSeconds());
 
-		image.clear(Color::White);
+        //        camera.setPosition(player.getPosition());
 
-		// Draw Sprites here (Render Loop)
+                //Check collision with player (screen-space) *Only works with Static_Camera*
+                //{
+                //	auto aabb = player.getAABB();
+                //	glm::vec2 correction{ 0 };
+                //	if (aabb.min.x < 0)
+                //	{
+                //		correction.x = 10 - aabb.min.x;
+                //	}
+                //	if (aabb.min.y < 0)
+                //	{
+                //		correction.y = -aabb.min.y;
+                //	}
+                //	if (aabb.max.x >= image.getWidth())
+                //	{
+                //		correction.x = image.getWidth() - aabb.max.x;
+                //	}
+                //	if (aabb.max.y >= image.getHeight())
+                //	{
+                //		correction.y = image.getHeight() - aabb.max.y;
+                //	}
+                //	//Apply correction
+                //	player.translate(correction);
+                //}
 
-		image.copy(*backgroundStage1, 0, 0);
+        image.clear(Color::White);
 
-		player.Draw(image);
+        // Draw Sprites here (Render Loop)
+        // Draw the background several times to imitate infinite scrolling.
+        // Hint: Use the modulo operator (%) with the background width.
+        image.copy(*backgroundStage1, -cameraOffset);
+        image.copy(*backgroundStage1, -cameraOffset + glm::vec2{backgroundStage1->getWidth(), 0});
 
-		image.drawText(Font::Default, fps, 10, 10, Color::White);
+        // Do we want the player moving on the screen?
+        player.Draw(image, -cameraOffset);
 
-		window.present(image);
+        image.drawText(Font::Default, fps, 10, 10, Color::White);
 
-		Event event;
-		while (window.popEvent(event))
-		{
-			switch (event.type)
-			{
-				case Event::Close:
-					window.destroy();
-					break;
-				case Event::KeyPressed:
-				{
-					switch (event.key.code)
-					{
-					case KeyCode::Escape:
-						window.destroy();
-						break;
-					case KeyCode::V:
-						window.toggleVSync();
-						break;
-					}
-				}
-			}
-		}
+        window.present(image);
 
-		++frameCount;
+        Event event;
+        while (window.popEvent(event))
+        {
+            switch (event.type)
+            {
+            case Event::Close:
+                window.destroy();
+                break;
+            case Event::KeyPressed:
+            {
+                switch (event.key.code)
+                {
+                case KeyCode::Escape:
+                    window.destroy();
+                    break;
+                case KeyCode::V:
+                    window.toggleVSync();
+                    break;
+                case KeyCode::F11:
+                    window.toggleFullscreen();
+                    break;
+                }
+            }
+            }
+        }
 
-		totalTime += timer.elapsedSeconds();
-		if (totalTime > 1.0)
-		{
-			fps = fmt::format("FPS: {:.3f}", static_cast<double>(frameCount) / totalTime);
+        ++frameCount;
 
-			std::cout << fps << std::endl;
+        totalTime += timer.elapsedSeconds();
+        if (totalTime > 1.0)
+        {
+            fps = fmt::format("FPS: {:.3f}", static_cast<double>(frameCount) / totalTime);
 
-			frameCount = 0;
-			totalTime = 0.0;
-		}
-	}
+            std::cout << fps << std::endl;
 
-	return 0;
+            frameCount = 0;
+            totalTime = 0.0;
+        }
+    }
+
+    return 0;
 }

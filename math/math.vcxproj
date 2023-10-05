@@ -19,6 +19,7 @@
     <ClInclude Include="inc\Math\Math.hpp" />
     <ClInclude Include="inc\Math\OutCodes.hpp" />
     <ClInclude Include="inc\Math\Rect.hpp" />
+    <ClInclude Include="inc\Math\Space.hpp" />
     <ClInclude Include="inc\Math\Sphere.hpp" />
     <ClInclude Include="inc\Math\Transform2D.hpp" />
   </ItemGroup>
