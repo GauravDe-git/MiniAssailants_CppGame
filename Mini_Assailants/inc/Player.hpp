@@ -5,6 +5,8 @@
 
 #include <glm/vec2.hpp>
 
+#include <string>
+
 class Player
 {
 public:
@@ -18,10 +20,11 @@ public:
 	// Default constructor
 	Player();
 
-	explicit Player(const glm::vec2& pos, const Graphics::SpriteAnim& _sprite);
+	explicit Player(const glm::vec2& pos);
 
 	void update(float deltaTime);
 
+	std::string_view getState(const State& state);
 	void Draw(Graphics::Image& image, const glm::vec2& offset);
 
 	void setPosition(const glm::vec2& pos);
@@ -38,6 +41,7 @@ private:
 	glm::vec2 position{ 0 };
 	glm::vec2 velocity{ 0 };
 	float speed{ 80.0f };
-	Graphics::SpriteAnim sprite;
+	Graphics::SpriteAnim idleSprite;
+	Graphics::SpriteAnim walkSprite;
 	Math::AABB aabb;
 };

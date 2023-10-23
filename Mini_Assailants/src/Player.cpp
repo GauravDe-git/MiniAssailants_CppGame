@@ -2,17 +2,21 @@
 
 #include <Graphics/Input.hpp>
 #include <Graphics/Font.hpp>
+#include <Graphics/ResourceManager.hpp>
 
 using namespace Graphics;
 
 Player::Player() = default;
 
-Player::Player(const glm::vec2& pos, const SpriteAnim& _sprite)
+Player::Player(const glm::vec2& pos)
 	:position{ pos }
-	, sprite{ _sprite }
 	, aabb{ {9,65,0},{31,117,0} }
 {
+	auto idleSheet = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	idleSprite = SpriteAnim{ idleSheet, 10.0f };
 
+	auto walkSheet = ResourceManager::loadSpriteSheet("assets/textures/Walking_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	walkSprite = SpriteAnim{ walkSheet, 10.0f };
 }
 
 void Player::update(float deltaTime)
@@ -27,13 +31,24 @@ void Player::update(float deltaTime)
 	if (glm::length(velocity) > 0)
 	{
 		setState(State::Walking);
+		walkSprite.update(deltaTime);
 	}
 	else
 	{
 		setState(State::Idle);
+		idleSprite.update(deltaTime);
 	}
+}
 
-	sprite.update(deltaTime);
+std::string_view Player::getState(const State& state)
+{
+	switch (state)
+	{
+	case State::Idle:
+		return "Idle";
+	case State::Walking:
+		return "Walking";
+	}
 }
 
 void Player::Draw(Image& image, const glm::vec2& offset)
@@ -42,18 +57,18 @@ void Player::Draw(Image& image, const glm::vec2& offset)
 	switch (state)
 	{
 	case State::Idle:
-		image.drawSprite(sprite, position + offset);
+		image.drawSprite(idleSprite, position + offset);
 		break;
 	case State::Walking:
 		//Draw walking sprite anim
-		image.drawSprite(sprite, position + offset);
+		image.drawSprite(walkSprite, position + offset);
 		break;
 	}
 
 	#if _DEBUG
 		// Draw AABB
 	image.drawAABB(getAABB() + glm::vec3{offset, 0}, Color::Yellow, {}, FillMode::WireFrame);
-	image.drawText(Font::Default, "State:..?", position + offset + glm::vec2{0, 50}, Color::Yellow);
+	image.drawText(Font::Default, getState(state), position + offset + glm::vec2{0, 50}, Color::Yellow);
 	#endif
 }
 

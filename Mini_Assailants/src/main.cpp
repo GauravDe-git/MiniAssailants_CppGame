@@ -1,8 +1,8 @@
 #include <Player.hpp>
 #include <Background.hpp>
 
-#include "Graphics/Window.hpp"
-#include "Graphics/Image.hpp"
+#include <Graphics/Window.hpp>
+#include <Graphics/Image.hpp>
 #include "Graphics/Sprite.hpp"
 #include "Graphics/ResourceManager.hpp"
 #include "Graphics/SpriteAnim.hpp"      
@@ -28,8 +28,7 @@ Player player;
 
 int main()
 {
-    auto idleSprites = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
-    player = Player{ {SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 },SpriteAnim{idleSprites,10.0f} };
+    player = Player{ {SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 }};
 
     auto backgroundStage1 = Background("assets/textures/stage1.png");
 
