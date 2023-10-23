@@ -1,13 +1,13 @@
-#include<Player.hpp>
+#include <Player.hpp>
+#include <Background.hpp>
 
-#include"Graphics/Window.hpp"
-#include"Graphics/Image.hpp"
-#include"Graphics/Sprite.hpp"
-#include"Graphics/ResourceManager.hpp"
-#include"Graphics/SpriteAnim.hpp"      
-#include"Graphics/Timer.hpp"
-#include"Graphics/Input.hpp"
-#include"Math/Camera2D.hpp"
+#include "Graphics/Window.hpp"
+#include "Graphics/Image.hpp"
+#include "Graphics/Sprite.hpp"
+#include "Graphics/ResourceManager.hpp"
+#include "Graphics/SpriteAnim.hpp"      
+#include "Graphics/Timer.hpp"
+#include "Graphics/Input.hpp"
 
 #include <fmt/core.h>
 
@@ -18,7 +18,6 @@ using namespace Math;
 
 Window window;
 Image image;
-Camera2D camera;
 
 const int SCREEN_WIDTH = 480;
 const int SCREEN_HEIGHT = 270;
@@ -32,8 +31,7 @@ int main()
     auto idleSprites = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
     player = Player{ {SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 },SpriteAnim{idleSprites,10.0f} };
 
-    auto backgroundStage1 = ResourceManager::loadImage("assets/textures/stage1.png");
-    Sprite bg1Sprite(backgroundStage1);
+    auto backgroundStage1 = Background("assets/textures/stage1.png");
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -41,8 +39,6 @@ int main()
     window.create(L"Mini Assailants", SCREEN_WIDTH, SCREEN_HEIGHT);
     window.show();
     window.setFullscreen(true);
-    camera.setSize({ SCREEN_WIDTH, SCREEN_HEIGHT });
-    camera.setPosition({ SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2 });
 
     Timer timer;
     double      totalTime = 0.0;
@@ -59,7 +55,6 @@ int main()
         Input::update();
 
         cameraOffset.x += Input::getAxis("Horizontal") * 80.0f * static_cast<float>(timer.elapsedSeconds());
-        cameraOffset.x =  (float)((int)cameraOffset.x % backgroundStage1->getWidth());
 
         player.update(timer.elapsedSeconds());
 
@@ -94,8 +89,7 @@ int main()
         // Draw Sprites here (Render Loop)
         // Draw the background several times to imitate infinite scrolling.
         // Hint: Use the modulo operator (%) with the background width.
-        image.copy(*backgroundStage1, -cameraOffset);
-        image.copy(*backgroundStage1, -cameraOffset + glm::vec2{backgroundStage1->getWidth(), 0});
+		backgroundStage1.draw(image, -cameraOffset);
 
         // Do we want the player moving on the screen?
         player.Draw(image, -cameraOffset);

@@ -2,10 +2,8 @@
 
 #include <Graphics/Input.hpp>
 #include <Graphics/Font.hpp>
-#include <Math/Camera2D.hpp>
 
 using namespace Graphics;
-using namespace Math;
 
 Player::Player() = default;
 

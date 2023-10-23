@@ -5,16 +5,6 @@
 
 #include <glm/vec2.hpp>
 
-namespace Math
-{
-	class Camera2D;
-}
-
-namespace Graphics
-{
-	class Image;
-}
-
 class Player
 {
 public:
