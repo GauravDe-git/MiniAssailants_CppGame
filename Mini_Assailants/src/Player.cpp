@@ -27,6 +27,15 @@ void Player::update(float deltaTime)
 	position.y -= Input::getAxis("Vertical") * speed * deltaTime;
 
 	velocity = (position - initialPos) / deltaTime;
+	transform.setAnchor(glm::vec2(76.5f, 63.5f));
+
+	// Check the direction of movement and flip the sprite.
+	if (velocity.x < 0) {
+		transform.setScale(glm::vec2(-1.0f, 1.0f));
+	}
+	else if (velocity.x > 0) {
+		transform.setScale(glm::vec2(1.0f, 1.0f));
+	}
 
 	if (glm::length(velocity) > 0)
 	{
@@ -53,15 +62,17 @@ std::string_view Player::getState(const State& state)
 
 void Player::Draw(Image& image, const glm::vec2& offset)
 {
-	//Conditionally draw sprite based on state-
+	// Set the position of the transform.
+	transform.setPosition(position + offset);
+
+	// Draw the sprite with the transform.
 	switch (state)
 	{
 	case State::Idle:
-		image.drawSprite(idleSprite, position + offset);
+		image.drawSprite(idleSprite, transform);
 		break;
 	case State::Walking:
-		//Draw walking sprite anim
-		image.drawSprite(walkSprite, position + offset);
+		image.drawSprite(walkSprite, transform);
 		break;
 	}
 

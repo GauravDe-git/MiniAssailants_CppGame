@@ -2,6 +2,7 @@
 
 #include <Graphics/SpriteAnim.hpp>
 #include <Math/AABB.hpp>
+#include <Math/Transform2D.hpp>
 
 #include <glm/vec2.hpp>
 
@@ -44,4 +45,5 @@ private:
 	Graphics::SpriteAnim idleSprite;
 	Graphics::SpriteAnim walkSprite;
 	Math::AABB aabb;
+	Math::Transform2D transform;
 };
