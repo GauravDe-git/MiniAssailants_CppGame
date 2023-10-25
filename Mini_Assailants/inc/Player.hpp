@@ -35,15 +35,17 @@ public:
 
 	const Math::AABB getAABB() const;
 
+	void setScreenBounds(const Math::AABB& bounds);
+
 private:
 	void setState(State newState);
 
 	State state = State::None;
-	glm::vec2 position{ 0 };
 	glm::vec2 velocity{ 0 };
 	float speed{ 80.0f };
 	Graphics::SpriteAnim idleSprite;
 	Graphics::SpriteAnim walkSprite;
 	Math::AABB aabb;
 	Math::Transform2D transform;
+	Math::AABB bounds;
 };

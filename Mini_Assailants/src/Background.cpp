@@ -11,17 +11,14 @@ Background::Background(const std::filesystem::path& path)
 
 void Background::draw(Graphics::Image& image, const glm::vec2& offset)
 {
-	float w = background->getWidth();
-	float left = position.x + offset.x;
-	float right = position.x + offset.x + background->getWidth();
+    float w = background->getWidth();
 
-	if (left > 0)
-	{
-		image.copy(*background, glm::vec2(left - w, 0));
-	}
-	image.copy(*background,glm::vec2(left,0));
-	if (right < image.getWidth())
-	{
-		image.copy(*background, glm::vec2(right, 0));
-	}
+    // Calculate the current position of the background.
+    float bgX = offset.x;
+
+    // Draw the background repeatedly to the right as the player moves.
+    while (bgX < image.getWidth()) {
+        image.copy(*background, glm::vec2(bgX, 0));
+        bgX += w;
+    }
 }

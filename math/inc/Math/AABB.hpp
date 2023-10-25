@@ -140,6 +140,26 @@ struct AABB
         return max.y - min.y;
     }
 
+    float left() const noexcept
+    {
+        return min.x;
+    }
+
+    float right() const noexcept
+    {
+		return max.x;
+    }
+
+    float top() const noexcept
+    {
+		return min.y;
+    }
+
+    float bottom() const noexcept
+    {
+        return max.y;
+    }
+
     /// <summary>
     /// Get the depth (along the z-axis) of the AABB.
     /// </summary>

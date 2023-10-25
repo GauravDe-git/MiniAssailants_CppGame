@@ -28,7 +28,7 @@ Player player;
 
 int main()
 {
-    player = Player{ {SCREEN_WIDTH / 2,SCREEN_HEIGHT / 2 }};
+    player = Player{ {SCREEN_WIDTH / 2,(SCREEN_HEIGHT - 10)}};
 
     auto backgroundStage1 = Background("assets/textures/stage1.png");
 
