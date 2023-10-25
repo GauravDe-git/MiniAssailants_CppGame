@@ -25,7 +25,6 @@ public:
 
 	void update(float deltaTime);
 
-	std::string_view getState(const State& state);
 	void Draw(Graphics::Image& image, const glm::vec2& offset);
 
 	void setPosition(const glm::vec2& pos);

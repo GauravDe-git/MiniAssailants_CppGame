@@ -4,6 +4,8 @@
 #include <Graphics/Font.hpp>
 #include <Graphics/ResourceManager.hpp>
 
+#include <iostream>
+
 using namespace Graphics;
 
 Player::Player() = default;
@@ -41,6 +43,8 @@ void Player::update(float deltaTime)
 
 	velocity = (position - initialPos) / deltaTime;
 
+	transform.setPosition(position);
+
 	// Check the direction of movement and flip the sprite.
 	if (velocity.x < 0) {
 		transform.setScale(glm::vec2(-1.0f, 1.0f));
@@ -58,18 +62,6 @@ void Player::update(float deltaTime)
 	{
 		setState(State::Idle);
 		idleSprite.update(deltaTime);
-	}
-	transform.setPosition(position);
-}
-
-std::string_view Player::getState(const State& state)
-{
-	switch (state)
-	{
-	case State::Idle:
-		return "Idle";
-	case State::Walking:
-		return "Walking";
 	}
 }
 
@@ -92,7 +84,7 @@ void Player::Draw(Image& image, const glm::vec2& offset)
 	#if _DEBUG
 		// Draw AABB
 	image.drawAABB(getAABB() + glm::vec3{offset, 0}, Color::Yellow, {}, FillMode::WireFrame);
-	image.drawText(Font::Default, getState(state), transform.getPosition() + offset + glm::vec2{0, 50}, Color::Yellow);
+	image.drawText(Font::Default, "state: ...", transform.getPosition() + offset + glm::vec2{ -20, -70 }, Color::Yellow);
 	#endif
 }
 
@@ -131,7 +123,6 @@ void Player::setState(State newState)
 			break;
 		case State::Walking:
 			break;
-
 		//Add remaining states here
 		}
 		state = newState;
