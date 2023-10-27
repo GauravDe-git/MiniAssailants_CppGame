@@ -39,6 +39,10 @@ public:
 private:
 	void setState(State newState);
 
+	void doMovement(float deltaTime);
+	void doIdle(float deltaTime);
+	void doWalk(float deltaTime);
+
 	State state = State::None;
 	glm::vec2 velocity{ 0 };
 	float speed{ 80.0f };

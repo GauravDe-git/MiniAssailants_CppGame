@@ -22,7 +22,7 @@ Image image;
 const int SCREEN_WIDTH = 480;
 const int SCREEN_HEIGHT = 270;
 
-glm::vec2 cameraOffset{0};
+glm::vec2 cameraOffset{0}; //Create a camera class for this maybe-
 
 Player player;
 
