@@ -9,6 +9,8 @@
 #include "Graphics/Timer.hpp"
 #include "Graphics/Input.hpp"
 
+#include <Camera.hpp>
+
 #include <fmt/core.h>
 
 #include <iostream>
@@ -22,14 +24,14 @@ Image image;
 const int SCREEN_WIDTH = 480;
 const int SCREEN_HEIGHT = 270;
 
-glm::vec2 cameraOffset{0}; //Create a camera class for this maybe-
-
+//glm::vec2 cameraOffset{0}; //Create a camera class for this maybe-
+Camera camera;
 Player player;
 
 int main()
 {
     player = Player{ {SCREEN_WIDTH / 2,(SCREEN_HEIGHT - 10)}};
-
+    bool isScrolling{ true };
     auto backgroundStage1 = Background("assets/textures/stage1.png");
 
     //Initialization Settings:
@@ -53,7 +55,9 @@ int main()
         //Updating Input state
         Input::update();
 
-        cameraOffset.x += Input::getAxis("Horizontal") * 80.0f * static_cast<float>(timer.elapsedSeconds());
+        //cameraOffset.x += Input::getAxis("Horizontal") * 80.0f * static_cast<float>(timer.elapsedSeconds());
+        if(isScrolling)
+        camera.setPosition(camera.getPosition() + glm::vec2(Input::getAxis("Horizontal"), 0) * 80.0f * static_cast<float>(timer.elapsedSeconds()));
 
         player.update(timer.elapsedSeconds());
 
@@ -88,12 +92,12 @@ int main()
         // Draw Sprites here (Render Loop)
         // Draw the background several times to imitate infinite scrolling.
         // Hint: Use the modulo operator (%) with the background width.
-		backgroundStage1.draw(image, -cameraOffset);
+		backgroundStage1.draw(image, camera.getViewPosition());
 
         // Do we want the player moving on the screen?
-        player.Draw(image, -cameraOffset);
+        player.Draw(image, camera.getViewPosition());
 
-        image.drawText(Font::Default, fps, 10, 10, Color::White);
+        image.drawText(Font::Default, fps, 10, 10, Color::Blue);
 
         window.present(image);
 
@@ -117,6 +121,9 @@ int main()
                     break;
                 case KeyCode::F11:
                     window.toggleFullscreen();
+                    break;
+                case KeyCode::T:  //DEBUG
+                    isScrolling = !isScrolling;
                     break;
                 }
             }

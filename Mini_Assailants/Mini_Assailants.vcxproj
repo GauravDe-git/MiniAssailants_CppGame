@@ -17,6 +17,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Background.hpp" />
+    <ClInclude Include="inc\Camera.hpp" />
     <ClInclude Include="inc\Player.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
