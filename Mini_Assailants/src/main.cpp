@@ -24,7 +24,6 @@ Image image;
 const int SCREEN_WIDTH = 480;
 const int SCREEN_HEIGHT = 270;
 
-//glm::vec2 cameraOffset{0}; //Create a camera class for this maybe-
 Camera camera;
 Player player;
 
@@ -55,43 +54,24 @@ int main()
         //Updating Input state
         Input::update();
 
-        //cameraOffset.x += Input::getAxis("Horizontal") * 80.0f * static_cast<float>(timer.elapsedSeconds());
         if(isScrolling)
         camera.setPosition(camera.getPosition() + glm::vec2(Input::getAxis("Horizontal"), 0) * 80.0f * static_cast<float>(timer.elapsedSeconds()));
 
         player.update(timer.elapsedSeconds());
 
-        //        camera.setPosition(player.getPosition());
+		// Prevent bg from scrolling off screen on left side (temporary fix)
+        if (player.getPosition().x <= SCREEN_WIDTH/2)
+        {
+            isScrolling = false;
+        }
+        else if (player.getPosition().x > SCREEN_WIDTH/2)
+        {
+            isScrolling = true;
+        }
 
-                //Check collision with player (screen-space) *Only works with Static_Camera*
-                //{
-                //	auto aabb = player.getAABB();
-                //	glm::vec2 correction{ 0 };
-                //	if (aabb.min.x < 0)
-                //	{
-                //		correction.x = 10 - aabb.min.x;
-                //	}
-                //	if (aabb.min.y < 0)
-                //	{
-                //		correction.y = -aabb.min.y;
-                //	}
-                //	if (aabb.max.x >= image.getWidth())
-                //	{
-                //		correction.x = image.getWidth() - aabb.max.x;
-                //	}
-                //	if (aabb.max.y >= image.getHeight())
-                //	{
-                //		correction.y = image.getHeight() - aabb.max.y;
-                //	}
-                //	//Apply correction
-                //	player.translate(correction);
-                //}
-
-        image.clear(Color::White);
+        image.clear(Color::Black);
 
         // Draw Sprites here (Render Loop)
-        // Draw the background several times to imitate infinite scrolling.
-        // Hint: Use the modulo operator (%) with the background width.
 		backgroundStage1.draw(image, camera.getViewPosition());
 
         // Do we want the player moving on the screen?

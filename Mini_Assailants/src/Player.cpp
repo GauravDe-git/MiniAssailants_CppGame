@@ -134,14 +134,10 @@ void Player::doMovement(float deltaTime)
 	{
 		position.y = 225;
 	}
-	//if (position.x > 480) // right edge collision
-	//{
-	//	position.x = 480;
-	//}
-	//if (position.x < 0) // left edge collision
-	//{
-	//	position.x = 0;
-	//}
+	if (position.x < 0) // left edge collision
+	{
+		position.x = 0;
+	}
 
 	velocity = (position - initialPos) / deltaTime;
 
