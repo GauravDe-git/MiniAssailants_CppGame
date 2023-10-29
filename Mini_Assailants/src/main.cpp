@@ -1,5 +1,7 @@
 #include <Player.hpp>
 #include <Background.hpp>
+#include <Constants.hpp>
+#include <Level.hpp>
 
 #include <Graphics/Window.hpp>
 #include <Graphics/Image.hpp>
@@ -21,17 +23,17 @@ using namespace Math;
 Window window;
 Image image;
 
-const int SCREEN_WIDTH = 480;
-const int SCREEN_HEIGHT = 270;
-
 Camera camera;
-Player player;
+//Player player;
+Level level;
 
 int main()
 {
-    player = Player{ {SCREEN_WIDTH / 2,(SCREEN_HEIGHT - 10)}};
+    level =  Level("assets/textures/stage1.png", 225);
+    level.LoadLevelAssets();
+    //player = Player{ {SCREEN_WIDTH / 2,(SCREEN_HEIGHT - 10)}};
     bool isScrolling{ true };
-    auto backgroundStage1 = Background("assets/textures/stage1.png");
+    //auto backgroundStage1 = Background("assets/textures/stage1.png");
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -57,14 +59,23 @@ int main()
         if(isScrolling)
         camera.setPosition(camera.getPosition() + glm::vec2(Input::getAxis("Horizontal"), 0) * 80.0f * static_cast<float>(timer.elapsedSeconds()));
 
-        player.update(timer.elapsedSeconds());
+        //player.update(timer.elapsedSeconds());
+		level.Update(timer.elapsedSeconds());
 
 		// Prevent bg from scrolling off screen on left side (temporary fix)
-        if (player.getPosition().x <= SCREEN_WIDTH/2)
+        /*if (player.getPosition().x <= SCREEN_WIDTH/2)
         {
             isScrolling = false;
         }
         else if (player.getPosition().x > SCREEN_WIDTH/2)
+        {
+            isScrolling = true;
+        }*/
+        if (level.getPlayer().getPosition().x <= SCREEN_WIDTH / 2)
+        {
+            isScrolling = false;
+        }
+        else if (level.getPlayer().getPosition().x > SCREEN_WIDTH / 2)
         {
             isScrolling = true;
         }
@@ -72,10 +83,11 @@ int main()
         image.clear(Color::Black);
 
         // Draw Sprites here (Render Loop)
-		backgroundStage1.draw(image, camera.getViewPosition());
+		//backgroundStage1.draw(image, camera.getViewPosition());
 
         // Do we want the player moving on the screen?
-        player.Draw(image, camera.getViewPosition());
+        //player.Draw(image, camera.getViewPosition());
+        level.Draw(image, camera.getViewPosition());
 
         image.drawText(Font::Default, fps, 10, 10, Color::Blue);
 

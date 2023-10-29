@@ -12,12 +12,15 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Background.cpp" />
+    <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\Background.hpp" />
     <ClInclude Include="inc\Camera.hpp" />
+    <ClInclude Include="inc\Constants.hpp" />
+    <ClInclude Include="inc\Level.hpp" />
     <ClInclude Include="inc\Player.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

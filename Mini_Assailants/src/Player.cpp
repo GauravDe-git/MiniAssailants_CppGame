@@ -32,6 +32,11 @@ Player::Player(const glm::vec2& pos)
 	setState(State::Idle);
 }
 
+void Player::setTopEdgeCollision(int top)
+{
+	topEdgeCollision = top;
+}
+
 void Player::update(float deltaTime)
 {
 	// Check the direction of movement and flip the sprite.
@@ -130,9 +135,9 @@ void Player::doMovement(float deltaTime)
 	{
 		position.y = 270;
 	}
-	if (position.y < 225) // top edge collision
+	if (position.y < topEdgeCollision) // top edge collision
 	{
-		position.y = 225;
+		position.y = topEdgeCollision;
 	}
 	if (position.x < 0) // left edge collision
 	{

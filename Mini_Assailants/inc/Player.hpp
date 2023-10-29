@@ -23,6 +23,8 @@ public:
 
 	explicit Player(const glm::vec2& pos);
 
+	void setTopEdgeCollision(int top);
+
 	void update(float deltaTime);
 
 	void Draw(Graphics::Image& image, const glm::vec2& offset);
@@ -46,6 +48,8 @@ private:
 	State state = State::None;
 	glm::vec2 velocity{ 0 };
 	float speed{ 80.0f };
+	int topEdgeCollision{ 0 };
+
 	Graphics::SpriteAnim idleSprite;
 	Graphics::SpriteAnim walkSprite;
 	Math::AABB aabb;
