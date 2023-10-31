@@ -20,6 +20,7 @@
     <ClInclude Include="inc\Background.hpp" />
     <ClInclude Include="inc\Camera.hpp" />
     <ClInclude Include="inc\Constants.hpp" />
+    <ClInclude Include="inc\Entity.hpp" />
     <ClInclude Include="inc\Level.hpp" />
     <ClInclude Include="inc\Player.hpp" />
   </ItemGroup>

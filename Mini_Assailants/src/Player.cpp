@@ -13,7 +13,8 @@ static std::map<Player::State, std::string> g_stateNames =
 {
 	{Player::State::None, "None"},
 	{Player::State::Idle, "Idle"},
-	{Player::State::Walking, "Walking"}
+	{Player::State::Walking, "Walking"},
+	{Player::State::Special1, "Special1"}, 
 };
 
 Player::Player() = default;
@@ -27,6 +28,9 @@ Player::Player(const glm::vec2& pos)
 
 	auto walkSheet = ResourceManager::loadSpriteSheet("assets/textures/Walking_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	walkSprite = SpriteAnim{ walkSheet, 10.0f };
+
+	auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	special1Sprite = SpriteAnim{ special1Sheet, 10.0f };
 
 	transform.setAnchor(glm::vec2{21.0f,116.0f});
 	setState(State::Idle);
@@ -47,6 +51,11 @@ void Player::update(float deltaTime)
 		transform.setScale(glm::vec2(1.0f, 1.0f));
 	}
 
+	if (Input::getKeyDown(KeyCode::Y))
+	{
+		setState(State::Special1);
+	}
+
 	switch (state)
 	{
 	case State::Idle:
@@ -54,6 +63,9 @@ void Player::update(float deltaTime)
 		break;
 	case State::Walking:
 		doWalk(deltaTime);
+		break;
+	case State::Special1:
+		doSpecial1(deltaTime);
 		break;
 	}
 }
@@ -71,6 +83,9 @@ void Player::Draw(Image& image, const glm::vec2& offset)
 		break;
 	case State::Walking:
 		image.drawSprite(walkSprite, tempTransform);
+		break;
+	case State::Special1:
+		image.drawSprite(special1Sprite, tempTransform);
 		break;
 	}
 
@@ -115,6 +130,8 @@ void Player::setState(State newState)
 		case State::Idle:
 			break;
 		case State::Walking:
+			break;
+		case State::Special1:
 			break;
 		//Add remaining states here
 		}
@@ -168,4 +185,18 @@ void Player::doWalk(float deltaTime)
 		setState(State::Idle);
 	}
 	walkSprite.update(deltaTime);
+}
+
+void Player::doSpecial1(float deltaTime)
+{
+	// Implement the special attack logic here
+	special1Sprite.update(deltaTime);
+
+	// Check if the special attack animation is done
+	if (special1Sprite.isDone())
+	{
+		special1Sprite.reset();
+		// Transition back to Idle state or another appropriate state
+		setState(State::Idle);
+	}
 }

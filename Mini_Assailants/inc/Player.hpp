@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Entity.hpp"
+
 #include <Graphics/SpriteAnim.hpp>
 #include <Math/AABB.hpp>
 #include <Math/Transform2D.hpp>
@@ -15,7 +17,8 @@ public:
 	{
 		None,
 		Idle,
-		Walking
+		Walking,
+		Special1
 	};
 
 	// Default constructor
@@ -44,6 +47,7 @@ private:
 	void doMovement(float deltaTime);
 	void doIdle(float deltaTime);
 	void doWalk(float deltaTime);
+	void doSpecial1(float deltaTime);
 
 	State state = State::None;
 	glm::vec2 velocity{ 0 };
@@ -52,6 +56,8 @@ private:
 
 	Graphics::SpriteAnim idleSprite;
 	Graphics::SpriteAnim walkSprite;
+	Graphics::SpriteAnim special1Sprite;
+
 	Math::AABB aabb;
 	Math::Transform2D transform;
 	Math::AABB bounds;

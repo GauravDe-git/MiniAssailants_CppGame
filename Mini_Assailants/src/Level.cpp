@@ -49,11 +49,3 @@ void Level::Draw(Graphics::Image& image, const glm::vec2& offset)
 	background.draw(image, offset);
 	player.Draw(image, offset);
 }
-
-
-
-
-
-
-
-
