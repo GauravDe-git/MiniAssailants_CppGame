@@ -5,9 +5,9 @@ Camera::Camera(const glm::vec2& pos)
 {
 }
 
-void Camera::update(float deltaTime, const glm::vec2& playerPos, const glm::vec2& playerVelocity, float screenWidth)
+void Camera::update(float deltaTime, const glm::vec2& playerPos, const glm::vec2& playerVelocity, float screenWidth,bool isPlayerAttacking)
 {
-	if (state == State::scrolling)
+	if (state == State::scrolling && !isPlayerAttacking)
 	{
 		position.x += playerVelocity.x * deltaTime;
 	}

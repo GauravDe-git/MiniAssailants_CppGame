@@ -35,6 +35,7 @@ public:
 	void setPosition(const glm::vec2& pos) { transform.setPosition(pos); }
 	const glm::vec2& getPosition() const { return transform.getPosition(); }
 	const glm::vec2& getVelocity() const { return velocity; }
+	bool isAttacking() const { return state == State::Special1; }
 
 	void translate(const glm::vec2& t) { transform.translate(t); }
 

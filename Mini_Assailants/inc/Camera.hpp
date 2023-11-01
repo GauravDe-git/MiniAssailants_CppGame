@@ -13,7 +13,7 @@ public:
 
 	explicit Camera(const glm::vec2& pos);
 
-	void update(float deltaTime, const glm::vec2& playerPos, const glm::vec2& playerVelocity,float screenWidth);
+	void update(float deltaTime, const glm::vec2& playerPos, const glm::vec2& playerVelocity,float screenWidth,bool isPlayerAttacking);
 
 	void setPosition(const glm::vec2& pos) { position = pos; }
 	const glm::vec2& getPosition() const { return position; }
