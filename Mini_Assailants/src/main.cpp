@@ -27,13 +27,11 @@ Level level;
 
 int main()
 {
-    level =  Level("assets/textures/stage1.png", 225);
+    level.SetLevel(1);
     level.LoadLevelAssets();
-    bool isScrolling{ true };
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
-
     window.create(L"Mini Assailants", SCREEN_WIDTH, SCREEN_HEIGHT);
     window.show();
     window.setFullscreen(true);
@@ -47,32 +45,22 @@ int main()
     {
         timer.tick();
 
-        // Game Logic Here (Update Loop)
+        //// Game Logic Here (Update Loop)  ////
 
         //Updating Input state
         Input::update();
 
-        if(isScrolling)
-        camera.setPosition(camera.getPosition() + glm::vec2(Input::getAxis("Horizontal"), 0) * 80.0f * static_cast<float>(timer.elapsedSeconds()));
+        //Update the camera
+		camera.update(timer.elapsedSeconds(), level.getPlayer().getPosition(),level.getPlayer().getVelocity(), SCREEN_WIDTH);
 
         //updating the player/bg/etc.
 		level.Update(timer.elapsedSeconds());
 
-		// Prevent bg from scrolling off screen on left side (temporary fix)
-            if (level.getPlayer().getPosition().x <= SCREEN_WIDTH / 2)
-            {
-                isScrolling = false;
-            }
-            else if (level.getPlayer().getPosition().x > SCREEN_WIDTH / 2)
-            {
-                isScrolling = true;
-            }
-
         image.clear(Color::Black);
 
-        // Draw Sprites here (Render Loop)
+        //// Draw Sprites here (Render Loop) ////
 
-        level.Draw(image, camera.getViewPosition());
+        level.Draw(image, camera);
 
         image.drawText(Font::Default, fps, 10, 10, Color::Blue);
 
@@ -98,9 +86,6 @@ int main()
                     break;
                 case KeyCode::F11:
                     window.toggleFullscreen();
-                    break;
-                case KeyCode::T:  //DEBUG
-                    isScrolling = !isScrolling;
                     break;
                 }
             }

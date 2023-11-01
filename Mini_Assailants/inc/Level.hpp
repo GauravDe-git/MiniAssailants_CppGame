@@ -8,13 +8,11 @@ class Level {
 public:
 	Level();
 
-	Level(const std::string& backgroundPath, int topEdgeCollision);
-
 	void LoadLevelAssets();
 	void SetLevel(int levelNumber);
 
 	void Update(float deltaTime);
-	void Draw(Graphics::Image& image, const glm::vec2& offset);
+	void Draw(Graphics::Image& image, const Camera& camera);
 
 	Player& getPlayer() { return player; }
 

@@ -30,7 +30,7 @@ Player::Player(const glm::vec2& pos)
 	walkSprite = SpriteAnim{ walkSheet, 10.0f };
 
 	auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
-	special1Sprite = SpriteAnim{ special1Sheet, 10.0f };
+	special1Sprite = SpriteAnim{ special1Sheet, 12.0f };
 
 	transform.setAnchor(glm::vec2{21.0f,116.0f});
 	setState(State::Idle);
@@ -43,17 +43,17 @@ void Player::setTopEdgeCollision(int top)
 
 void Player::update(float deltaTime)
 {
+	if (Input::getKeyDown(KeyCode::Y))
+	{
+		setState(State::Special1);
+	}
+
 	// Check the direction of movement and flip the sprite.
 	if (velocity.x < 0) {
 		transform.setScale(glm::vec2(-1.0f, 1.0f));
 	}
 	else if (velocity.x > 0) {
 		transform.setScale(glm::vec2(1.0f, 1.0f));
-	}
-
-	if (Input::getKeyDown(KeyCode::Y))
-	{
-		setState(State::Special1);
 	}
 
 	switch (state)
@@ -94,31 +94,6 @@ void Player::Draw(Image& image, const glm::vec2& offset)
 	image.drawAABB(getAABB() + glm::vec3{offset, 0}, Color::Yellow, {}, FillMode::WireFrame);
 	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + offset + glm::vec2{-20, -70}, Color::Yellow);
 	#endif
-}
-
-void Player::setPosition(const glm::vec2& pos)
-{
-	transform.setPosition(pos);
-}
-
-const glm::vec2& Player::getPosition() const
-{
-	return transform.getPosition();
-}
-
-void Player::translate(const glm::vec2& t)
-{
-	transform.translate(t);
-}
-
-const Math::AABB Player::getAABB() const
-{
-	return  transform * aabb;
-}
-
-void Player::setScreenBounds(const Math::AABB& _bounds)
-{
-	bounds = _bounds;
 }
 
 void Player::setState(State newState)

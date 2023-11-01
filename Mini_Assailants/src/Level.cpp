@@ -3,13 +3,6 @@
 
 Level::Level() = default;
 
-Level::Level(const std::string& _backgroundPath, int _topEdgeCollision)
-	:backgroundPath{ _backgroundPath }
-	,topEdgeCollision{_topEdgeCollision}
-{
-	//Initialize other level-specific properties here
-}
-
 void Level::LoadLevelAssets()
 {
 	//Load level-specific assets
@@ -43,9 +36,9 @@ void Level::Update(float deltaTime)
 	player.update(deltaTime);
 }
 
-void Level::Draw(Graphics::Image& image, const glm::vec2& offset)
+void Level::Draw(Graphics::Image& image, const Camera& camera)
 {
 	// Draw level-specific elements (bg, player, enemies, etc.)
-	background.draw(image, offset);
-	player.Draw(image, offset);
+	background.draw(image, camera.getViewPosition());
+	player.Draw(image, camera.getViewPosition());
 }

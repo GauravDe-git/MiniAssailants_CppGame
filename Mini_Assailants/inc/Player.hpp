@@ -32,14 +32,15 @@ public:
 
 	void Draw(Graphics::Image& image, const glm::vec2& offset);
 
-	void setPosition(const glm::vec2& pos);
-	const glm::vec2& getPosition() const;
+	void setPosition(const glm::vec2& pos) { transform.setPosition(pos); }
+	const glm::vec2& getPosition() const { return transform.getPosition(); }
+	const glm::vec2& getVelocity() const { return velocity; }
 
-	void translate(const glm::vec2& t);
+	void translate(const glm::vec2& t) { transform.translate(t); }
 
-	const Math::AABB getAABB() const;
+	const Math::AABB getAABB() const { return  transform * aabb; }
 
-	void setScreenBounds(const Math::AABB& bounds);
+	void setScreenBounds(const Math::AABB& _bounds) { bounds = _bounds; }
 
 private:
 	void setState(State newState);
