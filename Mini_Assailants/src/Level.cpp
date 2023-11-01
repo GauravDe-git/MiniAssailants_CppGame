@@ -42,3 +42,6 @@ void Level::Draw(Graphics::Image& image, const Camera& camera)
 	background.draw(image, camera.getViewPosition());
 	player.Draw(image, camera.getViewPosition());
 }
+
+
+// call the camera in the level update

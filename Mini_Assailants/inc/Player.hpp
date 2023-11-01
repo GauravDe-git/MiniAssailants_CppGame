@@ -45,6 +45,8 @@ public:
 
 private:
 	void setState(State newState);
+	void beginState(State newState);
+	void endState(State oldState);
 
 	void doMovement(float deltaTime);
 	void doIdle(float deltaTime);

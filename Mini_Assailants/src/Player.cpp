@@ -14,7 +14,7 @@ static std::map<Player::State, std::string> g_stateNames =
 	{Player::State::None, "None"},
 	{Player::State::Idle, "Idle"},
 	{Player::State::Walking, "Walking"},
-	{Player::State::Special1, "Special1"}, 
+	{Player::State::Special1, "Special1"},
 };
 
 Player::Player() = default;
@@ -32,7 +32,7 @@ Player::Player(const glm::vec2& pos)
 	auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	special1Sprite = SpriteAnim{ special1Sheet, 12.0f };
 
-	transform.setAnchor(glm::vec2{21.0f,116.0f});
+	transform.setAnchor(glm::vec2{ 21.0f,116.0f });
 	setState(State::Idle);
 }
 
@@ -89,28 +89,61 @@ void Player::Draw(Image& image, const glm::vec2& offset)
 		break;
 	}
 
-	#if _DEBUG
-		// Draw AABB
-	image.drawAABB(getAABB() + glm::vec3{offset, 0}, Color::Yellow, {}, FillMode::WireFrame);
-	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + offset + glm::vec2{-20, -70}, Color::Yellow);
-	#endif
+#if _DEBUG
+	// Draw AABB
+	image.drawAABB(getAABB() + glm::vec3{ offset, 0 }, Color::Yellow, {}, FillMode::WireFrame);
+	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + offset + glm::vec2{ -20, -70 }, Color::Yellow);
+#endif
 }
 
 void Player::setState(State newState)
 {
 	if (newState != state)
 	{
-		switch (newState)
-		{
-		case State::Idle:
-			break;
-		case State::Walking:
-			break;
-		case State::Special1:
-			break;
-		//Add remaining states here
-		}
+		beginState(newState);
+		endState(state);
 		state = newState;
+	}
+}
+
+void Player::beginState(State newState)
+{
+	switch (newState)
+	{
+	case State::Idle:
+		break;
+	case State::Walking:
+		break;
+	case State::Special1:
+		special1Sprite.reset();
+		break;
+		//Add remaining states here
+	}
+}
+
+void Player::endState(State oldState)
+{
+	switch (oldState)
+	{
+	case State::Idle:
+		break;
+	case State::Walking:
+		break;
+	case State::Special1:
+
+	{//Displacement of player pos upon landing
+		glm::vec2 displacement(26.f, 0);
+
+		// If the player is facing left, negate the displacement
+		if (transform.getScale().x < 0)
+		{
+			displacement.x = -displacement.x;
+		}
+
+		transform.translate(displacement);
+	}
+	break;
+	//Add remaining states here
 	}
 }
 
@@ -148,7 +181,7 @@ void Player::doIdle(float deltaTime)
 	{
 		setState(State::Walking);
 	}
-	
+
 	idleSprite.update(deltaTime);
 }
 
@@ -170,19 +203,6 @@ void Player::doSpecial1(float deltaTime)
 	// Check if the special attack animation is done
 	if (special1Sprite.isDone())
 	{
-		special1Sprite.reset();
-
-		//Displacement of player pos upon landing
-		glm::vec2 displacement(26.f, 0);
-
-		// If the player is facing left, negate the displacement
-		if (transform.getScale().x < 0)
-		{
-			displacement.x = -displacement.x;
-		}
-
-		transform.translate(displacement);
-
 		// Transition back to Idle state or another appropriate state
 		setState(State::Idle);
 	}

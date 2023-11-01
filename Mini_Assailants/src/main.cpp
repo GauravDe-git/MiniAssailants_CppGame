@@ -28,7 +28,6 @@ Level level;
 int main()
 {
     level.SetLevel(1);
-    level.LoadLevelAssets();
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);

@@ -77,6 +77,11 @@ struct AABB
         return { min + rhs, max + rhs };
     }
 
+    AABB operator+(const glm::vec2& rhs) const noexcept
+    {
+		return operator+(glm::vec3(rhs, 0));
+    }
+
     /// <summary>
     /// Translate this AABB.
     /// </summary>
