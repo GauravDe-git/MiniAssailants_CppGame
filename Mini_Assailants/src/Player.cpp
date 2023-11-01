@@ -74,7 +74,7 @@ void Player::Draw(Image& image, const glm::vec2& offset)
 {
 	// Set the position of the transform.
 	Math::Transform2D tempTransform = transform;
-	tempTransform.translate(offset); //glm::vec2{offset.x,115.f}
+	tempTransform.translate(offset);
 	// Draw the sprite with the transform.
 	switch (state)
 	{
@@ -171,6 +171,18 @@ void Player::doSpecial1(float deltaTime)
 	if (special1Sprite.isDone())
 	{
 		special1Sprite.reset();
+
+		//Displacement of player pos upon landing
+		glm::vec2 displacement(26.f, 0);
+
+		// If the player is facing left, negate the displacement
+		if (transform.getScale().x < 0)
+		{
+			displacement.x = -displacement.x;
+		}
+
+		transform.translate(displacement);
+
 		// Transition back to Idle state or another appropriate state
 		setState(State::Idle);
 	}

@@ -52,7 +52,7 @@ int main()
 
         //Update the camera
 		camera.update(timer.elapsedSeconds(), level.getPlayer().getPosition(),
-                     level.getPlayer().getVelocity(), SCREEN_WIDTH, level.getPlayer().isAttacking());
+                     level.getPlayer().getVelocity(), level.getPlayer().isAttacking());
 
         //updating the player/bg/etc.
 		level.Update(timer.elapsedSeconds());
