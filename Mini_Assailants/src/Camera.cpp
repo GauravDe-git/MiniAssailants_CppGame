@@ -47,7 +47,16 @@ void Camera::setState(State newState)
 
 void Camera::doScrolling(float deltaTime, const glm::vec2& playerVelocity, const glm::vec2& playerPos)
 {	
-	position.x += playerVelocity.x * deltaTime;
+	//Calculate the center of the screen
+	float screenCenterX = position.x + SCREEN_WIDTH / 2;
+
+	//Calculate player's distance from center of the screen
+	float distanceFromCenter = playerPos.x - screenCenterX;
+
+	//Now calculate the scrollSpeed factor based on distanceFromCenter
+	float scrollSpeed = 1 + std::abs(distanceFromCenter) / (SCREEN_WIDTH/2);
+
+	position.x += playerVelocity.x * deltaTime * scrollSpeed;
 
 	///// Go to arena if player reaches edge of screen//////
 	if (playerPos.x <= SCREEN_WIDTH / 2) //worldBounds.left() 
