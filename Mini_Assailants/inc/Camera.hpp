@@ -14,12 +14,6 @@ public:
 
 	explicit Camera(const glm::vec2& pos);
 
-	void scroll(float deltaTime, const glm::vec2& playerVelocity);
-
-	void follow(const glm::vec2& playerPos);
-
-	void enterArenaMode(const glm::vec2& centerPos);
-
 	Math::AABB getScreenBounds() const;
 
 	void update(float deltaTime, const glm::vec2& playerPos, const glm::vec2& playerVelocity,bool isPlayerAttacking);
@@ -29,6 +23,11 @@ public:
 	glm::vec2 getViewPosition() const { return -position; }
 
 private:
+	void setState(State newState);
+
+	void doScrolling(float deltaTime, const glm::vec2& playerVelocity, const glm::vec2& playerPos);
+	void doArena(const glm::vec2& playerPos);
+
 	glm::vec2 position;
 	State state;
 	Math::AABB screenBounds;

@@ -44,4 +44,4 @@ void Level::Draw(Graphics::Image& image, const Camera& camera)
 }
 
 
-// call the camera in the level update
+// call the camera in the level update, move the camera call from main to level

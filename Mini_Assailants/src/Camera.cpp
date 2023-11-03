@@ -1,31 +1,12 @@
 #include "Camera.hpp"
 #include <Constants.hpp>
 
+#include <Graphics/Keyboard.hpp>
+
 Camera::Camera(const glm::vec2& pos)
 	: position{pos}, state{State::scrolling}
+	, screenBounds{ {0,0,0}, {SCREEN_WIDTH, SCREEN_HEIGHT,0} }
 {
-}
-
-void Camera::scroll(float deltaTime, const glm::vec2& playerVelocity)
-{
-	if (state == State::scrolling)
-	{
-		position.x += playerVelocity.x * deltaTime;
-	}
-}
-
-void Camera::follow(const glm::vec2& playerPos)
-{
-	if (state == State::arena)
-	{
-		position.x = playerPos.x - SCREEN_WIDTH / 2;
-	}
-}
-
-void Camera::enterArenaMode(const glm::vec2& centerPos)
-{
-	state = State::arena;
-	position.x = centerPos.x - SCREEN_WIDTH / 2;
 }
 
 Math::AABB Camera::getScreenBounds() const
@@ -35,18 +16,55 @@ Math::AABB Camera::getScreenBounds() const
 
 void Camera::update(float deltaTime, const glm::vec2& playerPos, const glm::vec2& playerVelocity,bool isPlayerAttacking)
 {
-	if (state == State::scrolling && !isPlayerAttacking)
+	switch (state)
 	{
-		position.x += playerVelocity.x * deltaTime;
-	}
-
-	// Prevent bg from scrolling off screen on left side (temporary fix)
-	if (playerPos.x <= SCREEN_WIDTH / 2) {
-		state = State::arena;
-	}
-	else if (playerPos.x > SCREEN_WIDTH / 2) {
-		state = State::scrolling;
+	case State::scrolling:
+		if (!isPlayerAttacking)
+		{
+			doScrolling(deltaTime, playerVelocity, playerPos);
+		}
+		break;
+	case State::arena:
+		doArena(playerPos);
+		break;
 	}
 }
 
-// state machine, aabb- getScreenBounds, pass the camera to player for stuff
+void Camera::setState(State newState)
+{
+	if (newState != state)
+	{
+		switch (newState)
+		{
+		case State::scrolling:
+			break;
+		case State::arena:
+			break;
+		}
+		state = newState;
+	}
+}
+
+void Camera::doScrolling(float deltaTime, const glm::vec2& playerVelocity, const glm::vec2& playerPos)
+{	
+	position.x += playerVelocity.x * deltaTime;
+
+	///// Go to arena if player reaches edge of screen//////
+	if (playerPos.x <= SCREEN_WIDTH / 2) //worldBounds.left() 
+	{
+		setState(State::arena);
+	}
+
+}
+
+void Camera::doArena(const glm::vec2& playerPos)
+{
+	////Logic for going to arena mode//////
+	// no logic, essentially position.x remains unchanged
+
+	//// Go to scrolling if player goes away from edge of screen////
+	if (playerPos.x > SCREEN_WIDTH / 2)
+	{
+		setState(State::scrolling);
+	}
+}

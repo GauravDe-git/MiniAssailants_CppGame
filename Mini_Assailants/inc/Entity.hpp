@@ -9,7 +9,7 @@ public:
 	virtual ~Entity() = default;
 
 	virtual void Update(float deltaTime) = 0;
-	virtual void Draw(Graphics::Image& image) = 0;
+	virtual void Draw(Graphics::Image& image /*camera*/) = 0;
 
 protected:
 	Math::AABB aabb;
