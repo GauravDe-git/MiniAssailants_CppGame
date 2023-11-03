@@ -22,6 +22,8 @@ public:
 	const glm::vec2& getPosition() const { return position; }
 	glm::vec2 getViewPosition() const { return -position; }
 
+	void translate(const glm::vec2& t) { position += t; }
+
 private:
 	void setState(State newState);
 

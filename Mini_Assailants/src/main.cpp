@@ -22,7 +22,6 @@ using namespace Math;
 Window window;
 Image image;
 
-Camera camera;
 Level level;
 
 int main()
@@ -50,8 +49,8 @@ int main()
         Input::update();
 
         //Update the camera
-		camera.update(timer.elapsedSeconds(), level.getPlayer().getPosition(),
-                     level.getPlayer().getVelocity(), level.getPlayer().isAttacking());
+		/*camera.update(timer.elapsedSeconds(), level.getPlayer().getPosition(),
+                     level.getPlayer().getVelocity(), level.getPlayer().isAttacking());*/
 
         //updating the player/bg/etc.
 		level.Update(timer.elapsedSeconds());
@@ -60,7 +59,7 @@ int main()
 
         //// Draw Sprites here (Render Loop) ////
 
-        level.Draw(image, camera);
+        level.Draw(image);
 
         image.drawText(Font::Default, fps, 10, 10, Color::Blue);
 

@@ -12,13 +12,14 @@ public:
 	void SetLevel(int levelNumber);
 
 	void Update(float deltaTime);
-	void Draw(Graphics::Image& image, const Camera& camera);
+	void Draw(Graphics::Image& image);
 
 	Player& getPlayer() { return player; }
 
 private:
 	Background background;
 	Player player;
+	Camera camera;
 	std::string backgroundPath;
 	int topEdgeCollision;
 };

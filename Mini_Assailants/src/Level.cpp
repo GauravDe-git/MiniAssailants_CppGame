@@ -1,7 +1,9 @@
 #include <Level.hpp>
 #include <Constants.hpp>
 
-Level::Level() = default;
+Level::Level()
+	:backgroundPath{}, topEdgeCollision{ 0 }, camera{ glm::vec2{0,0} }
+{}
 
 void Level::LoadLevelAssets()
 {
@@ -33,10 +35,12 @@ void Level::SetLevel(int levelNumber)
 void Level::Update(float deltaTime)
 {
 	// Update game logic here (eg. player, enemies)
+	camera.update(deltaTime, player.getPosition(), player.getVelocity(), player.isAttacking());
+
 	player.update(deltaTime);
 }
 
-void Level::Draw(Graphics::Image& image, const Camera& camera)
+void Level::Draw(Graphics::Image& image)
 {
 	// Draw level-specific elements (bg, player, enemies, etc.)
 	background.draw(image, camera.getViewPosition());
