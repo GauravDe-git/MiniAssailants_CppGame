@@ -26,7 +26,7 @@ Level level;
 
 int main()
 {
-    level.SetLevel(1);
+    level.setLevel(1);
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -51,13 +51,13 @@ int main()
         //Update the camera
 
         //updating the player/bg/camera etc.
-		level.Update(timer.elapsedSeconds());
+		level.update(timer.elapsedSeconds());
 
         image.clear(Color::Black);
 
         //// Draw Sprites here (Render Loop) ////
 
-        level.Draw(image);
+        level.draw(image);
 
         image.drawText(Font::Default, fps, 10, 10, Color::Blue);
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Graphics/Image.hpp>
-#include <glm/vec2.hpp>
+#include <Camera.hpp>
 
 #include <filesystem>
 #include <memory>
@@ -13,7 +13,7 @@ public:
 
 	Background(const std::filesystem::path& path);
 
-	void draw(Graphics::Image& image, const glm::vec2& offset);
+	void draw(Graphics::Image& image, const Camera& camera);
 
 private:
 	std::shared_ptr<Graphics::Image> background;

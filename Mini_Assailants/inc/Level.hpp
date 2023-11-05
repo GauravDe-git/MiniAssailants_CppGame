@@ -8,11 +8,11 @@ class Level {
 public:
 	Level();
 
-	void LoadLevelAssets();
-	void SetLevel(int levelNumber);
+	void loadLevelAssets();
+	void setLevel(int levelNumber);
 
-	void Update(float deltaTime);
-	void Draw(Graphics::Image& image);
+	void update(float deltaTime);
+	void draw(Graphics::Image& image);
 
 	Player& getPlayer() { return player; }
 

@@ -70,11 +70,11 @@ void Player::update(float deltaTime)
 	}
 }
 
-void Player::Draw(Image& image, const glm::vec2& offset)
+void Player::draw(Image& image, const Camera& camera)
 {
 	// Set the position of the transform.
 	Math::Transform2D tempTransform = transform;
-	tempTransform.translate(offset);
+	tempTransform.translate(camera.getViewPosition());
 	// Draw the sprite with the transform.
 	switch (state)
 	{
@@ -91,8 +91,8 @@ void Player::Draw(Image& image, const glm::vec2& offset)
 
 #if _DEBUG
 	// Draw AABB
-	image.drawAABB(getAABB() + glm::vec3{ offset, 0 }, Color::Yellow, {}, FillMode::WireFrame);
-	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + offset + glm::vec2{ -20, -70 }, Color::Yellow);
+	image.drawAABB(getAABB() + glm::vec3{ camera.getViewPosition(), 0}, Color::Yellow, {}, FillMode::WireFrame);
+	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + camera.getViewPosition() + glm::vec2{-20, -70}, Color::Yellow);
 #endif
 }
 

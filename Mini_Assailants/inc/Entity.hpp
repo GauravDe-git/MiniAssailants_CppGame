@@ -8,8 +8,8 @@ class Entity
 public:
 	virtual ~Entity() = default;
 
-	virtual void Update(float deltaTime) = 0;
-	virtual void Draw(Graphics::Image& image /*camera*/) = 0;
+	virtual void update(float deltaTime) = 0;
+	virtual void draw(Graphics::Image& image /*camera*/) = 0;
 
 protected:
 	Math::AABB aabb;

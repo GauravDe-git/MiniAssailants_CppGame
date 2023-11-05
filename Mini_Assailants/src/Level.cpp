@@ -5,7 +5,7 @@ Level::Level()
 	:backgroundPath{}, topEdgeCollision{ 0 }, camera{ glm::vec2{0,0} }
 {}
 
-void Level::LoadLevelAssets()
+void Level::loadLevelAssets()
 {
 	//Load level-specific assets
 	background = Background(backgroundPath);
@@ -15,7 +15,7 @@ void Level::LoadLevelAssets()
 	// Add other assets (eneimes, items etc.) later
 }
 
-void Level::SetLevel(int levelNumber)
+void Level::setLevel(int levelNumber)
 {
 	// Define different levels
 	switch (levelNumber)
@@ -29,10 +29,10 @@ void Level::SetLevel(int levelNumber)
 	}
 
 	//Load level-specific assets based on updated props
-	LoadLevelAssets();
+	loadLevelAssets();
 }
 
-void Level::Update(float deltaTime)
+void Level::update(float deltaTime)
 {
 	// Update game logic here (eg. player, enemies)
 	camera.update(deltaTime, player.getPosition(), player.getVelocity(), player.isAttacking());
@@ -40,11 +40,11 @@ void Level::Update(float deltaTime)
 	player.update(deltaTime);
 }
 
-void Level::Draw(Graphics::Image& image)
+void Level::draw(Graphics::Image& image)
 {
 	// Draw level-specific elements (bg, player, enemies, etc.)
-	background.draw(image, camera.getViewPosition());
-	player.Draw(image, camera.getViewPosition());
+	background.draw(image, camera);
+	player.draw(image, camera);
 }
 
 

@@ -9,12 +9,12 @@ Background::Background(const std::filesystem::path& path)
 	background = ResourceManager::loadImage(path);
 }
 
-void Background::draw(Graphics::Image& image, const glm::vec2& offset)
+void Background::draw(Graphics::Image& image, const Camera& camera)
 {
     float w = background->getWidth();
 
     // Calculate the current position of the background.
-    float bgX = offset.x;
+    float bgX = camera.getViewPosition().x;
 
     // Draw the background repeatedly to the right as the player moves.
     while (bgX < image.getWidth()) {

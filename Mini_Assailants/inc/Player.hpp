@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.hpp"
+#include <Camera.hpp>
 
 #include <Graphics/SpriteAnim.hpp>
 #include <Math/AABB.hpp>
@@ -30,7 +31,7 @@ public:
 
 	void update(float deltaTime);
 
-	void Draw(Graphics::Image& image, const glm::vec2& offset);
+	void draw(Graphics::Image& image, const Camera& camera);
 
 	void setPosition(const glm::vec2& pos) { transform.setPosition(pos); }
 	const glm::vec2& getPosition() const { return transform.getPosition(); }
