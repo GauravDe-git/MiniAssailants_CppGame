@@ -11,7 +11,7 @@
 
 #include <string>
 
-class Player
+class Player : public Entity
 {
 public:
 	enum class State
@@ -29,18 +29,12 @@ public:
 
 	void setTopEdgeCollision(int top);
 
-	void update(float deltaTime);
+	virtual void update(float deltaTime) override;
 
-	void draw(Graphics::Image& image, const Camera& camera);
+	virtual void draw(Graphics::Image& image, const Camera& camera) override;
 
-	void setPosition(const glm::vec2& pos) { transform.setPosition(pos); }
-	const glm::vec2& getPosition() const { return transform.getPosition(); }
 	const glm::vec2& getVelocity() const { return velocity; }
 	bool isAttacking() const { return state == State::Special1; }
-
-	void translate(const glm::vec2& t) { transform.translate(t); }
-
-	const Math::AABB getAABB() const { return  transform * aabb; }
 
 	void setScreenBounds(const Math::AABB& _bounds) { bounds = _bounds; }
 
@@ -54,16 +48,14 @@ private:
 	void doWalk(float deltaTime);
 	void doSpecial1(float deltaTime);
 
-	State state = State::None;
 	glm::vec2 velocity{ 0 };
 	float speed{ 80.0f };
 	int topEdgeCollision{ 0 };
 
+	State state = State::None;
 	Graphics::SpriteAnim idleSprite;
 	Graphics::SpriteAnim walkSprite;
 	Graphics::SpriteAnim special1Sprite;
 
-	Math::AABB aabb;
-	Math::Transform2D transform;
 	Math::AABB bounds;
 };

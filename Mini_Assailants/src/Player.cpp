@@ -20,8 +20,7 @@ static std::map<Player::State, std::string> g_stateNames =
 Player::Player() = default;
 
 Player::Player(const glm::vec2& pos)
-	:transform{ pos }
-	, aabb{ {9,65,0},{31,117,0} }
+	:Entity{ { pos } ,{ {9,65,0},{31,117,0} } }
 {
 	auto idleSheet = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	idleSprite = SpriteAnim{ idleSheet, 10.0f };
