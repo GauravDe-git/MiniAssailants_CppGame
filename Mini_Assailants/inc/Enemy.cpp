@@ -2,23 +2,63 @@
 
 #include <Graphics/ResourceManager.hpp>
 
+#include <map>
+
 using namespace Graphics;
+
+static std::map<Enemy::State, std::string> g_stateNames =
+{
+	{Enemy::State::None, "None"},
+	{Enemy::State::Idle, "Idle"},
+	{Enemy::State::Chase, "Chase"},
+	{Enemy::State::Attack, "Attack"},
+	{Enemy::State::Hurt, "Hurt"},
+};
 
 Enemy::Enemy() = default;
 
-Enemy::Enemy(const glm::vec2& pos)
-	:Entity{ { pos } ,{ {34,63,0},{94,103,0} } }
+Enemy::Enemy(const glm::vec2& pos,Type _type)
+	:Entity{ { pos } ,{ {79,62,0},{94,102,0} } }, type{_type}
 {
-	auto goblinIdleSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0);
-	goblinIdle = SpriteAnim{ goblinIdleSheet, 7.f};
+	switch (type)
+	{
+		case Type::Goblin:
+			auto goblinIdleSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0,BlendMode::AlphaBlend);
+			goblinIdle = SpriteAnim{ goblinIdleSheet, 7.f };
 
+			auto goblinChaseSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Chase.png", 150, 125, 0, 0, BlendMode::AlphaBlend);
+			goblinChase = SpriteAnim{ goblinChaseSheet, 8.f };
 
-	transform.setAnchor(glm::vec2{ 84.0f,103.0f });
+			auto goblinAtkSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Atk.png", 150, 125, 0, 0, BlendMode::AlphaBlend);
+			goblinAtk = SpriteAnim{ goblinAtkSheet, 7.f };
+
+			auto goblinHurtSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Hurt.png", 150, 125, 0, 0, BlendMode::AlphaBlend);
+			goblinHurt = SpriteAnim{ goblinHurtSheet, 7.f };
+
+			state = State::Idle;
+			transform.setAnchor(glm::vec2{ 84.0f,103.0f });
+			break;
+		//Handle Other enemy types
+	}
 }
 
 void Enemy::update(float deltaTime)
 {
-	goblinIdle.update(deltaTime);
+	switch (state)
+	{
+	case State::Idle:
+		doIdle(deltaTime);
+		break;
+	case State::Chase:
+		doChase(deltaTime);
+		break;
+	case State::Attack:
+		//doAttack(deltaTime);
+		break;
+	case State::Hurt:
+		//doHurt(deltaTime);
+		break;
+	}
 }
 
 void Enemy::draw(Graphics::Image& image, const Camera& camera)
@@ -26,6 +66,88 @@ void Enemy::draw(Graphics::Image& image, const Camera& camera)
 	Math::Transform2D tempTransform = transform;
 	tempTransform.translate(camera.getViewPosition());
 
-	//drawing idle goblin anim-
-	image.drawSprite(goblinIdle, tempTransform);
+	switch (state)
+	{
+	case State::Idle:
+		image.drawSprite(goblinIdle, tempTransform);
+		break;
+	case State::Chase:
+		image.drawSprite(goblinChase, tempTransform);
+		break;
+	case State::Attack:
+		image.drawSprite(goblinAtk, tempTransform);
+		break;
+	case State::Hurt:
+		image.drawSprite(goblinHurt, tempTransform);
+		break;
+	}
+
+#if _DEBUG
+	// Draw AABB
+	image.drawAABB(getAABB() + glm::vec3{ camera.getViewPosition(), 0 }, Color::Yellow, {}, FillMode::WireFrame);
+	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + camera.getViewPosition() + glm::vec2{ -18, -58 }, Color::Yellow);
+#endif
+}
+
+void Enemy::setState(State newState)
+{
+	if (newState != state)
+	{
+		beginState(newState);
+		endState(state);
+		state = newState;
+	}
+}
+
+void Enemy::beginState(State newState)
+{
+	switch (newState)
+	{
+	case State::Idle:
+		break;
+	case State::Chase:
+		break;
+	case State::Attack:
+		break;
+	case State::Hurt:
+		break;
+	}
+}
+
+void Enemy::endState(State oldState)
+{
+	switch (oldState)
+	{
+	case State::Idle:
+		break;
+	case State::Chase:
+		break;
+	case State::Attack:
+		break;
+	case State::Hurt:
+		break;
+	}
+}
+
+void Enemy::doMovement(float deltaTime)
+{
+	auto initialPos = transform.getPosition();
+}
+
+void Enemy::doIdle(float deltaTime)
+{
+	doMovement(deltaTime);
+	//if velocity > 0 switch to chasing
+
+	goblinIdle.update(deltaTime);
+}
+
+void Enemy::doChase(float deltaTime)
+{
+	doMovement(deltaTime);
+	if (glm::length(velocity) == 0)
+	{
+		setState(State::Idle);
+	}
+	goblinChase.update(deltaTime);
 }

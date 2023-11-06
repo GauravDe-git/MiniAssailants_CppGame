@@ -9,7 +9,7 @@ void Level::loadLevelAssets()
 {
 	//Load level-specific assets
 	background = Background(backgroundPath);
-	enemy = Enemy{ {SCREEN_WIDTH / 2 + 100,SCREEN_HEIGHT - 30} };
+	enemy = Enemy{ {SCREEN_WIDTH / 2 + 100,SCREEN_HEIGHT - 30},Enemy::Type::Goblin};
 	player = Player{ {SCREEN_WIDTH / 2,(SCREEN_HEIGHT - 10)} };
 
 	player.setTopEdgeCollision(topEdgeCollision);
@@ -46,6 +46,6 @@ void Level::draw(Graphics::Image& image)
 {
 	// Draw level-specific elements (bg, player, enemies, etc.)
 	background.draw(image, camera);
-	enemy.draw(image, camera);
 	player.draw(image, camera);
+	enemy.draw(image, camera);
 }

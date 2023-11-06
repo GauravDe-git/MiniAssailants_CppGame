@@ -9,14 +9,43 @@
 class Enemy : public Entity
 {
 public:
+	enum class Type
+	{
+		Goblin
+	};
+
+	enum class State
+	{
+		None,
+		Idle,
+		Chase,
+		Attack,
+		Hurt
+	};
 
 	Enemy();
-	explicit Enemy(const glm::vec2& pos);
+	explicit Enemy(const glm::vec2& pos, Type type);
 
 	virtual void update(float deltaTime) override;
 	virtual void draw(Graphics::Image& image, const Camera& camera) override;
 
 private:
+	void setState(State newState);
+	void beginState(State newState);
+	void endState(State oldState);
+
+	void doMovement(float deltaTime);
+	void doIdle(float deltaTime);
+	void doChase(float deltaTime);
+
+	glm::vec2 velocity{ 0 };
+	float speed{ 80.0f };
+
+	Type type;
+	State state = State::None;
 
 	Graphics::SpriteAnim goblinIdle;
+	Graphics::SpriteAnim goblinChase;
+	Graphics::SpriteAnim goblinAtk;
+	Graphics::SpriteAnim goblinHurt;
 };
