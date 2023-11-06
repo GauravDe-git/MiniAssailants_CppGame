@@ -35,7 +35,8 @@ public:
 	virtual void draw(Graphics::Image& image, const Camera& camera) override;
 
 	const glm::vec2& getVelocity() const { return velocity; }
-	bool isAttacking() const { return state == State::Special1; }
+	bool isAttacking() const { return state == State::Special1 ||state == State::LightAtk1
+							  || state == State::LightAtk2; }
 
 	void setScreenBounds(const Math::AABB& _bounds) { bounds = _bounds; }
 

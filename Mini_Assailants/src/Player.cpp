@@ -32,9 +32,9 @@ Player::Player(const glm::vec2& pos)
 
 	// 2 anims for Light Attack (On pressing H key)
 	auto lightAtk1Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
-	lightAtk1Sprite = SpriteAnim{ lightAtk1Sheet, 10.0f };
+	lightAtk1Sprite = SpriteAnim{ lightAtk1Sheet, 12.0f };
 	auto lightAtk2Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk2_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
-	lightAtk2Sprite = SpriteAnim{ lightAtk2Sheet, 10.0f };
+	lightAtk2Sprite = SpriteAnim{ lightAtk2Sheet, 14.0f };
 
 	auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	special1Sprite = SpriteAnim{ special1Sheet, 12.0f };
@@ -50,22 +50,23 @@ void Player::setTopEdgeCollision(int top)
 
 void Player::update(float deltaTime)
 {
+	if (isAttacking())
+	{
+		timeSinceLastAtk += deltaTime;
+	}
+
 	//Light Attack
 	if (Input::getKeyDown(KeyCode::H))
 	{
-		if (state == State::LightAtk1 && timeSinceLastAtk < 1.f)
+		if (state == State::LightAtk1 && timeSinceLastAtk < 0.5f)
 		{
 			setState(State::LightAtk2);
 		}
 		else if (state != State::Special1 && state != State::LightAtk2)
 		{
 			setState(State::LightAtk1);
-			timeSinceLastAtk = 0.f; 
+			timeSinceLastAtk = 0.f;
 		}
-	}
-	if (state == State::LightAtk1)
-	{
-		timeSinceLastAtk += deltaTime;
 	}
 
 	// Special 1 Attack

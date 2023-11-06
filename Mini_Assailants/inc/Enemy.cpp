@@ -9,8 +9,11 @@ Enemy::Enemy() = default;
 Enemy::Enemy(const glm::vec2& pos)
 	:Entity{ { pos } ,{ {34,63,0},{94,103,0} } }
 {
-	auto goblinIdleSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0, BlendMode::AlphaBlend);
-	goblinIdle = SpriteAnim{ goblinIdleSheet, 10.f};
+	auto goblinIdleSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0);
+	goblinIdle = SpriteAnim{ goblinIdleSheet, 7.f};
+
+
+	transform.setAnchor(glm::vec2{ 84.0f,103.0f });
 }
 
 void Enemy::update(float deltaTime)

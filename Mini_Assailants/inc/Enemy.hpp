@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Entity.hpp"
+#include "Constants.hpp"
 
 #include <Graphics/SpriteAnim.hpp>
 #include <glm/vec2.hpp>
@@ -18,5 +19,4 @@ public:
 private:
 
 	Graphics::SpriteAnim goblinIdle;
-
 };
