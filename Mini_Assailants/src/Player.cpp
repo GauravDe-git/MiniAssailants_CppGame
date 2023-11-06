@@ -14,6 +14,8 @@ static std::map<Player::State, std::string> g_stateNames =
 	{Player::State::None, "None"},
 	{Player::State::Idle, "Idle"},
 	{Player::State::Walking, "Walking"},
+	{Player::State::LightAtk1, "LightAtk1"},
+	{Player::State::LightAtk2, "LightAtk2"},
 	{Player::State::Special1, "Special1"},
 };
 
@@ -27,6 +29,12 @@ Player::Player(const glm::vec2& pos)
 
 	auto walkSheet = ResourceManager::loadSpriteSheet("assets/textures/Walking_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	walkSprite = SpriteAnim{ walkSheet, 10.0f };
+
+	// 2 anims for Light Attack (On pressing H key)
+	auto lightAtk1Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	lightAtk1Sprite = SpriteAnim{ lightAtk1Sheet, 10.0f };
+	auto lightAtk2Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk2_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	lightAtk2Sprite = SpriteAnim{ lightAtk2Sheet, 10.0f };
 
 	auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	special1Sprite = SpriteAnim{ special1Sheet, 12.0f };
@@ -42,8 +50,28 @@ void Player::setTopEdgeCollision(int top)
 
 void Player::update(float deltaTime)
 {
+	//Light Attack
+	if (Input::getKeyDown(KeyCode::H))
+	{
+		if (state == State::LightAtk1 && timeSinceLastAtk < 1.f)
+		{
+			setState(State::LightAtk2);
+		}
+		else if (state != State::Special1 && state != State::LightAtk2)
+		{
+			setState(State::LightAtk1);
+			timeSinceLastAtk = 0.f; 
+		}
+	}
+	if (state == State::LightAtk1)
+	{
+		timeSinceLastAtk += deltaTime;
+	}
+
+	// Special 1 Attack
 	if (Input::getKeyDown(KeyCode::Y))
 	{
+		if (state == State::Idle || state == State::Walking)
 		setState(State::Special1);
 	}
 
@@ -62,6 +90,12 @@ void Player::update(float deltaTime)
 		break;
 	case State::Walking:
 		doWalk(deltaTime);
+		break;
+	case State::LightAtk1:
+		doLightAtk1(deltaTime);
+		break;
+	case State::LightAtk2:
+		doLightAtk2(deltaTime);
 		break;
 	case State::Special1:
 		doSpecial1(deltaTime);
@@ -82,6 +116,12 @@ void Player::draw(Image& image, const Camera& camera)
 		break;
 	case State::Walking:
 		image.drawSprite(walkSprite, tempTransform);
+		break;
+	case State::LightAtk1:
+		image.drawSprite(lightAtk1Sprite, tempTransform);
+		break;
+	case State::LightAtk2:
+		image.drawSprite(lightAtk2Sprite, tempTransform);
 		break;
 	case State::Special1:
 		image.drawSprite(special1Sprite, tempTransform);
@@ -113,6 +153,12 @@ void Player::beginState(State newState)
 		break;
 	case State::Walking:
 		break;
+	case State::LightAtk1:
+		lightAtk1Sprite.reset();
+		break;
+	case State::LightAtk2:
+		lightAtk2Sprite.reset();
+		break;
 	case State::Special1:
 		special1Sprite.reset();
 		break;
@@ -128,8 +174,11 @@ void Player::endState(State oldState)
 		break;
 	case State::Walking:
 		break;
+	case State::LightAtk1:
+		break;
+	case State::LightAtk2:
+		break;
 	case State::Special1:
-
 	{//Displacement of player pos upon landing
 		glm::vec2 displacement(26.f, 0);
 
@@ -194,15 +243,29 @@ void Player::doWalk(float deltaTime)
 	walkSprite.update(deltaTime);
 }
 
+void Player::doLightAtk1(float deltaTime)
+{
+	lightAtk1Sprite.update(deltaTime);
+	if (lightAtk1Sprite.isDone())
+	{
+		setState(State::Idle);
+	}
+}
+
+void Player::doLightAtk2(float deltaTime)
+{
+	lightAtk2Sprite.update(deltaTime);
+	if (lightAtk2Sprite.isDone())
+	{
+		setState(State::Idle);
+	}
+}
+
 void Player::doSpecial1(float deltaTime)
 {
-	// Implement the special attack logic here
 	special1Sprite.update(deltaTime);
-
-	// Check if the special attack animation is done
 	if (special1Sprite.isDone())
 	{
-		// Transition back to Idle state or another appropriate state
 		setState(State::Idle);
 	}
 }

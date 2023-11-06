@@ -19,6 +19,8 @@ public:
 		None,
 		Idle,
 		Walking,
+		LightAtk1,
+		LightAtk2,
 		Special1
 	};
 
@@ -45,15 +47,21 @@ private:
 	void doMovement(float deltaTime);
 	void doIdle(float deltaTime);
 	void doWalk(float deltaTime);
+	void doLightAtk1(float deltaTime);
+	void doLightAtk2(float deltaTime);
 	void doSpecial1(float deltaTime);
 
 	glm::vec2 velocity{ 0 };
 	float speed{ 80.0f };
 	int topEdgeCollision{ 0 };
 
+	float timeSinceLastAtk{ 0.f };
+
 	State state = State::None;
 	Graphics::SpriteAnim idleSprite;
 	Graphics::SpriteAnim walkSprite;
+	Graphics::SpriteAnim lightAtk1Sprite;
+	Graphics::SpriteAnim lightAtk2Sprite;
 	Graphics::SpriteAnim special1Sprite;
 
 	Math::AABB bounds;
