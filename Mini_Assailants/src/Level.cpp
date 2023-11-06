@@ -9,6 +9,7 @@ void Level::loadLevelAssets()
 {
 	//Load level-specific assets
 	background = Background(backgroundPath);
+	enemy = Enemy{ {(SCREEN_WIDTH / 2) + 100,SCREEN_HEIGHT - 10} };
 	player = Player{ {SCREEN_WIDTH / 2,(SCREEN_HEIGHT - 10)} };
 
 	player.setTopEdgeCollision(topEdgeCollision);
@@ -38,14 +39,13 @@ void Level::update(float deltaTime)
 	camera.update(deltaTime, player.getPosition(), player.getVelocity(), player.isAttacking());
 
 	player.update(deltaTime);
+	enemy.update(deltaTime);
 }
 
 void Level::draw(Graphics::Image& image)
 {
 	// Draw level-specific elements (bg, player, enemies, etc.)
 	background.draw(image, camera);
+	enemy.draw(image, camera);
 	player.draw(image, camera);
 }
-
-
-// call the camera in the level update, move the camera call from main to level

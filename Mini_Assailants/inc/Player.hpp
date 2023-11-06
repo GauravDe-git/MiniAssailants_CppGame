@@ -30,7 +30,6 @@ public:
 	void setTopEdgeCollision(int top);
 
 	virtual void update(float deltaTime) override;
-
 	virtual void draw(Graphics::Image& image, const Camera& camera) override;
 
 	const glm::vec2& getVelocity() const { return velocity; }

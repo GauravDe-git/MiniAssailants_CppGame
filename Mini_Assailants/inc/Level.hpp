@@ -3,6 +3,7 @@
 #include <Background.hpp>
 #include <Camera.hpp>
 #include <Player.hpp>
+#include <Enemy.hpp>
 
 class Level {
 public:
@@ -19,6 +20,7 @@ public:
 private:
 	Background background;
 	Player player;
+	Enemy enemy;
 	Camera camera;
 	std::string backgroundPath;
 	int topEdgeCollision;
