@@ -40,6 +40,7 @@ void Level::update(float deltaTime)
 
 	player.update(deltaTime);
 	enemy.update(deltaTime);
+	enemy.setTarget(&player);
 }
 
 void Level::draw(Graphics::Image& image)

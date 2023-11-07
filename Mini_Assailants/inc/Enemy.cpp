@@ -18,7 +18,7 @@ static std::map<Enemy::State, std::string> g_stateNames =
 Enemy::Enemy() = default;
 
 Enemy::Enemy(const glm::vec2& pos,Type _type)
-	:Entity{ { pos } ,{ {79,62,0},{94,102,0} } }, type{_type}
+	:Entity{ { pos } ,{ {75,62,0},{94,102,0} } }, type{_type}
 {
 	switch (type)
 	{
@@ -44,6 +44,13 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 
 void Enemy::update(float deltaTime)
 {
+	if (velocity.x < 0) {
+		transform.setScale(glm::vec2(1.0f, 1.0f));
+	}
+	else if (velocity.x > 0) {
+		transform.setScale(glm::vec2(-1.0f, 1.0f));
+	}
+
 	switch (state)
 	{
 	case State::Idle:
@@ -132,12 +139,24 @@ void Enemy::endState(State oldState)
 void Enemy::doMovement(float deltaTime)
 {
 	auto initialPos = transform.getPosition();
+	auto targetPos = target ? target->getPosition() : initialPos;
+
+	auto direction = targetPos - initialPos;
+
+	direction = glm::length(direction) > 0 ? glm::normalize(direction) : direction;
+	velocity = direction * speed;
+	initialPos += velocity * deltaTime;
+
+	transform.setPosition(initialPos);
 }
 
 void Enemy::doIdle(float deltaTime)
 {
 	doMovement(deltaTime);
-	//if velocity > 0 switch to chasing
+	if (glm::length(velocity) > 0)
+	{
+		setState(State::Chase);
+	}
 
 	goblinIdle.update(deltaTime);
 }
@@ -145,9 +164,20 @@ void Enemy::doIdle(float deltaTime)
 void Enemy::doChase(float deltaTime)
 {
 	doMovement(deltaTime);
-	if (glm::length(velocity) == 0)
+	if (glm::length(velocity) == 0.f)
 	{
 		setState(State::Idle);
 	}
 	goblinChase.update(deltaTime);
+}
+
+void Enemy::doAttack(float deltaTime)
+{
+	doMovement(deltaTime);
+	goblinAtk.update(deltaTime);
+
+	if (goblinAtk.isDone())
+	{
+		setState(State::Idle);
+	}
 }

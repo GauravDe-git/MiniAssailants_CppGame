@@ -53,7 +53,7 @@ private:
 	void doSpecial1(float deltaTime);
 
 	glm::vec2 velocity{ 0 };
-	float speed{ 80.0f };
+	float speed{ 85.0f };
 	int topEdgeCollision{ 0 };
 
 	float timeSinceLastAtk{ 0.f };

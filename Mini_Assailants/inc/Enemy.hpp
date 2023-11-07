@@ -29,6 +29,8 @@ public:
 	virtual void update(float deltaTime) override;
 	virtual void draw(Graphics::Image& image, const Camera& camera) override;
 
+	void setTarget(Entity* _target) { target = _target; }
+
 private:
 	void setState(State newState);
 	void beginState(State newState);
@@ -37,9 +39,11 @@ private:
 	void doMovement(float deltaTime);
 	void doIdle(float deltaTime);
 	void doChase(float deltaTime);
+	void doAttack(float deltaTime);
 
+	Entity* target = nullptr;
 	glm::vec2 velocity{ 0 };
-	float speed{ 80.0f };
+	float speed{ 78.0f };
 
 	Type type;
 	State state = State::None;
