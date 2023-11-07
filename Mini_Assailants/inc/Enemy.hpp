@@ -41,6 +41,7 @@ public:
 	virtual void draw(Graphics::Image& image, const Camera& camera) override;
 
 	void setTarget(Entity* _target) { target = _target; }
+	const Math::AABB getAABB() const { return  transform * aabb; }
 
 private:
 	void setState(State newState);
@@ -57,6 +58,7 @@ private:
 	Entity* target = nullptr;
 
 	glm::vec2 velocity{ 0 };
+	Math::AABB aabb;
 
 	Type type;
 	State state = State::None;

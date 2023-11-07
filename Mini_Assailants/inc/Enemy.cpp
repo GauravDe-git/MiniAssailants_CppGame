@@ -18,7 +18,7 @@ static std::map<Enemy::State, std::string> g_stateNames =
 Enemy::Enemy() = default;
 
 Enemy::Enemy(const glm::vec2& pos,Type _type)
-	:Entity{ pos, attributes.aabb }, type{_type}
+	:Entity{ pos }, type{ _type }
 {
 	switch (type)
 	{
@@ -37,6 +37,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			break;
 		//Handle Other enemy types
 	}
+	aabb = attributes.aabb;
 }
 
 void Enemy::update(float deltaTime)
@@ -150,7 +151,10 @@ void Enemy::doMovement(float deltaTime)
 
 void Enemy::doIdle(float deltaTime)
 {
-	doMovement(deltaTime);
+	if (!(target && glm::distance(transform.getPosition(), target->getPosition()) < attributes.attackDistance))
+	{
+		doMovement(deltaTime);
+	}
 	if (glm::length(velocity) > 0)
 	{
 		setState(State::Chase);

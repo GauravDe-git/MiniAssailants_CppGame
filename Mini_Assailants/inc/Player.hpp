@@ -38,6 +38,7 @@ public:
 	bool isAttacking() const { return state == State::Special1 ||state == State::LightAtk1
 							  || state == State::LightAtk2; }
 
+	const Math::AABB getAABB() const { return  transform * aabb; }
 	void setScreenBounds(const Math::AABB& _bounds) { bounds = _bounds; }
 
 private:
@@ -55,6 +56,7 @@ private:
 	glm::vec2 velocity{ 0 };
 	float speed{ 85.0f };
 	int topEdgeCollision{ 0 };
+	Math::AABB aabb;
 
 	float timeSinceLastAtk{ 0.f };
 

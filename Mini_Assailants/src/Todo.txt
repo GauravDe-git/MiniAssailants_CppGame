@@ -1,5 +1,5 @@
 
-1. Enemy attacks Player:
+1. Enemy attacks Player:                   
     - Player flashes red,
     - Hp reduces  (Add hp,atk variables)
    !!- Hp 0 = Game Over Screen
@@ -23,7 +23,11 @@
 
 ---------------------------
 Extra Time:
+	- Add hp/mp bar.
 	- Use the level class to add more levels.
 	- Add more enemy types.
 
-	- Add Bosses.
+For intake:
+- add hp/mp item drops to collect
+
+	- Add Bosses.(what)
