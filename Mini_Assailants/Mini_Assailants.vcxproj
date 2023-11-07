@@ -28,6 +28,9 @@
     <ClInclude Include="inc\Level.hpp" />
     <ClInclude Include="inc\Player.hpp" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="src\Todo.txt" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
     <Keyword>Win32Proj</Keyword>

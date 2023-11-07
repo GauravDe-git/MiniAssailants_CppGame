@@ -1,0 +1,29 @@
+
+1. Enemy attacks Player:
+    - Player flashes red,
+    - Hp reduces  (Add hp,atk variables)
+   !!- Hp 0 = Game Over Screen
+
+2. Player attacks Enemy:
+	- Enemy Hurt State,
+	- Enemy knocked back,
+	- Hp reduces (Add hp,atk variables)
+
+3. Wave of enemies:
+    - Spawn multiple enemies using vectors.
+	- Change camera state to arena during combat.
+	- Switch back to scrolling after enemies defeated.
+
+4. Add audio:
+	- Add sound effects.
+	- Add music.
+
+5. Add a main menu:
+	- Using a Button class.
+
+---------------------------
+Extra Time:
+	- Use the level class to add more levels.
+	- Add more enemy types.
+
+	- Add Bosses.

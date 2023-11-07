@@ -18,22 +18,19 @@ static std::map<Enemy::State, std::string> g_stateNames =
 Enemy::Enemy() = default;
 
 Enemy::Enemy(const glm::vec2& pos,Type _type)
-	:Entity{ { pos } ,{ {75,62,0},{94,102,0} } }, type{_type}
+	:Entity{ pos, attributes.aabb }, type{_type}
 {
 	switch (type)
 	{
 		case Type::Goblin:
-			auto goblinIdleSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0,BlendMode::AlphaBlend);
-			goblinIdle = SpriteAnim{ goblinIdleSheet, 7.f };
+			attributes.aabb = { {75,62,0},{94,102,0} };
+			attributes.attackDistance = 62.0f;
+			attributes.speed = 78.0f;
 
-			auto goblinChaseSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Chase.png", 150, 125, 0, 0, BlendMode::AlphaBlend);
-			goblinChase = SpriteAnim{ goblinChaseSheet, 8.f };
-
-			auto goblinAtkSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Atk.png", 150, 125, 0, 0, BlendMode::AlphaBlend);
-			goblinAtk = SpriteAnim{ goblinAtkSheet, 7.f };
-
-			auto goblinHurtSheet = ResourceManager::loadSpriteSheet("assets/textures/Goblin_Hurt.png", 150, 125, 0, 0, BlendMode::AlphaBlend);
-			goblinHurt = SpriteAnim{ goblinHurtSheet, 7.f };
+			attributes.idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
+			attributes.chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Chase.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 8.f };
+			attributes.attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Atk.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
+			attributes.hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Hurt.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
 
 			state = State::Idle;
 			transform.setAnchor(glm::vec2{ 84.0f,103.0f });
@@ -76,16 +73,16 @@ void Enemy::draw(Graphics::Image& image, const Camera& camera)
 	switch (state)
 	{
 	case State::Idle:
-		image.drawSprite(goblinIdle, tempTransform);
+		image.drawSprite(attributes.idleAnim, tempTransform);
 		break;
 	case State::Chase:
-		image.drawSprite(goblinChase, tempTransform);
+		image.drawSprite(attributes.chaseAnim, tempTransform);
 		break;
 	case State::Attack:
-		image.drawSprite(goblinAtk, tempTransform);
+		image.drawSprite(attributes.attackAnim, tempTransform);
 		break;
 	case State::Hurt:
-		image.drawSprite(goblinHurt, tempTransform);
+		image.drawSprite(attributes.hurtAnim, tempTransform);
 		break;
 	}
 
@@ -115,7 +112,7 @@ void Enemy::beginState(State newState)
 	case State::Chase:
 		break;
 	case State::Attack:
-		goblinAtk.reset();
+		attributes.attackAnim.reset();
 		break;
 	case State::Hurt:
 		break;
@@ -145,7 +142,7 @@ void Enemy::doMovement(float deltaTime)
 	auto direction = targetPos - initialPos;
 
 	direction = glm::length(direction) > 0 ? glm::normalize(direction) : direction;
-	velocity = direction * speed;
+	velocity = direction * attributes.speed;
 	initialPos += velocity * deltaTime;
 
 	transform.setPosition(initialPos);
@@ -159,12 +156,12 @@ void Enemy::doIdle(float deltaTime)
 		setState(State::Chase);
 	}
 
-	goblinIdle.update(deltaTime);
+	attributes.idleAnim.update(deltaTime);
 }
 
 void Enemy::doChase(float deltaTime)
 {
-	if (target && glm::distance(transform.getPosition(), target->getPosition()) < attackDistance)
+	if (target && glm::distance(transform.getPosition(), target->getPosition()) < attributes.attackDistance)
 	{
 		if(state != State::Attack)
 		setState(State::Attack);
@@ -177,21 +174,21 @@ void Enemy::doChase(float deltaTime)
 			setState(State::Idle);
 		}
 	}
-	goblinChase.update(deltaTime);
+	attributes.chaseAnim.update(deltaTime);
 }
 
 void Enemy::doAttack(float deltaTime)
 {
-	if (target && glm::distance(transform.getPosition(), target->getPosition()) > attackDistance)
+	if (target && glm::distance(transform.getPosition(), target->getPosition()) > attributes.attackDistance)
 	{
 		setState(State::Chase);
 	}
 	else
 	{
-		goblinAtk.update(deltaTime);
-		if (goblinAtk.isDone())
+		attributes.attackAnim.update(deltaTime);
+		if (attributes.attackAnim.isDone())
 		{
-			goblinAtk.reset();
+			attributes.attackAnim.reset();
 			setState(State::Idle);
 		}
 	}
