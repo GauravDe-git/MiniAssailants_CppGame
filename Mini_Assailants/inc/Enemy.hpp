@@ -42,6 +42,8 @@ private:
 	void doAttack(float deltaTime);
 
 	Entity* target = nullptr;
+	float attackDistance = 62.0f;
+
 	glm::vec2 velocity{ 0 };
 	float speed{ 78.0f };
 

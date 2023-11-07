@@ -60,7 +60,7 @@ void Enemy::update(float deltaTime)
 		doChase(deltaTime);
 		break;
 	case State::Attack:
-		//doAttack(deltaTime);
+		doAttack(deltaTime);
 		break;
 	case State::Hurt:
 		//doHurt(deltaTime);
@@ -115,6 +115,7 @@ void Enemy::beginState(State newState)
 	case State::Chase:
 		break;
 	case State::Attack:
+		goblinAtk.reset();
 		break;
 	case State::Hurt:
 		break;
@@ -163,21 +164,35 @@ void Enemy::doIdle(float deltaTime)
 
 void Enemy::doChase(float deltaTime)
 {
-	doMovement(deltaTime);
-	if (glm::length(velocity) == 0.f)
+	if (target && glm::distance(transform.getPosition(), target->getPosition()) < attackDistance)
 	{
-		setState(State::Idle);
+		if(state != State::Attack)
+		setState(State::Attack);
+	}
+	else
+	{
+		doMovement(deltaTime);
+		if (glm::length(velocity) == 0.f)
+		{
+			setState(State::Idle);
+		}
 	}
 	goblinChase.update(deltaTime);
 }
 
 void Enemy::doAttack(float deltaTime)
 {
-	doMovement(deltaTime);
-	goblinAtk.update(deltaTime);
-
-	if (goblinAtk.isDone())
+	if (target && glm::distance(transform.getPosition(), target->getPosition()) > attackDistance)
 	{
-		setState(State::Idle);
+		setState(State::Chase);
+	}
+	else
+	{
+		goblinAtk.update(deltaTime);
+		if (goblinAtk.isDone())
+		{
+			goblinAtk.reset();
+			setState(State::Idle);
+		}
 	}
 }
