@@ -5,6 +5,8 @@
 #include <Player.hpp>
 #include <Enemy.hpp>
 
+#include <vector>
+
 class Level {
 public:
 	Level();
@@ -22,6 +24,8 @@ private:
 	Player player;
 	Enemy enemy;
 	Camera camera;
+	std::vector<Entity*> entities;
+
 	std::string backgroundPath;
 	int topEdgeCollision;
 };

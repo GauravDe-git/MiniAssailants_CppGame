@@ -18,7 +18,8 @@ static std::map<Enemy::State, std::string> g_stateNames =
 Enemy::Enemy() = default;
 
 Enemy::Enemy(const glm::vec2& pos,Type _type)
-	:Entity{ pos }, type{ _type }
+	:Entity{ pos }
+	,type{ _type }
 {
 	switch (type)
 	{

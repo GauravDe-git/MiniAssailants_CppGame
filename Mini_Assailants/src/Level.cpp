@@ -1,6 +1,8 @@
 #include <Level.hpp>
 #include <Constants.hpp>
 
+#include <algorithm>
+
 Level::Level()
 	:backgroundPath{}, topEdgeCollision{ 0 }, camera{ glm::vec2{0,0} }
 {}
@@ -14,6 +16,9 @@ void Level::loadLevelAssets()
 	player.setTopEdgeCollision(topEdgeCollision);
 	// Add other assets (eneimes, items etc.) later
 	enemy = Enemy{ {SCREEN_WIDTH / 2 + 100,SCREEN_HEIGHT - 30},Enemy::Type::Goblin };
+	entities.clear();
+	entities.push_back(&player);
+	entities.push_back(&enemy);
 }
 
 void Level::setLevel(int levelNumber)
@@ -47,6 +52,11 @@ void Level::draw(Graphics::Image& image)
 {
 	// Draw level-specific elements (bg, player, enemies, etc.)
 	background.draw(image, camera);
-	enemy.draw(image, camera);
-	player.draw(image, camera);
+
+	std::sort(entities.begin(), entities.end(), [](const Entity* a, const Entity* b) {return a->getPosition().y < b->getPosition().y; });
+	for (auto entity : entities)
+	{
+		entity->draw(image, camera);
+	}
+	
 }

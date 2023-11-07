@@ -1,10 +1,12 @@
 
-1. Enemy attacks Player:                   
-    - Player flashes red,
+1. Enemy attacks Player:
+	- Circle Intersects AABB
+    - Player flashes red, //software rasterizer image class new changes
     - Hp reduces  (Add hp,atk variables)
    !!- Hp 0 = Game Over Screen
 
 2. Player attacks Enemy:
+	- Circle Intersects AABB
 	- Enemy Hurt State,
 	- Enemy knocked back,
 	- Hp reduces (Add hp,atk variables)
@@ -22,7 +24,7 @@
 	- Using a Button class.
 
 ---------------------------
-Extra Time:
+Extra:
 	- Add hp/mp bar.
 	- Use the level class to add more levels.
 	- Add more enemy types.
