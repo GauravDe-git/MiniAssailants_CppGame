@@ -27,11 +27,13 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			aabb = { {75,62,0},{94,102,0} };
 			attackDistance = 62.0f;
 			speed = 78.0f;
+			hp = 10;
+			attackDmg = 1;
 
 			idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
 			chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Chase.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 8.f };
 			attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Atk.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
-			hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Hurt.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 17.f };
+			hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Hurt.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
 
 			state = State::Idle;
 			transform.setAnchor(glm::vec2{ 84.0f,103.0f });
@@ -91,12 +93,8 @@ void Enemy::draw(Graphics::Image& image, const Camera& camera)
 	// Draw AABB
 	image.drawAABB(getAABB() + glm::vec3{ camera.getViewPosition(), 0 }, Color::Yellow, {}, FillMode::WireFrame);
 	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + camera.getViewPosition() + glm::vec2{ -18, -58 }, Color::Yellow);
+	image.drawText(Font::Default, std::to_string(hp), transform.getPosition() + camera.getViewPosition() + glm::vec2{-16, -70}, Color::Red);
 #endif
-}
-
-void Enemy::getHit()
-{
-	setState(State::Hurt);
 }
 
 void Enemy::setState(State newState)
@@ -206,6 +204,11 @@ void Enemy::doAttack(float deltaTime)
 void Enemy::doHurt(float deltaTime)
 {
 	hurtAnim.update(deltaTime);
+	glm::vec2 knockBack{ 50.f * transform.getScale().x,0.f };
+
+	transform.translate(knockBack * deltaTime);
+	
+	
 	if (hurtAnim.isDone())
 	{
 		hurtAnim.reset();

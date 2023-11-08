@@ -5,7 +5,6 @@
 #include <Graphics/ResourceManager.hpp>
 
 #include <iostream>
-#include <map>
 
 using namespace Graphics;
 
@@ -38,6 +37,10 @@ Player::Player(const glm::vec2& pos)
 
 	auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	special1Sprite = SpriteAnim{ special1Sheet, 12.0f };
+
+	attackDmg[AttackType::Light1] = 1;
+	attackDmg[AttackType::Light2] = 2;
+	attackDmg[AttackType::Special1] = 5;
 
 	transform.setAnchor(glm::vec2{ 21.0f,116.0f });
 	setState(State::Idle);
@@ -137,12 +140,15 @@ void Player::beginState(State newState)
 	case State::Walking:
 		break;
 	case State::LightAtk1:
+		currentAtkType = AttackType::Light1;
 		lightAtk1Sprite.reset();
 		break;
 	case State::LightAtk2:
+		currentAtkType = AttackType::Light2;
 		lightAtk2Sprite.reset();
 		break;
 	case State::Special1:
+		currentAtkType = AttackType::Special1;
 		special1Sprite.reset();
 		break;
 		//Add remaining states here
@@ -163,16 +169,12 @@ void Player::endState(State oldState)
 		break;
 	case State::Special1:
 	{//Displacement of player pos upon landing
-		glm::vec2 displacement(26.f, 0);
+		glm::vec2 displacement{26.f, 0};
 
 		// If the player is facing left, negate the displacement
-		if (transform.getScale().x < 0)
-		{
-			displacement.x = -displacement.x;
-		}
+		transform.translate(displacement * transform.getScale());
 
-		transform.translate(displacement);
-		attackCircle.center= glm::vec2{0,0};
+		attackCircle.center = glm::vec2{0,0};
 	}
 	break;
 	//Add remaining states here

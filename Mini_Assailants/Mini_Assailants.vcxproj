@@ -22,6 +22,7 @@
   <ItemGroup>
     <ClInclude Include="inc\Background.hpp" />
     <ClInclude Include="inc\Camera.hpp" />
+    <ClInclude Include="inc\Combat.hpp" />
     <ClInclude Include="inc\Constants.hpp" />
     <ClInclude Include="inc\Enemy.hpp" />
     <ClInclude Include="inc\Entity.hpp" />

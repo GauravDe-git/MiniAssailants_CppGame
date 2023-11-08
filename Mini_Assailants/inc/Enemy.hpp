@@ -32,10 +32,14 @@ public:
 	void setTarget(Entity* _target) { target = _target; }
 	const Math::AABB getAABB() const { return  transform * aabb; }
 
-	void getHit();
+	int getHp() const { return hp; }
+	void reduceHP(int damage) { hp -= damage; }
+	int getAtkDmg() const { return attackDmg; }
+	void changeStateToHurt() { setState(State::Hurt); }
 
-private:
 	void setState(State newState);
+	State getState() const { return state; }
+private:
 	void beginState(State newState);
 	void endState(State oldState);
 
@@ -48,8 +52,10 @@ private:
 	Entity* target = nullptr;
 
 	glm::vec2 velocity{ 0 };
-	float attackDistance;
-	float speed;
+	float attackDistance{};
+	float speed{};
+	int hp{};
+	int attackDmg{};
 	Math::AABB aabb;
 
 	Graphics::SpriteAnim idleAnim;

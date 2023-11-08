@@ -10,6 +10,7 @@
 #include <glm/vec2.hpp>
 
 #include <string>
+#include <map>
 
 class Player : public Entity
 {
@@ -22,6 +23,16 @@ public:
 		LightAtk1,
 		LightAtk2,
 		Special1
+	};
+
+	enum class AttackType
+	{
+		Light1,
+		Light2,
+		Heavy1,
+		Heavy2,
+		Special1,
+		Special2
 	};
 
 	// Default constructor
@@ -38,12 +49,20 @@ public:
 	bool isAttacking() const { return state == State::Special1 ||state == State::LightAtk1
 							  || state == State::LightAtk2; }
 
+	//---Combat related functions---//
 	const Math::AABB getAABB() const { return  transform * aabb; }
 	const Math::Circle& getAttackCircle() const { return attackCircle; }
-	void setScreenBounds(const Math::AABB& _bounds) { bounds = _bounds; }
+	int getHP() const { return hp; }
+	void reduceHP(int damage) { hp -= damage; }
+	int getAtkDmg(AttackType type) const { return attackDmg.at(type); }
+	AttackType getCurrentAtkType() const { return currentAtkType; }
 
-private:
+	//void setScreenBounds(const Math::AABB& _bounds) { bounds = _bounds; }
+
 	void setState(State newState);
+	State getState() const { return state; }
+private:
+	
 	void beginState(State newState);
 	void endState(State oldState);
 
@@ -58,9 +77,13 @@ private:
 	glm::vec2 velocity{ 0 };
 	float speed{ 85.0f };
 	int topEdgeCollision{ 0 };
+
 	Math::AABB aabb;
+	int hp{30};
+	std::map<AttackType, int> attackDmg;
 	Math::Circle attackCircle{ {},15.f };
 	float timeSinceLastAtk{ 0.f };
+	AttackType currentAtkType{};
 
 	State state = State::None;
 	Graphics::SpriteAnim idleSprite;
@@ -69,5 +92,5 @@ private:
 	Graphics::SpriteAnim lightAtk2Sprite;
 	Graphics::SpriteAnim special1Sprite;
 
-	Math::AABB bounds;
+	//Math::AABB bounds;
 };

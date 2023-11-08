@@ -1,5 +1,6 @@
-#include <Level.hpp>
-#include <Constants.hpp>
+#include "Level.hpp"
+#include "Constants.hpp"
+#include "Combat.hpp"
 
 #include <algorithm>
 #include <iostream>
@@ -47,10 +48,10 @@ void Level::update(float deltaTime)
 	player.update(deltaTime);
 	enemy.update(deltaTime);
 	enemy.setTarget(&player);
-	if (enemy.getAABB().intersect(player.getAttackCircle()))
+	if (player.isAttacking() && enemy.getState() != Enemy::State::Hurt && enemy.getAABB().intersect(player.getAttackCircle()))
 	{
-		enemy.getHit();
-		std::cout << "Ouch \n";
+		Combat::attack(player, enemy, player.getCurrentAtkType());
+		std::cout << enemy.getHp() << "\n";
 	}
 }
 
