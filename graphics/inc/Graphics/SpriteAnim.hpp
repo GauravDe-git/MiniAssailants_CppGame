@@ -65,6 +65,11 @@ public:
     /// <returns>`true` if all of the frames of the animation have played at least once, `false` otherwise.</returns>
     bool isDone() const noexcept;
 
+    int getCurrentFrame()
+    {
+		return static_cast<int>(time * frameRate) % frames.size();
+    }
+
 private:
     std::shared_ptr<SpriteSheet> spriteSheet;
     std::vector<int>             frames;

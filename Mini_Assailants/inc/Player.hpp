@@ -39,6 +39,7 @@ public:
 							  || state == State::LightAtk2; }
 
 	const Math::AABB getAABB() const { return  transform * aabb; }
+	const Math::Circle& getAttackCircle() const { return attackCircle; }
 	void setScreenBounds(const Math::AABB& _bounds) { bounds = _bounds; }
 
 private:
@@ -58,7 +59,7 @@ private:
 	float speed{ 85.0f };
 	int topEdgeCollision{ 0 };
 	Math::AABB aabb;
-
+	Math::Circle attackCircle{ {},15.f };
 	float timeSinceLastAtk{ 0.f };
 
 	State state = State::None;

@@ -2,6 +2,7 @@
 #include <Constants.hpp>
 
 #include <algorithm>
+#include <iostream>
 
 Level::Level()
 	:backgroundPath{}, topEdgeCollision{ 0 }, camera{ glm::vec2{0,0} }
@@ -46,6 +47,11 @@ void Level::update(float deltaTime)
 	player.update(deltaTime);
 	enemy.update(deltaTime);
 	enemy.setTarget(&player);
+	if (enemy.getAABB().intersect(player.getAttackCircle()))
+	{
+		enemy.getHit();
+		std::cout << "Ouch \n";
+	}
 }
 
 void Level::draw(Graphics::Image& image)

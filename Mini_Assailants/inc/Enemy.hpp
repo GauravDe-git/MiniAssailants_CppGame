@@ -32,6 +32,8 @@ public:
 	void setTarget(Entity* _target) { target = _target; }
 	const Math::AABB getAABB() const { return  transform * aabb; }
 
+	void getHit();
+
 private:
 	void setState(State newState);
 	void beginState(State newState);
@@ -41,6 +43,7 @@ private:
 	void doIdle(float deltaTime);
 	void doChase(float deltaTime);
 	void doAttack(float deltaTime);
+	void doHurt(float deltaTime);
 
 	Entity* target = nullptr;
 

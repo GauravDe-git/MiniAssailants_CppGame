@@ -31,7 +31,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
 			chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Chase.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 8.f };
 			attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Atk.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
-			hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Hurt.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
+			hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Hurt.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 17.f };
 
 			state = State::Idle;
 			transform.setAnchor(glm::vec2{ 84.0f,103.0f });
@@ -61,7 +61,7 @@ void Enemy::update(float deltaTime)
 		doAttack(deltaTime);
 		break;
 	case State::Hurt:
-		//doHurt(deltaTime);
+		doHurt(deltaTime);
 		break;
 	}
 }
@@ -92,6 +92,11 @@ void Enemy::draw(Graphics::Image& image, const Camera& camera)
 	image.drawAABB(getAABB() + glm::vec3{ camera.getViewPosition(), 0 }, Color::Yellow, {}, FillMode::WireFrame);
 	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + camera.getViewPosition() + glm::vec2{ -18, -58 }, Color::Yellow);
 #endif
+}
+
+void Enemy::getHit()
+{
+	setState(State::Hurt);
 }
 
 void Enemy::setState(State newState)
@@ -195,5 +200,15 @@ void Enemy::doAttack(float deltaTime)
 			attackAnim.reset();
 			setState(State::Idle);
 		}
+	}
+}
+
+void Enemy::doHurt(float deltaTime)
+{
+	hurtAnim.update(deltaTime);
+	if (hurtAnim.isDone())
+	{
+		hurtAnim.reset();
+		setState(State::Idle);
 	}
 }

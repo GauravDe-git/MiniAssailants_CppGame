@@ -109,9 +109,12 @@ void Player::draw(Image& image, const Camera& camera)
 	}
 
 #if _DEBUG
-	// Draw AABB
 	image.drawAABB(getAABB() + glm::vec3{ camera.getViewPosition(), 0}, Color::Yellow, {}, FillMode::WireFrame);
 	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + camera.getViewPosition() + glm::vec2{-20, -70}, Color::Yellow);
+	if (isAttacking())
+	{
+		image.drawCircle(attackCircle.center + camera.getViewPosition(), attackCircle.radius, Color::Red, {}, FillMode::WireFrame);
+	}
 #endif
 }
 
@@ -169,6 +172,7 @@ void Player::endState(State oldState)
 		}
 
 		transform.translate(displacement);
+		attackCircle.center= glm::vec2{0,0};
 	}
 	break;
 	//Add remaining states here
@@ -247,6 +251,7 @@ void Player::doLightAtk1(float deltaTime)
 	else
 	{
 		lightAtk1Sprite.update(deltaTime);
+		attackCircle.center = transform.getPosition() + glm::vec2{ 10, -10 };
 		if (lightAtk1Sprite.isDone())
 		{
 			setState(State::Idle);
@@ -266,6 +271,19 @@ void Player::doLightAtk2(float deltaTime)
 void Player::doSpecial1(float deltaTime)
 {
 	special1Sprite.update(deltaTime);
+
+	if (special1Sprite.getCurrentFrame() == 4)
+	{
+		if (transform.getScale().x > 0)
+		{
+			attackCircle.center = transform.getPosition() + glm::vec2{ 30.f,-40.f };
+		}
+		else if (transform.getScale().x < 0)
+		{
+			attackCircle.center = transform.getPosition() + glm::vec2{ -30.f,-40.f };
+		}
+	}
+
 	if (special1Sprite.isDone())
 	{
 		setState(State::Idle);
