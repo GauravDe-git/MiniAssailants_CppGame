@@ -55,27 +55,6 @@ void Player::update(float deltaTime)
 		timeSinceLastAtk += deltaTime;
 	}
 
-	//Light Attack
-	if (Input::getKeyDown(KeyCode::H))
-	{
-		if (state == State::LightAtk1 && timeSinceLastAtk < 0.5f)
-		{
-			setState(State::LightAtk2);
-		}
-		else if (state != State::Special1 && state != State::LightAtk2)
-		{
-			setState(State::LightAtk1);
-			timeSinceLastAtk = 0.f;
-		}
-	}
-
-	// Special 1 Attack
-	if (Input::getKeyDown(KeyCode::Y))
-	{
-		if (state == State::Idle || state == State::Walking)
-		setState(State::Special1);
-	}
-
 	// Check the direction of movement and flip the sprite.
 	if (velocity.x < 0) {
 		transform.setScale(glm::vec2(-1.0f, 1.0f));
@@ -223,9 +202,23 @@ void Player::doMovement(float deltaTime)
 	transform.setPosition(position);
 }
 
+void Player::doCombat()
+{
+	if (Input::getKeyDown(KeyCode::H))
+	{
+		setState(State::LightAtk1);
+		timeSinceLastAtk = 0.f;
+	}
+	else if (Input::getKeyDown(KeyCode::Y))
+	{
+		setState(State::Special1);
+	}
+}
+
 void Player::doIdle(float deltaTime)
 {
 	doMovement(deltaTime);
+	doCombat();
 	if (glm::length(velocity) > 0)
 	{
 		setState(State::Walking);
@@ -237,6 +230,7 @@ void Player::doIdle(float deltaTime)
 void Player::doWalk(float deltaTime)
 {
 	doMovement(deltaTime);
+	doCombat();
 	if (glm::length(velocity) == 0)
 	{
 		setState(State::Idle);
@@ -246,10 +240,17 @@ void Player::doWalk(float deltaTime)
 
 void Player::doLightAtk1(float deltaTime)
 {
-	lightAtk1Sprite.update(deltaTime);
-	if (lightAtk1Sprite.isDone())
+	if (Input::getKeyDown(KeyCode::H) && timeSinceLastAtk < 0.5f)
 	{
-		setState(State::Idle);
+		setState(State::LightAtk2);
+	}
+	else
+	{
+		lightAtk1Sprite.update(deltaTime);
+		if (lightAtk1Sprite.isDone())
+		{
+			setState(State::Idle);
+		}
 	}
 }
 

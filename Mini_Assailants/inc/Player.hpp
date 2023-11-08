@@ -47,6 +47,7 @@ private:
 	void endState(State oldState);
 
 	void doMovement(float deltaTime);
+	void doCombat();
 	void doIdle(float deltaTime);
 	void doWalk(float deltaTime);
 	void doLightAtk1(float deltaTime);

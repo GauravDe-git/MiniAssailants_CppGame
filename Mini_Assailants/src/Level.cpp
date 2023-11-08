@@ -53,6 +53,7 @@ void Level::draw(Graphics::Image& image)
 	// Draw level-specific elements (bg, player, enemies, etc.)
 	background.draw(image, camera);
 
+	//sorting order of drawing player/enemy based on their Y position
 	std::sort(entities.begin(), entities.end(), [](const Entity* a, const Entity* b) {return a->getPosition().y < b->getPosition().y; });
 	for (auto entity : entities)
 	{

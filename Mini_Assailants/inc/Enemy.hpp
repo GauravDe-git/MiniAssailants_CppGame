@@ -9,17 +9,6 @@
 class Enemy : public Entity
 {
 public:
-	struct Attributes
-	{
-		Math::AABB aabb;
-		Graphics::SpriteAnim idleAnim;
-		Graphics::SpriteAnim chaseAnim;
-		Graphics::SpriteAnim attackAnim;
-		Graphics::SpriteAnim hurtAnim;
-		float attackDistance;
-		float speed;
-	};
-
 	enum class Type
 	{
 		Goblin
@@ -53,12 +42,17 @@ private:
 	void doChase(float deltaTime);
 	void doAttack(float deltaTime);
 
-	Attributes attributes;
-
 	Entity* target = nullptr;
 
 	glm::vec2 velocity{ 0 };
+	float attackDistance;
+	float speed;
 	Math::AABB aabb;
+
+	Graphics::SpriteAnim idleAnim;
+	Graphics::SpriteAnim chaseAnim;
+	Graphics::SpriteAnim attackAnim;
+	Graphics::SpriteAnim hurtAnim;
 
 	Type type;
 	State state = State::None;
