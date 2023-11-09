@@ -6,6 +6,8 @@
 #include <Graphics/SpriteAnim.hpp>
 #include <glm/vec2.hpp>
 
+#include <map>
+
 class Enemy : public Entity
 {
 public:
@@ -30,7 +32,7 @@ public:
 	virtual void draw(Graphics::Image& image, const Camera& camera) override;
 
 	void setTarget(Entity* _target) { target = _target; }
-	const Math::AABB getAABB() const { return  transform * aabb; }
+	const Math::AABB getAABB() const;
 
 	int getHp() const { return hp; }
 	void reduceHP(int damage) { hp -= damage; }
@@ -56,7 +58,7 @@ private:
 	float speed{};
 	int hp{};
 	int attackDmg{};
-	Math::AABB aabb;
+	std::map<State, Math::AABB> aabbs;
 
 	Graphics::SpriteAnim idleAnim;
 	Graphics::SpriteAnim chaseAnim;

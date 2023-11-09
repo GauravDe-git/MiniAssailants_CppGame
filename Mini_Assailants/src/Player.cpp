@@ -113,7 +113,8 @@ void Player::draw(Image& image, const Camera& camera)
 
 #if _DEBUG
 	image.drawAABB(getAABB() + glm::vec3{ camera.getViewPosition(), 0}, Color::Yellow, {}, FillMode::WireFrame);
-	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + camera.getViewPosition() + glm::vec2{-20, -70}, Color::Yellow);
+	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + camera.getViewPosition() + glm::vec2{-20, -65}, Color::Yellow);
+	image.drawText(Font::Default,"HP: " + std::to_string(hp), transform.getPosition() + camera.getViewPosition() + glm::vec2{-17, -78}, Color::Green);
 	if (isAttacking())
 	{
 		image.drawCircle(attackCircle.center + camera.getViewPosition(), attackCircle.radius, Color::Red, {}, FillMode::WireFrame);
@@ -168,17 +169,16 @@ void Player::endState(State oldState)
 	case State::LightAtk2:
 		break;
 	case State::Special1:
-	{//Displacement of player pos upon landing
+		{
+		//Displacement of player pos upon landing
 		glm::vec2 displacement{26.f, 0};
-
 		// If the player is facing left, negate the displacement
 		transform.translate(displacement * transform.getScale());
-
-		attackCircle.center = glm::vec2{0,0};
-	}
+		}
 	break;
-	//Add remaining states here
 	}
+	//Reset the attack circle at end of each state
+	attackCircle = {};
 }
 
 void Player::doMovement(float deltaTime)
@@ -246,14 +246,19 @@ void Player::doWalk(float deltaTime)
 
 void Player::doLightAtk1(float deltaTime)
 {
-	if (Input::getKeyDown(KeyCode::H) && timeSinceLastAtk < 0.5f)
+	if (Input::getKeyDown(KeyCode::H) && timeSinceLastAtk < 2.f)
 	{
 		setState(State::LightAtk2);
 	}
 	else
 	{
 		lightAtk1Sprite.update(deltaTime);
-		attackCircle.center = transform.getPosition() + glm::vec2{ 10, -10 };
+
+		if (lightAtk1Sprite.getCurrentFrame() >= 3)
+		{
+			attackCircle = { transform.getPosition() + glm::vec2{ 32.f, -30.f } *transform.getScale(),10.f };
+		}
+
 		if (lightAtk1Sprite.isDone())
 		{
 			setState(State::Idle);
@@ -264,6 +269,10 @@ void Player::doLightAtk1(float deltaTime)
 void Player::doLightAtk2(float deltaTime)
 {
 	lightAtk2Sprite.update(deltaTime);
+
+	if (lightAtk2Sprite.getCurrentFrame() >= 3)
+		attackCircle = { transform.getPosition() + glm::vec2{ 32.f, -30.f } *transform.getScale(),11.f };
+
 	if (lightAtk2Sprite.isDone())
 	{
 		setState(State::Idle);
@@ -274,16 +283,9 @@ void Player::doSpecial1(float deltaTime)
 {
 	special1Sprite.update(deltaTime);
 
-	if (special1Sprite.getCurrentFrame() == 4)
+	if (special1Sprite.getCurrentFrame() >= 4)
 	{
-		if (transform.getScale().x > 0)
-		{
-			attackCircle.center = transform.getPosition() + glm::vec2{ 30.f,-40.f };
-		}
-		else if (transform.getScale().x < 0)
-		{
-			attackCircle.center = transform.getPosition() + glm::vec2{ -30.f,-40.f };
-		}
+		attackCircle = { transform.getPosition() + glm::vec2{ 30.f, -40.f } *transform.getScale(),15.f };
 	}
 
 	if (special1Sprite.isDone())

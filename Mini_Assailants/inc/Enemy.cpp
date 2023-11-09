@@ -24,8 +24,9 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 	switch (type)
 	{
 		case Type::Goblin:
-			aabb = { {75,62,0},{94,102,0} };
-			attackDistance = 62.0f;
+			aabbs[State::Idle] = { {75,62,0},{94,102,0} };
+			aabbs[State::Attack] = { {65,62,0},{94,102,0} };
+			attackDistance = 55.0f;
 			speed = 78.0f;
 			hp = 10;
 			attackDmg = 1;
@@ -93,8 +94,24 @@ void Enemy::draw(Graphics::Image& image, const Camera& camera)
 	// Draw AABB
 	image.drawAABB(getAABB() + glm::vec3{ camera.getViewPosition(), 0 }, Color::Yellow, {}, FillMode::WireFrame);
 	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + camera.getViewPosition() + glm::vec2{ -18, -58 }, Color::Yellow);
-	image.drawText(Font::Default, std::to_string(hp), transform.getPosition() + camera.getViewPosition() + glm::vec2{-16, -70}, Color::Red);
+	image.drawText(Font::Default,"HP: " + std::to_string(hp), transform.getPosition() + camera.getViewPosition() + glm::vec2{-16, -70}, Color::Red);
 #endif
+}
+
+const Math::AABB Enemy::getAABB() const
+{
+	auto it = aabbs.find(state);
+	if (it != aabbs.end())
+	{
+		// If there's an AABB for the current state, use it
+		return transform * it->second;
+	}
+	else
+	{
+		// Otherwise, use the Idle state's AABB as the default
+		return transform * aabbs.at(State::Idle);
+	}
+	
 }
 
 void Enemy::setState(State newState)
@@ -204,7 +221,7 @@ void Enemy::doAttack(float deltaTime)
 void Enemy::doHurt(float deltaTime)
 {
 	hurtAnim.update(deltaTime);
-	glm::vec2 knockBack{ 50.f * transform.getScale().x,0.f };
+	glm::vec2 knockBack{ 80.f * transform.getScale().x,0.f };
 
 	transform.translate(knockBack * deltaTime);
 	

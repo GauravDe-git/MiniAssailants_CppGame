@@ -81,7 +81,7 @@ private:
 	Math::AABB aabb;
 	int hp{30};
 	std::map<AttackType, int> attackDmg;
-	Math::Circle attackCircle{ {},15.f };
+	Math::Circle attackCircle{};
 	float timeSinceLastAtk{ 0.f };
 	AttackType currentAtkType{};
 

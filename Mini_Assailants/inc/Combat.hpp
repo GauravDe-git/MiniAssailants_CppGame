@@ -3,12 +3,10 @@
 #include "Player.hpp"
 #include "Enemy.hpp"
 
-class Combat
+namespace Combat
 {
-public:
-
 	//player attack enemy
-	static void attack(Player& player, Enemy& enemy, Player::AttackType atkType)
+	inline void attack(Player& player, Enemy& enemy, Player::AttackType atkType)
 	{
 		int damage = player.getAtkDmg(atkType);
 		enemy.reduceHP(damage);
@@ -16,7 +14,7 @@ public:
 	}
 
 	//enemy attack player
-	static void attack(Enemy& enemy, Player& player)
+	inline void attack(Enemy& enemy, Player& player)
 	{
 		int damage = enemy.getAtkDmg();
 		player.reduceHP(damage);
