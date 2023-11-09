@@ -39,9 +39,6 @@ Player::Player(const glm::vec2& pos)
 	auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	special1Sprite = SpriteAnim{ special1Sheet, 12.0f };
 
-	auto hurtSheet = ResourceManager::loadSpriteSheet("assets/textures/Hurt_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
-	hurtSprite = SpriteAnim{ hurtSheet, 12.0f };
-
 	attackDmg[AttackType::Light1] = 1;
 	attackDmg[AttackType::Light2] = 2;
 	attackDmg[AttackType::Special1] = 5;
@@ -57,6 +54,7 @@ void Player::setTopEdgeCollision(int top)
 
 void Player::update(float deltaTime)
 {
+	hitCounter -= deltaTime;
 	if (isAttacking())
 	{
 		timeSinceLastAtk += deltaTime;
@@ -95,6 +93,12 @@ void Player::update(float deltaTime)
 
 void Player::draw(Image& image, const Camera& camera)
 {
+	Color color = Color::White;
+	if (hitCounter > 0.f)
+	{
+		float alpha = (std::sin(hitCounter * 20.f) + 1.f) / 2.f;
+		color = alpha * Color::White + (1.f - alpha) * Color::Red;
+	}
 	// Set the position of the transform.
 	Math::Transform2D tempTransform = transform;
 	tempTransform.translate(camera.getViewPosition());
@@ -102,22 +106,22 @@ void Player::draw(Image& image, const Camera& camera)
 	switch (state)
 	{
 	case State::Idle:
-		image.drawSprite(idleSprite, tempTransform);
+		image.drawSprite(idleSprite, tempTransform, color);
 		break;
 	case State::Walking:
-		image.drawSprite(walkSprite, tempTransform);
+		image.drawSprite(walkSprite, tempTransform, color);
 		break;
 	case State::LightAtk1:
-		image.drawSprite(lightAtk1Sprite, tempTransform);
+		image.drawSprite(lightAtk1Sprite, tempTransform, color);
 		break;
 	case State::LightAtk2:
-		image.drawSprite(lightAtk2Sprite, tempTransform);
+		image.drawSprite(lightAtk2Sprite, tempTransform, color);
 		break;
 	case State::Special1:
-		image.drawSprite(special1Sprite, tempTransform);
+		image.drawSprite(special1Sprite, tempTransform, color);
 		break;
 	case State::Hurt:
-		image.drawSprite(hurtSprite, tempTransform);
+		image.drawSprite(idleSprite, tempTransform, color);
 		break;
 	}
 
@@ -162,6 +166,10 @@ void Player::beginState(State newState)
 		currentAtkType = AttackType::Special1;
 		special1Sprite.reset();
 		break;
+	case State::Hurt:
+		idleSprite.reset();
+		hitCounter = 1.f;
+		break;
 		//Add remaining states here
 	}
 }
@@ -186,6 +194,8 @@ void Player::endState(State oldState)
 		transform.translate(displacement * transform.getScale());
 		}
 	break;
+	case State::Hurt:
+		break;
 	}
 	//Reset the attack circle at end of each state
 	attackCircle = {};
@@ -199,7 +209,7 @@ void Player::doMovement(float deltaTime)
 	position.x += Input::getAxis("Horizontal") * speed * deltaTime;
 	position.y -= Input::getAxis("Vertical") * speed * deltaTime;
 
-	//edge collision checks (temporary,need to change to a fn.)
+	//edge collision checks
 	if (position.y > 270) // bottom edge collision
 	{
 		position.y = 270;
@@ -306,9 +316,5 @@ void Player::doSpecial1(float deltaTime)
 
 void Player::doHurt(float deltaTime)
 {
-	hurtSprite.update(deltaTime);
-	if (hurtSprite.isDone())
-	{
-		setState(State::Idle);
-	}
+	setState(State::Idle);
 }

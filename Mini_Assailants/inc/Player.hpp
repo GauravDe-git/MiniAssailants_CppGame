@@ -58,7 +58,7 @@ public:
 	int getAtkDmg(AttackType type) const { return attackDmg.at(type); }
 	AttackType getCurrentAtkType() const { return currentAtkType; }
 
-	//void setScreenBounds(const Math::AABB& _bounds) { bounds = _bounds; }
+	bool isHurt() const { return hitCounter > 0; }
 
 	void setState(State newState);
 	State getState() const { return state; }
@@ -87,6 +87,8 @@ private:
 	float timeSinceLastAtk{ 0.f };
 	AttackType currentAtkType{};
 
+	float hitCounter{0.f};
+
 	State state = State::None;
 	Graphics::SpriteAnim idleSprite;
 	Graphics::SpriteAnim walkSprite;
@@ -94,6 +96,4 @@ private:
 	Graphics::SpriteAnim lightAtk2Sprite;
 	Graphics::SpriteAnim special1Sprite;
 	Graphics::SpriteAnim hurtSprite;
-
-	//Math::AABB bounds;
 };

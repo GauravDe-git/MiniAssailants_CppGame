@@ -25,6 +25,15 @@ Button::Button(const Graphics::SpriteSheet& sheet, const Math::Transform2D& tran
 
 }
 
+Button::Button(const std::string& label, const Math::Transform2D& transform, const std::function<void()>& onClick)
+    : label{ label }
+    , transform{ transform }
+    , onClick{ onClick }
+{
+    aabb = AABB::fromRect(spriteSheet[0].getRect());
+    aabb *= transform;
+}
+
 void Button::processEvents(const Graphics::Event& event)
 {
     if (!enabled)

@@ -20,8 +20,11 @@ namespace Combat
 	//enemy attack player
 	inline void attack(Enemy& enemy, Player& player)
 	{
-		int damage = enemy.getAtkDmg();
-		player.reduceHP(damage);
-		player.setState(Player::State::Hurt);
+		if (!player.isHurt())
+		{
+			int damage = enemy.getAtkDmg();
+			player.reduceHP(damage);
+			player.setState(Player::State::Hurt);
+		}
 	}
 };

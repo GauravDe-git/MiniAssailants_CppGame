@@ -65,7 +65,7 @@ public:
     /// <returns>`true` if all of the frames of the animation have played at least once, `false` otherwise.</returns>
     bool isDone() const noexcept;
 
-    int getCurrentFrame()
+    int getCurrentFrame() const
     {
 		return static_cast<int>(time * frameRate) % frames.size();
     }

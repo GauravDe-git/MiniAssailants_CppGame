@@ -13,6 +13,7 @@
 #include <cassert>
 #include <filesystem>
 #include <memory>
+#include <optional>
 
 #include <glm/vec2.hpp>
 
@@ -287,16 +288,16 @@ public:
     /// </summary>
     /// <param name="sprite">The sprite the draw.</param>
     /// <param name="matrix">The matrix to apply to the sprite before drawing.</param>
-    void drawSprite( const Sprite& sprite, const glm::mat3& matrix ) noexcept;
+    void drawSprite( const Sprite& sprite, const glm::mat3& matrix, std::optional<Color> color = {}) noexcept;
 
     /// <summary>
     /// Draw a sprite on the screen using the given transform.
     /// </summary>
     /// <param name="sprite">The sprite to draw.</param>
     /// <param name="transform">The transform to apply to the sprite.</param>
-    void drawSprite( const Sprite& sprite, const Math::Transform2D& transform ) noexcept
+    void drawSprite(const Sprite& sprite, const Math::Transform2D& transform, std::optional<Color> color = {}) noexcept
     {
-        drawSprite( sprite, transform.getTransform() );
+        drawSprite( sprite, transform.getTransform(), color );
     }
 
     /// <summary>

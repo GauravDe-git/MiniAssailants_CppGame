@@ -41,6 +41,10 @@ public:
 	void reduceHP(int damage) { hp -= damage; }
 	int getAtkDmg() const { return attackDmg; }
 
+	bool isAttacking() const {
+		return state == State::Attack && attackAnim.getCurrentFrame() >= attackFrame;
+	}
+
 	void setState(State newState);
 	State getState() const { return state; }
 private:
