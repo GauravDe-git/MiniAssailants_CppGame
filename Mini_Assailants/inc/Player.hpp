@@ -22,7 +22,8 @@ public:
 		Walking,
 		LightAtk1,
 		LightAtk2,
-		Special1
+		Special1,
+		Hurt
 	};
 
 	enum class AttackType
@@ -73,6 +74,7 @@ private:
 	void doLightAtk1(float deltaTime);
 	void doLightAtk2(float deltaTime);
 	void doSpecial1(float deltaTime);
+	void doHurt(float deltaTime);
 
 	glm::vec2 velocity{ 0 };
 	float speed{ 85.0f };
@@ -91,6 +93,7 @@ private:
 	Graphics::SpriteAnim lightAtk1Sprite;
 	Graphics::SpriteAnim lightAtk2Sprite;
 	Graphics::SpriteAnim special1Sprite;
+	Graphics::SpriteAnim hurtSprite;
 
 	//Math::AABB bounds;
 };

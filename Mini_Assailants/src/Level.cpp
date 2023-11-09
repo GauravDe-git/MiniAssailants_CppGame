@@ -53,6 +53,10 @@ void Level::update(float deltaTime)
 		Combat::attack(player, enemy, player.getCurrentAtkType());
 		std::cout << enemy.getHp() << "\n";
 	}
+	if (enemy.getState() == Enemy::State::Attack && player.getState() != Player::State::Hurt && player.getAABB().intersect(enemy.getAttackCircle()))
+	{
+		Combat::attack(enemy, player);
+	}
 }
 
 void Level::draw(Graphics::Image& image)

@@ -30,6 +30,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			speed = 78.0f;
 			hp = 10;
 			attackDmg = 1;
+			attackFrame = 2;
 
 			idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
 			chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Chase.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 8.f };
@@ -45,6 +46,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			speed = 78.0f;
 			hp = 10;
 			attackDmg = 1;
+			attackFrame = 2;
 
 			idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Idle.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 7.f };
 			chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Chase.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 8.f };
@@ -117,6 +119,10 @@ void Enemy::draw(Graphics::Image& image, const Camera& camera)
 	image.drawAABB(getAABB() + glm::vec3{ camera.getViewPosition(), 0 }, Color::Yellow, {}, FillMode::WireFrame);
 	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + camera.getViewPosition() + glm::vec2{ -18, -58 }, Color::Yellow);
 	image.drawText(Font::Default,"HP: " + std::to_string(hp), transform.getPosition() + camera.getViewPosition() + glm::vec2{-16, -70}, Color::Red);
+	if (state == State::Attack)
+	{
+		image.drawCircle(attackCircle.center + camera.getViewPosition(), attackCircle.radius, Color::Cyan, {}, FillMode::WireFrame);
+	}
 #endif
 }
 
@@ -134,6 +140,17 @@ const Math::AABB Enemy::getAABB() const
 		return transform * aabbs.at(State::Idle);
 	}
 	
+}
+
+Math::Circle Enemy::getAttackCircle() const
+{
+	switch (type)
+	{
+	case Type::Goblin:
+		return {{transform.getPosition()}, 15.f};
+	case Type::Skeleton:
+		return {{transform.getPosition() + glm::vec2{ 32.f, 30.f } * -transform.getScale() }, 12.f};
+	}
 }
 
 void Enemy::setState(State newState)
@@ -179,6 +196,7 @@ void Enemy::endState(State oldState)
 	case State::Dead:
 		break;
 	}
+	attackCircle = {};
 }
 
 void Enemy::doMovement(float deltaTime)
@@ -236,6 +254,10 @@ void Enemy::doAttack(float deltaTime)
 	else
 	{
 		attackAnim.update(deltaTime);
+		if (attackAnim.getCurrentFrame() >= attackFrame)
+		{
+			attackCircle = getAttackCircle();
+		}
 		if (attackAnim.isDone())
 		{
 			attackAnim.reset();

@@ -36,10 +36,10 @@ public:
 	void setTarget(Entity* _target) { target = _target; }
 	const Math::AABB getAABB() const;
 
+	Math::Circle getAttackCircle() const;
 	int getHp() const { return hp; }
 	void reduceHP(int damage) { hp -= damage; }
 	int getAtkDmg() const { return attackDmg; }
-	void changeStateToHurt() { setState(State::Hurt); }
 
 	void setState(State newState);
 	State getState() const { return state; }
@@ -62,6 +62,8 @@ private:
 	int hp{};
 	int attackDmg{};
 	std::map<State, Math::AABB> aabbs;
+	Math::Circle attackCircle{};
+	int attackFrame{};
 
 	Graphics::SpriteAnim idleAnim;
 	Graphics::SpriteAnim chaseAnim;

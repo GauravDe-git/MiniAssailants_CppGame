@@ -16,6 +16,7 @@ static std::map<Player::State, std::string> g_stateNames =
 	{Player::State::LightAtk1, "LightAtk1"},
 	{Player::State::LightAtk2, "LightAtk2"},
 	{Player::State::Special1, "Special1"},
+	{Player::State::Hurt, "Hurt"},
 };
 
 Player::Player() = default;
@@ -37,6 +38,9 @@ Player::Player(const glm::vec2& pos)
 
 	auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	special1Sprite = SpriteAnim{ special1Sheet, 12.0f };
+
+	auto hurtSheet = ResourceManager::loadSpriteSheet("assets/textures/Hurt_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	hurtSprite = SpriteAnim{ hurtSheet, 12.0f };
 
 	attackDmg[AttackType::Light1] = 1;
 	attackDmg[AttackType::Light2] = 2;
@@ -83,6 +87,9 @@ void Player::update(float deltaTime)
 	case State::Special1:
 		doSpecial1(deltaTime);
 		break;
+	case State::Hurt:
+		doHurt(deltaTime);
+		break;
 	}
 }
 
@@ -108,6 +115,9 @@ void Player::draw(Image& image, const Camera& camera)
 		break;
 	case State::Special1:
 		image.drawSprite(special1Sprite, tempTransform);
+		break;
+	case State::Hurt:
+		image.drawSprite(hurtSprite, tempTransform);
 		break;
 	}
 
@@ -289,6 +299,15 @@ void Player::doSpecial1(float deltaTime)
 	}
 
 	if (special1Sprite.isDone())
+	{
+		setState(State::Idle);
+	}
+}
+
+void Player::doHurt(float deltaTime)
+{
+	hurtSprite.update(deltaTime);
+	if (hurtSprite.isDone())
 	{
 		setState(State::Idle);
 	}

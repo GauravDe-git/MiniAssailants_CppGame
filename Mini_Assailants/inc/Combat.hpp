@@ -12,7 +12,9 @@ namespace Combat
 		enemy.reduceHP(damage);
 		enemy.setState(Enemy::State::Hurt);
 		if (enemy.getHp() <= 0)
+		{
 			enemy.setState(Enemy::State::Dead);
+		}
 	}
 
 	//enemy attack player
@@ -20,6 +22,6 @@ namespace Combat
 	{
 		int damage = enemy.getAtkDmg();
 		player.reduceHP(damage);
-		// Change player state to hurt (todo fn. in player)
+		player.setState(Player::State::Hurt);
 	}
 };
