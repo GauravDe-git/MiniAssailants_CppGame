@@ -11,6 +11,8 @@ namespace Combat
 		int damage = player.getAtkDmg(atkType);
 		enemy.reduceHP(damage);
 		enemy.setState(Enemy::State::Hurt);
+		if (enemy.getHp() <= 0)
+			enemy.setState(Enemy::State::Dead);
 	}
 
 	//enemy attack player

@@ -50,6 +50,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Chase.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 8.f };
 			attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Atk.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 7.f };
 			hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Hurt.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 7.f };
+			deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Dead.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 7.f };
 
 			state = State::Idle;
 			transform.setAnchor(glm::vec2{ 55.0f,99.0f });
@@ -81,6 +82,9 @@ void Enemy::update(float deltaTime)
 	case State::Hurt:
 		doHurt(deltaTime);
 		break;
+	case State::Dead:
+		doDead(deltaTime);
+		break;
 	}
 }
 
@@ -102,6 +106,9 @@ void Enemy::draw(Graphics::Image& image, const Camera& camera)
 		break;
 	case State::Hurt:
 		image.drawSprite(hurtAnim, tempTransform);
+		break;
+	case State::Dead:
+		image.drawSprite(deadAnim, tempTransform);
 		break;
 	}
 
@@ -152,6 +159,8 @@ void Enemy::beginState(State newState)
 		break;
 	case State::Hurt:
 		break;
+	case State::Dead:
+		break;
 	}
 }
 
@@ -166,6 +175,8 @@ void Enemy::endState(State oldState)
 	case State::Attack:
 		break;
 	case State::Hurt:
+		break;
+	case State::Dead:
 		break;
 	}
 }
@@ -245,5 +256,15 @@ void Enemy::doHurt(float deltaTime)
 	{
 		hurtAnim.reset();
 		setState(State::Idle);
+	}
+}
+
+void Enemy::doDead(float deltaTime)
+{
+	deadAnim.update(deltaTime);
+	if (deadAnim.isDone())
+	{
+		deadAnim.reset();
+		setState(State::None);
 	}
 }

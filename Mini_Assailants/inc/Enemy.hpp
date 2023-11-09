@@ -23,7 +23,8 @@ public:
 		Idle,
 		Chase,
 		Attack,
-		Hurt
+		Hurt,
+		Dead
 	};
 
 	Enemy();
@@ -51,6 +52,7 @@ private:
 	void doChase(float deltaTime);
 	void doAttack(float deltaTime);
 	void doHurt(float deltaTime);
+	void doDead(float deltaTime);
 
 	Entity* target = nullptr;
 
@@ -65,6 +67,7 @@ private:
 	Graphics::SpriteAnim chaseAnim;
 	Graphics::SpriteAnim attackAnim;
 	Graphics::SpriteAnim hurtAnim;
+	Graphics::SpriteAnim deadAnim;
 
 	Type type;
 	State state = State::None;
