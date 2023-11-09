@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="inc\aligned_unique_ptr.hpp" />
+    <ClInclude Include="inc\Button.hpp" />
     <ClInclude Include="inc\Graphics\BlendMode.hpp" />
     <ClInclude Include="inc\Graphics\Color.hpp" />
     <ClInclude Include="inc\Graphics\Config.hpp" />
@@ -50,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BlendMode.cpp" />
+    <ClCompile Include="src\Button.cpp" />
     <ClCompile Include="src\Color.cpp" />
     <ClCompile Include="src\Font.cpp" />
     <ClCompile Include="src\GamePad.cpp" />

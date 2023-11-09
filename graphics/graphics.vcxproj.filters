@@ -132,6 +132,9 @@
     <ClInclude Include="src\Win32\WindowWin32.hpp">
       <Filter>Source Files\Win32</Filter>
     </ClInclude>
+    <ClInclude Include="inc\Button.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\BlendMode.cpp">
@@ -205,6 +208,9 @@
     </ClCompile>
     <ClCompile Include="src\Win32\WindowWin32.cpp">
       <Filter>Source Files\Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Button.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
