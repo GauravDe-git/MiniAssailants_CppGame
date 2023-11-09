@@ -17,7 +17,7 @@ void Level::loadLevelAssets()
 
 	player.setTopEdgeCollision(topEdgeCollision);
 	// Add other assets (eneimes, items etc.) later
-	enemy = Enemy{ {SCREEN_WIDTH / 2 + 100,SCREEN_HEIGHT - 30},Enemy::Type::Goblin };
+	enemy = Enemy{ {SCREEN_WIDTH / 2 + 100,SCREEN_HEIGHT - 30},Enemy::Type::Skeleton };
 	entities.clear();
 	entities.push_back(&player);
 	entities.push_back(&enemy);

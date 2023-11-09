@@ -13,7 +13,8 @@ class Enemy : public Entity
 public:
 	enum class Type
 	{
-		Goblin
+		Goblin,
+		Skeleton
 	};
 
 	enum class State

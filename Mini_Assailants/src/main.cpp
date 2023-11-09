@@ -48,13 +48,10 @@ int main()
         //Updating Input state
         Input::update();
 
-        //Update the camera
-
         //updating the player/bg/camera etc.
 		level.update(timer.elapsedSeconds());
 
         image.clear(Color::Black);
-
         //// Draw Sprites here (Render Loop) ////
 
         level.draw(image);

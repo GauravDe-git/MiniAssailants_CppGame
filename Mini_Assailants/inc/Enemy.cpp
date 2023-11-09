@@ -39,6 +39,21 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			state = State::Idle;
 			transform.setAnchor(glm::vec2{ 84.0f,103.0f });
 			break;
+		case Type::Skeleton:
+			aabbs[State::Idle] = { {41,46,0},{64,102,0} };
+			attackDistance = 55.0f;
+			speed = 78.0f;
+			hp = 10;
+			attackDmg = 1;
+
+			idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Idle.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 7.f };
+			chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Chase.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 8.f };
+			attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Atk.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 7.f };
+			hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Hurt.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 7.f };
+
+			state = State::Idle;
+			transform.setAnchor(glm::vec2{ 55.0f,99.0f });
+			break;
 		//Handle Other enemy types
 	}
 }
