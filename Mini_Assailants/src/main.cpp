@@ -26,7 +26,8 @@ int main()
 {
     auto startScreen = ResourceManager::loadImage("assets/textures/startScreen.png");
     bool isPlaying{ false };
-    Audio::Sound menuMusic{ "assets/sounds/menuMusic.wav" };
+    Audio::Sound menuMusic{ "assets/sounds/menuMusic.wav" , Audio::Sound::Type::Music};
+    menuMusic.setLooping(true);
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);

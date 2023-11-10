@@ -95,10 +95,12 @@ void Level::draw(Graphics::Image& image)
 
 	if (gameState == GameState::GameOver)
 	{
+		image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Graphics::Color::Black);
 		image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH/2 - 70, SCREEN_HEIGHT/2 }, Graphics::Color::Red);
 	}
 	else if (gameState == GameState::Won)
 	{
-		image.drawText(Graphics::Font::Default, "You Won", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Graphics::Color::Green);
+		image.drawText(Graphics::Font::Default, "You Win", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Graphics::Color::Black);
+		image.drawText(Graphics::Font::Default, "You Win", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Graphics::Color::Green);
 	}
 }
