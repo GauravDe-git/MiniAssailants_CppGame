@@ -51,6 +51,13 @@ void Level::update(float deltaTime)
 		player.update(deltaTime);
 		enemy.setTarget(&player);
 
+		// Check if the enemy is dead
+		if (enemy.getState() == Enemy::State::None) {
+			// Remove the dead enemy from the entities vector
+			entities.erase(std::remove(entities.begin(), entities.end(), &enemy), entities.end());
+			gameState = GameState::Won;
+		}
+
 		if (player.getHP() <= 0)
 		{
 			gameState = GameState::GameOver;
@@ -86,5 +93,9 @@ void Level::draw(Graphics::Image& image)
 	if (gameState == GameState::GameOver)
 	{
 		image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH/2 - 70, SCREEN_HEIGHT/2 }, Graphics::Color::Red);
+	}
+	else if (gameState == GameState::Won)
+	{
+		image.drawText(Graphics::Font::Default, "You Won", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Graphics::Color::Green);
 	}
 }

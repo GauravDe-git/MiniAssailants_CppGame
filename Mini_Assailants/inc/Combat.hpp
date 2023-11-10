@@ -13,6 +13,7 @@ namespace Combat
 		enemy.setState(Enemy::State::Hurt);
 		if (enemy.getHp() <= 0)
 		{
+			enemy.setHp(0);
 			enemy.setState(Enemy::State::Dead);
 		}
 	}

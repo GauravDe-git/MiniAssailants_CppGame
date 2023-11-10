@@ -44,7 +44,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			aabbs[State::Idle] = { {41,46,0},{64,102,0} };
 			attackDistance = 55.0f;
 			speed = 78.0f;
-			hp = 100;
+			hp = 30;
 			attackDmg = 1;
 			attackFrame = 2;
 

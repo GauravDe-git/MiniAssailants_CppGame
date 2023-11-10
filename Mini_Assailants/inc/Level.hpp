@@ -12,6 +12,7 @@ public:
 	enum class GameState
 	{
 		Playing,
+		Won,
 		GameOver
 	};
 	Level();

@@ -38,6 +38,7 @@ public:
 
 	Math::Circle getAttackCircle() const;
 	int getHp() const { return hp; }
+	void setHp(int hp) { this->hp = hp; }
 	void reduceHP(int damage) { hp -= damage; }
 	int getAtkDmg() const { return attackDmg; }
 
