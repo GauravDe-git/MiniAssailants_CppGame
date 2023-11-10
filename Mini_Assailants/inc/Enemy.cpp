@@ -44,7 +44,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			aabbs[State::Idle] = { {41,46,0},{64,102,0} };
 			attackDistance = 55.0f;
 			speed = 78.0f;
-			hp = 10;
+			hp = 100;
 			attackDmg = 1;
 			attackFrame = 2;
 
@@ -149,7 +149,7 @@ Math::Circle Enemy::getAttackCircle() const
 	case Type::Goblin:
 		return {{transform.getPosition()}, 15.f};
 	case Type::Skeleton:
-		return {{transform.getPosition() + glm::vec2{ 32.f, 30.f } * -transform.getScale() }, 12.f};
+		return {{transform.getPosition() + glm::vec2{ 34.f, 30.f } * -transform.getScale() }, 12.f};
 	}
 }
 

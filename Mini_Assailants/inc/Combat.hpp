@@ -20,7 +20,7 @@ namespace Combat
 	//enemy attack player
 	inline void attack(Enemy& enemy, Player& player)
 	{
-		if (!player.isHurt())
+		if (!player.isHurt() && !player.isAttacking())
 		{
 			int damage = enemy.getAtkDmg();
 			player.reduceHP(damage);

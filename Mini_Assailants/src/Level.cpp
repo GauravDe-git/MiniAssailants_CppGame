@@ -2,11 +2,14 @@
 #include "Constants.hpp"
 #include "Combat.hpp"
 
+#include <Graphics/Font.hpp>
+
 #include <algorithm>
 #include <iostream>
 
 Level::Level()
-	:backgroundPath{}, topEdgeCollision{ 0 }, camera{ glm::vec2{0,0} }
+	:backgroundPath{}, topEdgeCollision{ 0 }, 
+	camera{ glm::vec2{0,0} }, gameState{ GameState::Playing }
 {}
 
 void Level::loadLevelAssets()
@@ -42,20 +45,29 @@ void Level::setLevel(int levelNumber)
 
 void Level::update(float deltaTime)
 {
-	// Update game logic here (eg. player, enemies)
-	camera.update(deltaTime, player.getPosition(), player.getVelocity(), player.isAttacking());
-
-	player.update(deltaTime);
 	enemy.update(deltaTime);
-	enemy.setTarget(&player);
-	if (player.isAttacking() && enemy.getState() != Enemy::State::Hurt && enemy.getAABB().intersect(player.getAttackCircle()))
-	{
-		Combat::attack(player, enemy, player.getCurrentAtkType());
-		std::cout << enemy.getHp() << "\n";
-	}
-	if (enemy.isAttacking() && player.getState() != Player::State::Hurt && player.getAABB().intersect(enemy.getAttackCircle()))
-	{
-		Combat::attack(enemy, player);
+	if (gameState == GameState::Playing) {
+		camera.update(deltaTime, player.getPosition(), player.getVelocity(), player.isAttacking());
+		player.update(deltaTime);
+		enemy.setTarget(&player);
+
+		if (player.getHP() <= 0)
+		{
+			gameState = GameState::GameOver;
+			entities.erase(std::remove(entities.begin(), entities.end(), &player), entities.end());
+			enemy.setTarget(nullptr);
+		}
+		else{
+			if (player.isAttacking() && enemy.getState() != Enemy::State::Hurt && enemy.getAABB().intersect(player.getAttackCircle()))
+			{
+				Combat::attack(player, enemy, player.getCurrentAtkType());
+				std::cout << enemy.getHp() << "\n";
+			}
+			if (enemy.isAttacking() && player.getState() != Player::State::Hurt && player.getAABB().intersect(enemy.getAttackCircle()))
+			{
+				Combat::attack(enemy, player);
+			}
+		}
 	}
 }
 
@@ -70,5 +82,9 @@ void Level::draw(Graphics::Image& image)
 	{
 		entity->draw(image, camera);
 	}
-	
+
+	if (gameState == GameState::GameOver)
+	{
+		image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH/2 - 70, SCREEN_HEIGHT/2 }, Graphics::Color::Red);
+	}
 }

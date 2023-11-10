@@ -93,12 +93,14 @@ void Player::update(float deltaTime)
 
 void Player::draw(Image& image, const Camera& camera)
 {
+	//Logic to flash the player sprite
 	Color color = Color::White;
 	if (hitCounter > 0.f)
 	{
 		float alpha = (std::sin(hitCounter * 20.f) + 1.f) / 2.f;
 		color = alpha * Color::White + (1.f - alpha) * Color::Red;
 	}
+
 	// Set the position of the transform.
 	Math::Transform2D tempTransform = transform;
 	tempTransform.translate(camera.getViewPosition());
@@ -168,7 +170,7 @@ void Player::beginState(State newState)
 		break;
 	case State::Hurt:
 		idleSprite.reset();
-		hitCounter = 1.f;
+		hitCounter = 0.5f;
 		break;
 		//Add remaining states here
 	}

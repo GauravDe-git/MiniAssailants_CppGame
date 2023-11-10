@@ -9,6 +9,11 @@
 
 class Level {
 public:
+	enum class GameState
+	{
+		Playing,
+		GameOver
+	};
 	Level();
 
 	void loadLevelAssets();
@@ -17,9 +22,9 @@ public:
 	void update(float deltaTime);
 	void draw(Graphics::Image& image);
 
-	Player& getPlayer() { return player; }
-
+	GameState getGameState() const { return gameState; }
 private:
+	GameState gameState;
 	Background background;
 	Player player;
 	Enemy enemy;
