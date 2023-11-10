@@ -1,8 +1,5 @@
-#include <Player.hpp>
-#include <Background.hpp>
 #include <Constants.hpp>
 #include <Level.hpp>
-#include <Camera.hpp>
 
 #include <Graphics/Window.hpp>
 #include <Graphics/Image.hpp>

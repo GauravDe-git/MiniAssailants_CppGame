@@ -17,5 +17,4 @@ public:
 
 private:
 	std::shared_ptr<Graphics::Image> background;
-	glm::vec2 position;
 };
