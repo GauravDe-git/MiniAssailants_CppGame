@@ -5,12 +5,14 @@
 #include <Graphics/Font.hpp>
 
 #include <algorithm>
-#include <iostream>
 
 Level::Level()
 	:backgroundPath{}, topEdgeCollision{ 0 }, 
 	camera{ glm::vec2{0,0} }, gameState{ GameState::Playing }
-{}
+{
+	punch = Audio::Sound("assets/sounds/punch.wav");
+	swordSlash = Audio::Sound("assets/sounds/swordSlash.wav");
+}
 
 void Level::loadLevelAssets()
 {
@@ -68,11 +70,12 @@ void Level::update(float deltaTime)
 			if (player.isAttacking() && enemy.getState() != Enemy::State::Hurt && enemy.getAABB().intersect(player.getAttackCircle()))
 			{
 				Combat::attack(player, enemy, player.getCurrentAtkType());
-				std::cout << enemy.getHp() << "\n";
+				punch.play();
 			}
 			if (enemy.isAttacking() && player.getState() != Player::State::Hurt && player.getAABB().intersect(enemy.getAttackCircle()))
 			{
 				Combat::attack(enemy, player);
+				swordSlash.play();
 			}
 		}
 	}

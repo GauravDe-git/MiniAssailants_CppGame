@@ -17,7 +17,6 @@
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\StartMenu.cpp" />
     <ClCompile Include="src\Player.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -29,7 +28,6 @@
     <ClInclude Include="inc\Entity.hpp" />
     <ClInclude Include="inc\Level.hpp" />
     <ClInclude Include="inc\Player.hpp" />
-    <ClInclude Include="inc\StartMenu.hpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\Todo.txt" />

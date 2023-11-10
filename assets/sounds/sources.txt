@@ -1,6 +1,4 @@
-https://joshuuu.itch.io/short-loopable-background-music:
-	* Sweet Treats.ogg
+https://opengameart.org/content/menu-music
 
-https://pixabay.com/sound-effects/8-bit-powerup-6768/
-	* 8-bit-powerup.mp3
-
+https://mixkit.co/free-sound-effects/punch/
+https://mixkit.co/free-sound-effects/sword/

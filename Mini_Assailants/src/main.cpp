@@ -8,6 +8,7 @@
 #include "Graphics/SpriteAnim.hpp"      
 #include "Graphics/Timer.hpp"
 #include "Graphics/Input.hpp"
+#include <Audio/Sound.hpp>
 
 #include <fmt/core.h>
 
@@ -25,7 +26,7 @@ int main()
 {
     auto startScreen = ResourceManager::loadImage("assets/textures/startScreen.png");
     bool isPlaying{ false };
-    //level.setLevel(1);
+    Audio::Sound menuMusic{ "assets/sounds/menuMusic.wav" };
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -49,6 +50,7 @@ int main()
 
         if (isPlaying) {
             // If the game has started, update and draw the level
+            menuMusic.play();
             level.update(timer.elapsedSeconds());
             image.clear(Color::Black);
             level.draw(image);

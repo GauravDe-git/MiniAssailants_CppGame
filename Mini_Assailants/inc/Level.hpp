@@ -5,6 +5,8 @@
 #include <Player.hpp>
 #include <Enemy.hpp>
 
+#include <Audio/Sound.hpp>
+
 #include <vector>
 
 class Level {
@@ -31,6 +33,9 @@ private:
 	Enemy enemy;
 	Camera camera;
 	std::vector<Entity*> entities;
+
+	Audio::Sound punch;
+	Audio::Sound swordSlash;
 
 	std::string backgroundPath;
 	int topEdgeCollision;
