@@ -23,7 +23,9 @@ Level level;
 
 int main()
 {
-    level.setLevel(1);
+    auto startScreen = ResourceManager::loadImage("assets/textures/startScreen.png");
+    bool isPlaying{ false };
+    //level.setLevel(1);
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -45,14 +47,23 @@ int main()
         //Updating Input state
         Input::update();
 
-        //updating the player/bg/camera etc.
-		level.update(timer.elapsedSeconds());
+        if (isPlaying) {
+            // If the game has started, update and draw the level
+            level.update(timer.elapsedSeconds());
+            image.clear(Color::Black);
+            level.draw(image);
+        }
+        else {
+            // If the game has not started, draw the start screen
+            image.clear(Color::Black);
+            image.copy(*startScreen, 0, 0);
 
-        image.clear(Color::Black);
-        //// Draw Sprites here (Render Loop) ////
-
-        level.draw(image);
-
+            // If the Enter key is pressed, start the game
+            if (Graphics::Input::getKeyDown(Graphics::KeyCode::Enter)) {
+                isPlaying = true;
+                level.setLevel(1);
+            }
+        }
         image.drawText(Font::Default, fps, 10, 10, Color::Blue);
 
         window.present(image);
