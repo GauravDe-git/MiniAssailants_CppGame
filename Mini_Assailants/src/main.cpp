@@ -17,17 +17,17 @@
 using namespace Graphics;
 using namespace Math;
 
-Window window;
-Image image;
+Window window{};
+Image image{};
 
-Level level;
+Level level{};
 
 int main()
 {
     auto startScreen = ResourceManager::loadImage("assets/textures/startScreen.png");
     bool isPlaying{ false };
-    Audio::Sound menuMusic{ "assets/sounds/menuMusic.wav" , Audio::Sound::Type::Music};
-    menuMusic.setLooping(true);
+    Audio::Sound gameMusic{ "assets/sounds/menuMusic.wav" , Audio::Sound::Type::Music};
+    gameMusic.setLooping(true);
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -51,7 +51,7 @@ int main()
 
         if (isPlaying) {
             // If the game has started, update and draw the level
-            menuMusic.play();
+            gameMusic.play();
             level.update(timer.elapsedSeconds());
             image.clear(Color::Black);
             level.draw(image);

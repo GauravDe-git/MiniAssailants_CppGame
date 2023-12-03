@@ -27,11 +27,11 @@ public:
 
 	GameState getGameState() const { return gameState; }
 private:
-	GameState gameState;
-	Background background;
-	Player player;
-	Enemy enemy;
-	Camera camera;
+	GameState gameState{};
+	Background background{};
+	Player player{};
+	Enemy enemy{};
+	Camera camera{};
 	std::vector<Entity*> entities;
 
 	Audio::Sound punch;
