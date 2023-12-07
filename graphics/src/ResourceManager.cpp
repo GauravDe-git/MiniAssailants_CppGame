@@ -89,20 +89,25 @@ struct std::hash<FontKey>
 };
 
 // Image store.
-static std::unordered_map<std::filesystem::path, std::shared_ptr<Image>> g_ImageMap;
 
 // Font store.
 static std::unordered_map<FontKey, std::shared_ptr<Font>> g_FontMap;
 
+std::unordered_map<std::filesystem::path, std::shared_ptr<Image>>& GetImageMap()
+{
+    static std::unordered_map<std::filesystem::path, std::shared_ptr<Image>> g_ImageMap;
+    return g_ImageMap;
+}
+
 std::shared_ptr<Image> ResourceManager::loadImage( const std::filesystem::path& filePath )
 {
-    const auto iter = g_ImageMap.find( filePath );
+    const auto iter = GetImageMap().find( filePath );
 
-    if ( iter == g_ImageMap.end() )
+    if ( iter == GetImageMap().end() )
     {
         auto image = std::make_shared<Image>( filePath );
 
-        g_ImageMap[filePath] = image;
+        GetImageMap()[filePath] = image;
 
         return image;
     }
@@ -135,6 +140,6 @@ std::shared_ptr<Font> ResourceManager::loadFont( const std::filesystem::path& fo
 
 void ResourceManager::clear()
 {
-    g_ImageMap.clear();
+    GetImageMap().clear();
     g_FontMap.clear();
 }

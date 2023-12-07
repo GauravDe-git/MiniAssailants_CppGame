@@ -19,7 +19,6 @@ using namespace Math;
 
 Window window{};
 Image image{};
-
 Level level{};
 
 int main()
