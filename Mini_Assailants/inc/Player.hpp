@@ -81,7 +81,7 @@ private:
 	int topEdgeCollision{ 0 };
 
 	Math::AABB aabb;
-	int hp{25};
+	int hp{10};
 	std::map<AttackType, int> attackDmg;
 	Math::Circle attackCircle{};
 	float timeSinceLastAtk{ 0.f };

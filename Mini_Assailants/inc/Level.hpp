@@ -9,12 +9,15 @@
 
 #include <vector>
 
+//Level class: Responsible for both loading/changing levels
+//			   and changing between Game States.
+
 class Level {
 public:
 	enum class GameState
 	{
 		Playing,
-		Won,
+		Win,
 		GameOver
 	};
 	Level();
@@ -26,7 +29,15 @@ public:
 	void draw(Graphics::Image& image);
 
 	GameState getGameState() const { return gameState; }
+	void setState(GameState newState);
 private:
+	void beginState(GameState newState);
+	void endState(GameState oldState);
+
+	void doPlaying(float deltaTime);
+	void doGameOver();
+	void doWin();
+
 	GameState gameState{};
 	Background background{};
 	Player player{};
