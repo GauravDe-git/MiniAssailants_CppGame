@@ -7,13 +7,15 @@
 
 #include <algorithm>
 
+#include "Graphics/Input.hpp"
+
 Level::Level()
-    :backgroundPath{}, topEdgeCollision{ 0 },
-    camera{ glm::vec2{0,0} }, gameState{ GameState::Playing }
+    :topEdgeCollision{ 0 },
+    camera{ glm::vec2{0,0} }, gameState{ GameState::Menu}
 {
     punch = Audio::Sound("assets/sounds/punch.wav");
     swordSlash = Audio::Sound("assets/sounds/swordSlash.wav");
-    auto startScreen = Graphics::ResourceManager::loadImage("assets/textures/startScreen.png");
+    startScreen = Graphics::ResourceManager::loadImage("assets/textures/startScreen.png");
 }
 
 void Level::loadLevelAssets()
@@ -53,6 +55,9 @@ void Level::update(float deltaTime)
 
     switch (gameState)
     {
+    case GameState::Menu:
+        doMenu();
+        break;
     case GameState::Playing:
         doPlaying(deltaTime);
         break;
@@ -72,22 +77,21 @@ void Level::draw(Graphics::Image& image)
 
     switch (gameState)
     {
+    case GameState::Menu:
+        image.copy(*startScreen, 0, 0);
+        break;
     case GameState::Playing:
-
         //sorting order of drawing player/enemy based on their Y position
         std::sort(entities.begin(), entities.end(), [](const Entity* a, const Entity* b) {return a->getPosition().y < b->getPosition().y; });
         for (auto entity : entities)
         {
             entity->draw(image, camera);
         }
-
         break;
     case GameState::GameOver:
-
         enemy.draw(image, camera);
         image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Graphics::Color::Black);
         image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Graphics::Color::Red);
-
         break;
     case GameState::Win:
         player.draw(image, camera);
@@ -131,6 +135,12 @@ void Level::endState(GameState oldState)
     case GameState::Win:
         break;
     }
+}
+
+void Level::doMenu()
+{
+    if (Graphics::Input::getKeyDown(Graphics::KeyCode::Enter))
+        setState(GameState::Playing);
 }
 
 void Level::doPlaying(float deltaTime)

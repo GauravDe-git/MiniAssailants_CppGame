@@ -3,12 +3,9 @@
 
 #include <Graphics/Window.hpp>
 #include <Graphics/Image.hpp>
-#include "Graphics/Sprite.hpp"
 #include "Graphics/ResourceManager.hpp"
-#include "Graphics/SpriteAnim.hpp"      
 #include "Graphics/Timer.hpp"
 #include "Graphics/Input.hpp"
-#include <Audio/Sound.hpp>
 
 #include <fmt/core.h>
 
@@ -17,16 +14,12 @@
 using namespace Graphics;
 using namespace Math;
 
-Window window{};
-Image image{};
-Level level{};
-
 int main()
 {
-    auto startScreen = ResourceManager::loadImage("assets/textures/startScreen.png");
-    bool isPlaying{ false };
-    Audio::Sound gameMusic{ "assets/sounds/menuMusic.wav" , Audio::Sound::Type::Music};
-    gameMusic.setLooping(true);
+    Window window{};
+    Image image{};
+    Level level{};
+    level.setLevel(1);
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
@@ -48,26 +41,14 @@ int main()
         //Updating Input state
         Input::update();
 
-        if (isPlaying) {
-            // If the game has started, update and draw the level
-            gameMusic.play();
-            level.update(timer.elapsedSeconds());
-            image.clear(Color::Black);
-            level.draw(image);
-        }
-        else {
-            // If the game has not started, draw the start screen
-            image.clear(Color::Black);
-            image.copy(*startScreen, 0, 0);
+    	level.update(timer.elapsedSeconds());
 
-            // If the Enter key is pressed, start the game
-            if (Graphics::Input::getKeyDown(Graphics::KeyCode::Enter)) {
-                isPlaying = true;
-                level.setLevel(1);
-            }
-        }
+    	image.clear(Color::Black);
+
+        // Draw Stuff Here (Render Loop) //
+
+    	level.draw(image);
         image.drawText(Font::Default, fps, 10, 10, Color::Blue);
-
         window.present(image);
 
         Event event;
@@ -103,7 +84,7 @@ int main()
         {
             fps = fmt::format("FPS: {:.3f}", static_cast<double>(frameCount) / totalTime);
 
-            std::cout << fps << std::endl;
+            std::cout << fps << '\n';
 
             frameCount = 0;
             totalTime = 0.0;

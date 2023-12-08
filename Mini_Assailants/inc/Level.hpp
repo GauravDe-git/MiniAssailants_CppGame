@@ -16,6 +16,7 @@ class Level {
 public:
 	enum class GameState
 	{
+		Menu,
 		Playing,
 		Win,
 		GameOver
@@ -34,6 +35,7 @@ private:
 	void beginState(GameState newState);
 	void endState(GameState oldState);
 
+	void doMenu();
 	void doPlaying(float deltaTime);
 	void doGameOver();
 	void doWin();
@@ -47,6 +49,7 @@ private:
 
 	Audio::Sound punch;
 	Audio::Sound swordSlash;
+	std::shared_ptr<Graphics::Image> startScreen{};
 
 	std::string backgroundPath;
 	int topEdgeCollision;
