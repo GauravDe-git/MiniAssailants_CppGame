@@ -10,8 +10,8 @@
 #include "Graphics/Input.hpp"
 
 Level::Level()
-    :topEdgeCollision{ 0 },
-    camera{ glm::vec2{0,0} }, gameState{ GameState::Menu}
+    : gameState{GameState::Menu},
+      camera{ glm::vec2{0,0} }, topEdgeCollision{0}
 {
     punch = Audio::Sound("assets/sounds/punch.wav");
     swordSlash = Audio::Sound("assets/sounds/swordSlash.wav");
@@ -25,9 +25,8 @@ void Level::loadLevelAssets()
     player = Player{ {SCREEN_WIDTH / 2,(SCREEN_HEIGHT - 10)} };
 
     player.setTopEdgeCollision(topEdgeCollision);
-    // Add other assets (eneimes, items etc.) later
+    // Add other assets (enemies, items etc.) later
     enemy = Enemy{ {SCREEN_WIDTH / 2 + 100,SCREEN_HEIGHT - 30},Enemy::Type::Skeleton };
-    entities.clear();
     entities.push_back(&player);
     entities.push_back(&enemy);
 }
@@ -41,8 +40,7 @@ void Level::setLevel(int levelNumber)
         backgroundPath = "assets/textures/stage1.png";
         topEdgeCollision = 225;
         break;
-
-        // Add more cases for different levels
+    // Add more cases for different levels
     }
 
     //Load level-specific assets based on updated props
@@ -82,7 +80,8 @@ void Level::draw(Graphics::Image& image)
         break;
     case GameState::Playing:
         //sorting order of drawing player/enemy based on their Y position
-        std::sort(entities.begin(), entities.end(), [](const Entity* a, const Entity* b) {return a->getPosition().y < b->getPosition().y; });
+        //** ranges algorithm suggested by resharper over the normal std::sort
+        std::ranges::sort(entities, [](const Entity* a, const Entity* b) {return a->getPosition().y < b->getPosition().y; });
         for (auto entity : entities)
         {
             entity->draw(image, camera);
@@ -115,11 +114,20 @@ void Level::beginState(GameState newState)
 {
     switch (newState)
     {
+    case GameState::Menu:
+        break;
     case GameState::Playing:
+        if (!isFirstLoad)
+        {
+            loadLevelAssets();
+            camera.setPosition(glm::vec2{ 0,0 });
+        }
         break;
     case GameState::GameOver:
+        isFirstLoad = false;
         break;
     case GameState::Win:
+        isFirstLoad = false;
         break;
     }
 }
@@ -128,7 +136,10 @@ void Level::endState(GameState oldState)
 {
     switch (oldState)
     {
+    case GameState::Menu:
+        break;
     case GameState::Playing:
+        entities.clear();
         break;
     case GameState::GameOver:
         break;
@@ -152,14 +163,14 @@ void Level::doPlaying(float deltaTime)
     // Check if the enemy is dead
     if (enemy.getState() == Enemy::State::None) {
         // Remove the dead enemy from the entities vector
-        entities.erase(std::remove(entities.begin(), entities.end(), &enemy), entities.end());
+        std::erase(entities, &enemy);
         setState(GameState::Win);
     }
 
     if (player.getHP() <= 0)
     {
         setState(GameState::GameOver);
-        entities.erase(std::remove(entities.begin(), entities.end(), &player), entities.end());
+        std::erase(entities, &player);
         enemy.setTarget(nullptr);
     }
     else {
@@ -181,9 +192,13 @@ void Level::doPlaying(float deltaTime)
 void Level::doGameOver()
 {
     // Any logic that needs to happen when the game is over
+    if (Graphics::Input::getKeyDown(Graphics::KeyCode::Enter))
+        setState(GameState::Menu);
 }
 
 void Level::doWin()
 {
     // Any logic that needs to happen when the player wins the level
+    if (Graphics::Input::getKeyDown(Graphics::KeyCode::Enter))
+        setState(GameState::Menu);
 }

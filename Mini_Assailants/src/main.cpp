@@ -16,14 +16,13 @@ using namespace Math;
 
 int main()
 {
-    Window window{};
     Image image{};
     Level level{};
     level.setLevel(1);
 
     //Initialization Settings:
     image.resize(SCREEN_WIDTH, SCREEN_HEIGHT);
-    window.create(L"Mini Assailants", SCREEN_WIDTH, SCREEN_HEIGHT);
+    Window window{ L"Mini Assailants", SCREEN_WIDTH, SCREEN_HEIGHT };
     window.show();
     window.setFullscreen(true);
 

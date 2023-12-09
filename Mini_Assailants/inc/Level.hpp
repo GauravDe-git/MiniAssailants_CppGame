@@ -53,4 +53,5 @@ private:
 
 	std::string backgroundPath;
 	int topEdgeCollision;
+	bool isFirstLoad{ true };
 };
