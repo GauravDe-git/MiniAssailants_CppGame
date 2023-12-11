@@ -25,10 +25,17 @@ void Level::loadLevelAssets()
     player = Player{ {SCREEN_WIDTH / 2 -200,(SCREEN_HEIGHT - 10)} };
 
     player.setTopEdgeCollision(topEdgeCollision);
-    // Add other assets (enemies, items etc.) later
-    enemy = Enemy{ {SCREEN_WIDTH / 2 + 180,SCREEN_HEIGHT - 30},Enemy::Type::Skeleton };
     entities.push_back(&player);
-    entities.push_back(&enemy);
+    
+    for (const auto& enemyInfo : enemyInfos)
+    {
+        enemies.emplace_back(enemyInfo.position,enemyInfo.type);
+    }
+
+    for (auto& enemy: enemies)
+    {
+        entities.push_back(&enemy);
+    }
 }
 
 void Level::setLevel(int levelNumber)
@@ -39,7 +46,10 @@ void Level::setLevel(int levelNumber)
     case 1:
         backgroundPath = "assets/textures/stage1.png";
         topEdgeCollision = 225;
+        enemyInfos = { {Enemy::Type::Goblin, {420,250}},
+                        {Enemy::Type::Skeleton, {820,250}} };
         break;
+        
     // Add more cases for different levels
     }
 
@@ -49,7 +59,10 @@ void Level::setLevel(int levelNumber)
 
 void Level::update(float deltaTime)
 {
-    enemy.update(deltaTime);
+    for (auto& enemy: enemies)
+    {
+        enemy.update(deltaTime);
+    }
 
     switch (gameState)
     {
@@ -88,7 +101,10 @@ void Level::draw(Graphics::Image& image)
         }
         break;
     case GameState::GameOver:
-        enemy.draw(image, camera);
+        for(auto& enemy : enemies)
+        {
+            enemy.draw(image, camera);
+        }
         image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Graphics::Color::Black);
         image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Graphics::Color::Red);
         break;
@@ -156,36 +172,49 @@ void Level::doMenu()
 
 void Level::doPlaying(float deltaTime)
 {
+    bool allEnemiesDefeated{true};
     camera.update(deltaTime, player.getPosition(), player.getVelocity(), player.isAttacking());
     player.update(deltaTime);
-    enemy.setTarget(&player);
 
-    // Check if the enemy is dead
-    if (enemy.getState() == Enemy::State::None) {
-        // Remove the dead enemy from the entities vector
-        std::erase(entities, &enemy);
-        setState(GameState::Win);
-    }
-
-    if (player.getHP() <= 0)
+    for (auto& enemy : enemies)
     {
-        setState(GameState::GameOver);
-        std::erase(entities, &player);
-        enemy.setTarget(nullptr);
+        enemy.setTarget(&player);
+
+        // Check if the enemy is dead
+        if (enemy.getState() != Enemy::State::None)
+        {
+            allEnemiesDefeated = false;
+        }
+        else
+        {
+            // Remove the dead enemy from the entities vector
+            std::erase(entities, &enemy);
+        }
+
+        if (player.getHP() <= 0)
+        {
+            setState(GameState::GameOver);
+            std::erase(entities, &player);
+            enemy.setTarget(nullptr);
+        }
+        else {
+            if (player.isAttacking() && enemy.getState() != Enemy::State::Hurt
+                && enemy.getAABB().intersect(player.getAttackCircle()))
+            {
+                Combat::attack(player, enemy, player.getCurrentAtkType());
+                punch.play();
+            }
+            if (enemy.isAttacking() && player.getState() != Player::State::Hurt
+                && player.getAABB().intersect(enemy.getAttackCircle()))
+            {
+                Combat::attack(enemy, player);
+                swordSlash.play();
+            }
+        }
     }
-    else {
-        if (player.isAttacking() && enemy.getState() != Enemy::State::Hurt
-            && enemy.getAABB().intersect(player.getAttackCircle()))
-        {
-            Combat::attack(player, enemy, player.getCurrentAtkType());
-            punch.play();
-        }
-        if (enemy.isAttacking() && player.getState() != Player::State::Hurt
-            && player.getAABB().intersect(enemy.getAttackCircle()))
-        {
-            Combat::attack(enemy, player);
-            swordSlash.play();
-        }
+    if (allEnemiesDefeated)
+    {
+        setState(GameState::Win);
     }
 }
 

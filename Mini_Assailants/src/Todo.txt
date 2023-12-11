@@ -1,20 +1,18 @@
+1,2,3-player and enemy collision/combat, add sound effects- (Done)
 
-
-3. Wave of enemies:
-    - Spawn multiple enemies using vectors.
+4. Wave of enemies:
+    - Spawn multiple enemies using vectors. (Done)
 	- Change camera state to arena during combat.
 	- Switch back to scrolling after enemies defeated.
 
-4. Add audio:
-	- Add sound effects.
-	- Add music.
+4.5: Enemy Steering Behaviour Ai, when multiple enemies on screen together
 
 5. Add a main menu:
 	- Using a Button class.
 
 ---------------------------
-Extra:
-	- Add hp/mp bar.
+6:
+	- Add hp/mp bar- (image-drawQuad??)
 	- Use the level class to add more levels.
 	- Add more enemy types.
 

@@ -34,8 +34,9 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 
 			idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
 			chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Chase.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 8.f };
-			attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Atk.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
+			attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Atk.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 10.f };
 			hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Hurt.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
+			deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Dead.png",150,125,0,0,BlendMode::AlphaBlend),6.5f };
 
 			state = State::Idle;
 			transform.setAnchor(glm::vec2{ 84.0f,103.0f });
@@ -143,10 +144,11 @@ Math::Circle Enemy::getAttackCircle() const
 	switch (type)
 	{
 	case Type::Goblin:
-		return {{transform.getPosition()}, 15.f};
+		return {{transform.getPosition() + glm::vec2{ 44.f, 30.f } *-transform.getScale() }, 11.f};
 	case Type::Skeleton:
 		return {{transform.getPosition() + glm::vec2{ 34.f, 30.f } * -transform.getScale() }, 12.f};
 	}
+	return {};
 }
 
 void Enemy::setState(State newState)
@@ -212,9 +214,13 @@ void Enemy::doMovement(float deltaTime)
 
 void Enemy::doIdle(float deltaTime)
 {
-	if (target && glm::distance(transform.getPosition(), target->getPosition()) < chaseDistance)
-	{
-		doMovement(deltaTime);
+	if (target != nullptr) {
+		float distanceToPlayer = glm::distance(transform.getPosition(), target->getPosition());
+
+		if (distanceToPlayer > attackDistance && distanceToPlayer < chaseDistance)
+		{
+			doMovement(deltaTime);
+		}
 	}
 	if (glm::length(velocity) > 0)
 	{
@@ -223,6 +229,7 @@ void Enemy::doIdle(float deltaTime)
 
 	idleAnim.update(deltaTime);
 }
+
 
 void Enemy::doChase(float deltaTime)
 {

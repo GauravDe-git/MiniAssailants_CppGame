@@ -32,6 +32,12 @@ public:
 	GameState getGameState() const { return gameState; }
 	void setState(GameState newState);
 private:
+	struct EnemyInfo
+	{
+		Enemy::Type type;
+		glm::vec2 position;
+	};
+
 	void beginState(GameState newState);
 	void endState(GameState oldState);
 
@@ -43,9 +49,10 @@ private:
 	GameState gameState{};
 	Background background{};
 	Player player{};
-	Enemy enemy{};
 	Camera camera{};
+	std::vector<Enemy> enemies;
 	std::vector<Entity*> entities;
+	std::vector<EnemyInfo> enemyInfos;
 
 	Audio::Sound punch;
 	Audio::Sound swordSlash;
