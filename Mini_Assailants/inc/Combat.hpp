@@ -6,9 +6,9 @@
 namespace Combat
 {
 	//player attack enemy
-	inline void attack(Player& player, Enemy& enemy, Player::AttackType atkType)
+	inline void attack(const Player& player, Enemy& enemy, Player::AttackType atkType)
 	{
-		int damage = player.getAtkDmg(atkType);
+		const int damage = player.getAtkDmg(atkType);
 		enemy.reduceHP(damage);
 		enemy.setState(Enemy::State::Hurt);
 		if (enemy.getHp() <= 0)
@@ -19,11 +19,11 @@ namespace Combat
 	}
 
 	//enemy attack player
-	inline void attack(Enemy& enemy, Player& player)
+	inline void attack(const Enemy& enemy, Player& player)
 	{
 		if (!player.isHurt() && !player.isAttacking())
 		{
-			int damage = enemy.getAtkDmg();
+			const int damage = enemy.getAtkDmg();
 			player.reduceHP(damage);
 			player.setState(Player::State::Hurt);
 		}

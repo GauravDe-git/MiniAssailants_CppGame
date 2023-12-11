@@ -13,7 +13,7 @@ public:
 
 	Background(const std::filesystem::path& path);
 
-	void draw(Graphics::Image& image, const Camera& camera);
+	void draw(Graphics::Image& image, const Camera& camera) const;
 
 private:
 	std::shared_ptr<Graphics::Image> background;

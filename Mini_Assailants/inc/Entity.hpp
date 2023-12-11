@@ -3,7 +3,6 @@
 #include <Camera.hpp>
 
 #include <Graphics/Image.hpp>
-#include <Math/AABB.hpp>
 
 class Entity
 {

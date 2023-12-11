@@ -4,8 +4,6 @@
 #include <Graphics/Font.hpp>
 #include <Graphics/ResourceManager.hpp>
 
-#include <iostream>
-
 using namespace Graphics;
 
 static std::map<Player::State, std::string> g_stateNames =
@@ -24,19 +22,19 @@ Player::Player() = default;
 Player::Player(const glm::vec2& pos)
 	:Entity{ pos } ,aabb{ {9,65,0},{31,117,0} } 
 {
-	auto idleSheet = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	const auto idleSheet = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	idleSprite = SpriteAnim{ idleSheet, 10.0f };
 
-	auto walkSheet = ResourceManager::loadSpriteSheet("assets/textures/Walking_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	const auto walkSheet = ResourceManager::loadSpriteSheet("assets/textures/Walking_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	walkSprite = SpriteAnim{ walkSheet, 10.0f };
 
 	// 2 anims for Light Attack (On pressing H key)
-	auto lightAtk1Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	const auto lightAtk1Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	lightAtk1Sprite = SpriteAnim{ lightAtk1Sheet, 12.0f };
-	auto lightAtk2Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk2_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	const auto lightAtk2Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk2_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	lightAtk2Sprite = SpriteAnim{ lightAtk2Sheet, 14.0f };
 
-	auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	const auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	special1Sprite = SpriteAnim{ special1Sheet, 12.0f };
 
 	attackDmg[AttackType::Light1] = 1;
@@ -97,7 +95,7 @@ void Player::draw(Image& image, const Camera& camera)
 	Color color = Color::White;
 	if (hitCounter > 0.f)
 	{
-		float alpha = (std::sin(hitCounter * 20.f) + 1.f) / 2.f;
+		const float alpha = (std::sin(hitCounter * 20.f) + 1.f) / 2.f;
 		color = alpha * Color::White + (1.f - alpha) * Color::Red;
 	}
 
@@ -205,7 +203,7 @@ void Player::endState(State oldState)
 
 void Player::doMovement(float deltaTime)
 {
-	auto initialPos = transform.getPosition();
+	const auto initialPos = transform.getPosition();
 	auto position = initialPos;
 
 	position.x += Input::getAxis("Horizontal") * speed * deltaTime;

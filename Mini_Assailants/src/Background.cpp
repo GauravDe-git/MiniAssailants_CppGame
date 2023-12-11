@@ -9,7 +9,7 @@ Background::Background(const std::filesystem::path& path)
 	background = ResourceManager::loadImage(path);
 }
 
-void Background::draw(Graphics::Image& image, const Camera& camera)
+void Background::draw(Graphics::Image& image, const Camera& camera) const
 {
     float w = background->getWidth();
 

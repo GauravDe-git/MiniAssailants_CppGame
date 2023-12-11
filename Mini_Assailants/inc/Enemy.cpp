@@ -126,7 +126,7 @@ void Enemy::draw(Graphics::Image& image, const Camera& camera)
 #endif
 }
 
-const Math::AABB Enemy::getAABB() const
+Math::AABB Enemy::getAABB() const
 {
 	auto it = aabbs.find(state);
 	if (it != aabbs.end())
@@ -134,12 +134,8 @@ const Math::AABB Enemy::getAABB() const
 		// If there's an AABB for the current state, use it
 		return transform * it->second;
 	}
-	else
-	{
-		// Otherwise, use the Idle state's AABB as the default
-		return transform * aabbs.at(State::Idle);
-	}
-	
+	// Otherwise, use the Idle state's AABB as the default
+	return transform * aabbs.at(State::Idle);
 }
 
 Math::Circle Enemy::getAttackCircle() const
@@ -202,12 +198,13 @@ void Enemy::endState(State oldState)
 void Enemy::doMovement(float deltaTime)
 {
 	auto initialPos = transform.getPosition();
-	auto targetPos = target ? target->getPosition() : initialPos;
+	const auto targetPos = target ? target->getPosition() : initialPos;
 
 	auto direction = targetPos - initialPos;
 
 	direction = glm::length(direction) > 0 ? glm::normalize(direction) : direction;
 	velocity = direction * speed;
+
 	initialPos += velocity * deltaTime;
 
 	transform.setPosition(initialPos);
@@ -215,7 +212,7 @@ void Enemy::doMovement(float deltaTime)
 
 void Enemy::doIdle(float deltaTime)
 {
-	if (!(target && glm::distance(transform.getPosition(), target->getPosition()) < attackDistance))
+	if (target && glm::distance(transform.getPosition(), target->getPosition()) < chaseDistance)
 	{
 		doMovement(deltaTime);
 	}
@@ -242,6 +239,12 @@ void Enemy::doChase(float deltaTime)
 			setState(State::Idle);
 		}
 	}
+	//If player goes far away from enemy then set enemy back to Idle
+	// Buggy
+	/*if(target && glm::distance(transform.getPosition(), target->getPosition()) > chaseDistance)
+	{
+		setState(State::Idle);
+	}*/
 	chaseAnim.update(deltaTime);
 }
 
@@ -269,7 +272,7 @@ void Enemy::doAttack(float deltaTime)
 void Enemy::doHurt(float deltaTime)
 {
 	hurtAnim.update(deltaTime);
-	glm::vec2 knockBack{ 80.f * transform.getScale().x,0.f };
+	const glm::vec2 knockBack{ 80.f * transform.getScale().x,0.f };
 
 	transform.translate(knockBack * deltaTime);
 	

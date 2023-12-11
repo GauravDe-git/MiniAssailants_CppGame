@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Entity.hpp"
-#include "Constants.hpp"
 
 #include <Graphics/SpriteAnim.hpp>
 #include <glm/vec2.hpp>
@@ -34,7 +33,7 @@ public:
 	virtual void draw(Graphics::Image& image, const Camera& camera) override;
 
 	void setTarget(Entity* _target) { target = _target; }
-	const Math::AABB getAABB() const;
+	Math::AABB getAABB() const;
 
 	Math::Circle getAttackCircle() const;
 	int getHp() const { return hp; }
@@ -62,6 +61,7 @@ private:
 	Entity* target = nullptr;
 
 	glm::vec2 velocity{ 0 };
+	float chaseDistance{ 230.f };
 	float attackDistance{};
 	float speed{};
 	int hp{};

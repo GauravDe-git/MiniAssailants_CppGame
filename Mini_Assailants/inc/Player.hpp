@@ -9,7 +9,6 @@
 
 #include <glm/vec2.hpp>
 
-#include <string>
 #include <map>
 
 class Player : public Entity
@@ -77,7 +76,7 @@ private:
 	void doHurt(float deltaTime);
 
 	glm::vec2 velocity{ 0 };
-	float speed{ 85.0f };
+	float speed{ 185.0f };
 	int topEdgeCollision{ 0 };
 
 	Math::AABB aabb;

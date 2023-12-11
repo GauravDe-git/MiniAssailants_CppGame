@@ -22,11 +22,11 @@ void Level::loadLevelAssets()
 {
     //Load level-specific assets
     background = Background(backgroundPath);
-    player = Player{ {SCREEN_WIDTH / 2,(SCREEN_HEIGHT - 10)} };
+    player = Player{ {SCREEN_WIDTH / 2 -200,(SCREEN_HEIGHT - 10)} };
 
     player.setTopEdgeCollision(topEdgeCollision);
     // Add other assets (enemies, items etc.) later
-    enemy = Enemy{ {SCREEN_WIDTH / 2 + 100,SCREEN_HEIGHT - 30},Enemy::Type::Skeleton };
+    enemy = Enemy{ {SCREEN_WIDTH / 2 + 180,SCREEN_HEIGHT - 30},Enemy::Type::Skeleton };
     entities.push_back(&player);
     entities.push_back(&enemy);
 }
@@ -82,7 +82,7 @@ void Level::draw(Graphics::Image& image)
         //sorting order of drawing player/enemy based on their Y position
         //** ranges algorithm suggested by resharper over the normal std::sort
         std::ranges::sort(entities, [](const Entity* a, const Entity* b) {return a->getPosition().y < b->getPosition().y; });
-        for (auto entity : entities)
+        for (const auto entity : entities)
         {
             entity->draw(image, camera);
         }
