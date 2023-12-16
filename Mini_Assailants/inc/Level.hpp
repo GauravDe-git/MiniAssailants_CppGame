@@ -25,6 +25,7 @@ public:
 
 	void loadLevelAssets();
 	void setLevel(int levelNumber);
+	
 
 	void update(float deltaTime);
 	void draw(Graphics::Image& image);
@@ -38,6 +39,7 @@ private:
 		glm::vec2 position;
 	};
 
+	void updateEnemies(float deltaTime);
 	void beginState(GameState newState);
 	void endState(GameState oldState);
 

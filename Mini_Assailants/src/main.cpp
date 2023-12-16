@@ -47,7 +47,7 @@ int main()
         // Draw Stuff Here (Render Loop) //
 
     	level.draw(image);
-        image.drawText(Font::Default, fps, 10, 10, Color::Blue);
+        image.drawText(Font::Default, fps, 407, 5, Color::Yellow);
         window.present(image);
 
         Event event;
@@ -81,7 +81,7 @@ int main()
         totalTime += timer.elapsedSeconds();
         if (totalTime > 1.0)
         {
-            fps = fmt::format("FPS: {:.3f}", static_cast<double>(frameCount) / totalTime);
+            fps = fmt::format("FPS:{:.2f}", static_cast<double>(frameCount) / totalTime);
 
             std::cout << fps << '\n';
 

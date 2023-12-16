@@ -2,6 +2,7 @@
 
 #include "Entity.hpp"
 #include <Camera.hpp>
+#include "UiBar.hpp"
 
 #include <Graphics/SpriteAnim.hpp>
 #include <Math/AABB.hpp>
@@ -75,12 +76,14 @@ private:
 	void doSpecial1(float deltaTime);
 	void doHurt(float deltaTime);
 
+	UiBar healthBar{};
+
 	glm::vec2 velocity{ 0 };
 	float speed{ 185.0f };
 	int topEdgeCollision{ 0 };
 
 	Math::AABB aabb;
-	int hp{910};
+	int hp{30};
 	std::map<AttackType, int> attackDmg;
 	Math::Circle attackCircle{};
 	float timeSinceLastAtk{ 0.f };

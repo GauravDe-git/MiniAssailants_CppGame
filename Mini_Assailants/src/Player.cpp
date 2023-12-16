@@ -1,4 +1,5 @@
 #include <Player.hpp>
+#include <UiBar.hpp>
 
 #include <Graphics/Input.hpp>
 #include <Graphics/Font.hpp>
@@ -20,7 +21,8 @@ static std::map<Player::State, std::string> g_stateNames =
 Player::Player() = default;
 
 Player::Player(const glm::vec2& pos)
-	:Entity{ pos } ,aabb{ {9,65,0},{31,117,0} } 
+	:Entity{ pos } , healthBar{100, 12, {0, -20}},
+	 aabb{{9, 65, 0}, {31, 117, 0}}
 {
 	const auto idleSheet = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	idleSprite = SpriteAnim{ idleSheet, 10.0f };
@@ -29,12 +31,13 @@ Player::Player(const glm::vec2& pos)
 	walkSprite = SpriteAnim{ walkSheet, 10.0f };
 
 	// 2 anims for Light Attack (On pressing H key)
-	const auto lightAtk1Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	const auto lightAtk1Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk1_Sheet.png", 153,			                                                                  127, 0, 0, BlendMode::AlphaBlend);
 	lightAtk1Sprite = SpriteAnim{ lightAtk1Sheet, 12.0f };
-	const auto lightAtk2Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk2_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+
+	const auto lightAtk2Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk2_Sheet.png", 153,                                                                        127, 0, 0, BlendMode::AlphaBlend);
 	lightAtk2Sprite = SpriteAnim{ lightAtk2Sheet, 14.0f };
 
-	const auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	const auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153,                                                                                 127, 0, 0, BlendMode::AlphaBlend);
 	special1Sprite = SpriteAnim{ special1Sheet, 12.0f };
 
 	attackDmg[AttackType::Light1] = 1;
@@ -91,7 +94,13 @@ void Player::update(float deltaTime)
 
 void Player::draw(Image& image, const Camera& camera)
 {
-	//Logic to flash the player sprite
+	//Draw the health bar
+	const float healthPercent = static_cast<float>(hp) / 30;
+	const Color healthColor = healthPercent > 0.5f ? Color::Green : (healthPercent > 0.25f ? Color::Yellow : Color::Red);
+	healthBar.Draw(image, hp, 30, glm::vec2{10,25}, healthColor);
+
+	//Logic to flash the player sprite upon damage
+	//Solution using Sin wave shown by Jeremiah
 	Color color = Color::White;
 	if (hitCounter > 0.f)
 	{

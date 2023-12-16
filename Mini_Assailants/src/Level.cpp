@@ -47,7 +47,6 @@ void Level::setLevel(int levelNumber)
         backgroundPath = "assets/textures/stage1.png";
         topEdgeCollision = 225;
         enemyInfos =  { {Enemy::Type::Goblin, {420,250}},
-        				{Enemy::Type::Goblin, {400,250}},
                         {Enemy::Type::Skeleton, {820,250}} };
         break;
         
@@ -58,22 +57,27 @@ void Level::setLevel(int levelNumber)
     loadLevelAssets();
 }
 
+void Level::updateEnemies(float deltaTime)
+{
+	for (auto& enemy: enemies)
+	{
+		enemy.update(deltaTime);
+	}
+}
+
 void Level::update(float deltaTime)
 {
-    for (auto& enemy: enemies)
-    {
-        enemy.update(deltaTime);
-    }
-
     switch (gameState)
     {
     case GameState::Menu:
         doMenu();
         break;
     case GameState::Playing:
+        updateEnemies(deltaTime);
         doPlaying(deltaTime);
         break;
     case GameState::GameOver:
+        updateEnemies(deltaTime);
         doGameOver();
         break;
     case GameState::Win:
@@ -94,6 +98,7 @@ void Level::draw(Graphics::Image& image)
         break;
     case GameState::Playing:
         //sorting order of drawing player/enemy based on their Y position
+        // Solution using std::sort and lambda fn. suggested by Jeremiah
         //** ranges algorithm suggested by resharper over the normal std::sort
         std::ranges::sort(entities, [](const Entity* a, const Entity* b) {return a->getPosition().y < b->getPosition().y; });
         for (const auto entity : entities)
@@ -157,6 +162,7 @@ void Level::endState(GameState oldState)
         break;
     case GameState::Playing:
         entities.clear();
+        enemies.clear();
         break;
     case GameState::GameOver:
         break;

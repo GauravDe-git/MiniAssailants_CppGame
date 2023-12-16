@@ -66,13 +66,6 @@ void Enemy::update(float deltaTime)
 {
 	collisionCircle.center = transform.getPosition();
 
-	/*if (velocity.x < 0) {
-		transform.setScale(glm::vec2(1.0f, 1.0f));
-	}
-	else if (velocity.x > 0) {
-		transform.setScale(glm::vec2(-1.0f, 1.0f));
-	}*/
-
 	switch (state)
 	{
 	case State::Idle:

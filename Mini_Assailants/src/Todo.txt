@@ -20,3 +20,20 @@ For intake:
 - add hp/mp item drops to collect
 
 	- Add Bosses.(what)
+
+
+===============================================
+Bug:
+ - When dying and restarting level-> 
+     more enemies spawning.
+     many random DEBUG enemy collision AABBS, and enemy hp,state(State: None) texts showing up randomly.
+
+QOL:
+ Add ManaBar and more attacks for Player that uses mana (Special Attack 2, Heavy Attack).
+ Different Sound Effects for each Player attack (Light, Heavy, Special 1, Special 2).
+ 
+ Add more Enemy types for each level. 
+ Add Level 1,2,3.
+ Different Music for Menu,Levels 1,2,3, and sound for win,GameOver.
+
+
