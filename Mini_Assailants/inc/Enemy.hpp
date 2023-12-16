@@ -32,14 +32,19 @@ public:
 	virtual void update(float deltaTime) override;
 	virtual void draw(Graphics::Image& image, const Camera& camera) override;
 
+	void setFacingDirection(const glm::vec2& direction);
 	void setTarget(Entity* _target) { target = _target; }
 	Math::AABB getAABB() const;
 
+	//---------Getters/Setters-------------// 
 	Math::Circle getAttackCircle() const;
 	int getHp() const { return hp; }
 	void setHp(int hp) { this->hp = hp; }
 	void reduceHP(int damage) { hp -= damage; }
 	int getAtkDmg() const { return attackDmg; }
+	Math::Circle getCollisionCircle() const { return collisionCircle; }
+	void setVelocity(glm::vec2 _velocity) { velocity = _velocity; }
+	float getSpeed() const { return speed; }
 
 	bool isAttacking() const {
 		return state == State::Attack && attackAnim.getCurrentFrame() >= attackFrame;
@@ -68,6 +73,7 @@ private:
 	int attackDmg{};
 	std::map<State, Math::AABB> aabbs;
 	Math::Circle attackCircle{};
+	Math::Circle collisionCircle{{},10.f};
 	int attackFrame{};
 
 	Graphics::SpriteAnim idleAnim;

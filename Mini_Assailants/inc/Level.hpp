@@ -42,6 +42,7 @@ private:
 	void endState(GameState oldState);
 
 	void doMenu();
+	void enemySteerAi(std::vector<Enemy>::value_type& enemy) const;
 	void doPlaying(float deltaTime);
 	void doGameOver();
 	void doWin();

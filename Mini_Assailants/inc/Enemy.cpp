@@ -64,12 +64,14 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 
 void Enemy::update(float deltaTime)
 {
-	if (velocity.x < 0) {
+	collisionCircle.center = transform.getPosition();
+
+	/*if (velocity.x < 0) {
 		transform.setScale(glm::vec2(1.0f, 1.0f));
 	}
 	else if (velocity.x > 0) {
 		transform.setScale(glm::vec2(-1.0f, 1.0f));
-	}
+	}*/
 
 	switch (state)
 	{
@@ -124,6 +126,7 @@ void Enemy::draw(Graphics::Image& image, const Camera& camera)
 	{
 		image.drawCircle(attackCircle.center + camera.getViewPosition(), attackCircle.radius, Color::Cyan, {}, FillMode::WireFrame);
 	}
+	image.drawCircle(collisionCircle.center + camera.getViewPosition(), collisionCircle.radius, Color::Yellow, {}, FillMode::WireFrame);
 #endif
 }
 
@@ -144,7 +147,7 @@ Math::Circle Enemy::getAttackCircle() const
 	switch (type)
 	{
 	case Type::Goblin:
-		return {{transform.getPosition() + glm::vec2{ 44.f, 30.f } *-transform.getScale() }, 11.f};
+		return {{transform.getPosition() + glm::vec2{ 44.f, 30.f } * -transform.getScale() }, 11.f};
 	case Type::Skeleton:
 		return {{transform.getPosition() + glm::vec2{ 34.f, 30.f } * -transform.getScale() }, 12.f};
 	}
@@ -300,3 +303,14 @@ void Enemy::doDead(float deltaTime)
 		setState(State::None);
 	}
 }
+
+void Enemy::setFacingDirection(const glm::vec2& direction)
+{
+	if (direction.x < 0) {
+		transform.setScale(glm::vec2(1.0f, 1.0f));
+	}
+	else if (direction.x > 0) {
+		transform.setScale(glm::vec2(-1.0f, 1.0f));
+	}
+}
+

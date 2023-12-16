@@ -46,7 +46,8 @@ void Level::setLevel(int levelNumber)
     case 1:
         backgroundPath = "assets/textures/stage1.png";
         topEdgeCollision = 225;
-        enemyInfos = { {Enemy::Type::Goblin, {420,250}},
+        enemyInfos =  { {Enemy::Type::Goblin, {420,250}},
+        				{Enemy::Type::Goblin, {400,250}},
                         {Enemy::Type::Skeleton, {820,250}} };
         break;
         
@@ -170,6 +171,28 @@ void Level::doMenu()
         setState(GameState::Playing);
 }
 
+void Level::enemySteerAi(std::vector<Enemy>::value_type& enemy) const
+{
+	//Enemy steering behaviour when colliding with itself
+	for (const auto& otherEnemy : enemies)
+	{
+		if(&otherEnemy != &enemy && enemy.getCollisionCircle().intersect(otherEnemy.getCollisionCircle()))
+		{
+			auto direction = glm::normalize(otherEnemy.getPosition() - enemy.getPosition());
+
+			//set velocity to move in opposite direction
+			enemy.setVelocity(-direction * enemy.getSpeed());
+
+			//immediately resolve the collision by slightly moving the enemy
+			const float displacement = enemy.getCollisionCircle().radius + otherEnemy.getCollisionCircle().radius - glm::distance(enemy.getPosition(), otherEnemy.getPosition());
+			enemy.setPosition(enemy.getPosition() - direction * displacement);
+		}
+	}
+	// Set the enemy's facing direction based on the player's position
+	const glm::vec2 directionToPlayer = glm::normalize(player.getPosition() - enemy.getPosition());
+	enemy.setFacingDirection(directionToPlayer);
+}
+
 void Level::doPlaying(float deltaTime)
 {
     bool allEnemiesDefeated{true};
@@ -179,6 +202,8 @@ void Level::doPlaying(float deltaTime)
     for (auto& enemy : enemies)
     {
         enemy.setTarget(&player);
+
+        enemySteerAi(enemy);
 
         // Check if the enemy is dead
         if (enemy.getState() != Enemy::State::None)
