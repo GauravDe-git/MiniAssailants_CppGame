@@ -23,7 +23,8 @@ public:
 		Chase,
 		Attack,
 		Hurt,
-		Dead
+		Dead,
+		JustDefeated
 	};
 
 	Enemy();

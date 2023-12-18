@@ -1,13 +1,14 @@
 #include "Level.hpp"
 #include "Constants.hpp"
 #include "Combat.hpp"
+#include "PotionDrop.hpp"
 
 #include <Graphics/Font.hpp>
 #include <Graphics/ResourceManager.hpp>
+#include "Graphics/Input.hpp"
 
 #include <algorithm>
-
-#include "Graphics/Input.hpp"
+#include <random>
 
 Level::Level()
     : gameState{GameState::Menu},
@@ -47,7 +48,8 @@ void Level::setLevel(int levelNumber)
         backgroundPath = "assets/textures/stage1.png";
         topEdgeCollision = 225;
         enemyInfos =  { {Enemy::Type::Goblin, {420,250}},
-                        {Enemy::Type::Skeleton, {820,250}} };
+                        {Enemy::Type::Skeleton, {820,250}},
+        {Enemy::Type::Goblin, {1020,250}},};
         break;
         
     // Add more cases for different levels
@@ -219,9 +221,26 @@ void Level::doPlaying(float deltaTime)
         else
         {
             // Remove the dead enemy from the entities vector
+            //Bug: Not able to properly erase the enemy like this
+            // (Punch effect still playing after the enemy is removed)
             std::erase(entities, &enemy);
         }
 
+        //Enemy Potion Drop Logic
+        if (enemy.getState() == Enemy::State::JustDefeated)
+        {
+            std::mt19937 randGen{ std::random_device{}() };
+            std::bernoulli_distribution randDist(0.5);
+            if (randDist(randGen))
+            {
+	            const PotionDrop::Type type = randDist(randGen) ? PotionDrop::Type::HP : PotionDrop::Type::MP;
+				PotionDrop* potion = new PotionDrop{ enemy.getPosition(), type };
+				entities.push_back(potion);
+            }
+            enemy.setState(Enemy::State::None);
+        }
+
+        //Player and Enemy Combat Interaction Logic
         if (player.getHP() <= 0)
         {
             setState(GameState::GameOver);

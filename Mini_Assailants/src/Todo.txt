@@ -35,5 +35,5 @@ QOL:
  Add more Enemy types for each level. 
  Add Level 1,2,3.
  Different Music for Menu,Levels 1,2,3, and sound for win,GameOver.
-
+ Floating damage numbers.
 

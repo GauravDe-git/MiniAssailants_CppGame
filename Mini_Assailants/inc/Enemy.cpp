@@ -125,7 +125,7 @@ void Enemy::draw(Graphics::Image& image, const Camera& camera)
 
 Math::AABB Enemy::getAABB() const
 {
-	auto it = aabbs.find(state);
+	const auto it = aabbs.find(state);
 	if (it != aabbs.end())
 	{
 		// If there's an AABB for the current state, use it
@@ -293,7 +293,8 @@ void Enemy::doDead(float deltaTime)
 	if (deadAnim.isDone())
 	{
 		deadAnim.reset();
-		setState(State::None);
+		//setState(State::None);
+		setState(State::JustDefeated);
 	}
 }
 
