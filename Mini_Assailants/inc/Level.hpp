@@ -4,6 +4,7 @@
 #include <Camera.hpp>
 #include <Player.hpp>
 #include <Enemy.hpp>
+#include <random>
 
 #include <Audio/Sound.hpp>
 
@@ -25,7 +26,7 @@ public:
 
 	void loadLevelAssets();
 	void setLevel(int levelNumber);
-	
+
 
 	void update(float deltaTime);
 	void draw(Graphics::Image& image);
@@ -39,12 +40,12 @@ private:
 		glm::vec2 position;
 	};
 
-	void updateEnemies(float deltaTime);
+	void updateEnemies(float deltaTime) const;
 	void beginState(GameState newState);
 	void endState(GameState oldState);
 
 	void doMenu();
-	void enemySteerAi(std::vector<Enemy>::value_type& enemy) const;
+	void enemySteerAi(Enemy* enemy) const;
 	void doPlaying(float deltaTime);
 	void doGameOver();
 	void doWin();
@@ -53,7 +54,7 @@ private:
 	Background background{};
 	Player player{};
 	Camera camera{};
-	std::vector<Enemy> enemies;
+	std::vector<Enemy*> enemies;
 	std::vector<Entity*> entities;
 	std::vector<EnemyInfo> enemyInfos;
 
@@ -64,4 +65,7 @@ private:
 	std::string backgroundPath;
 	int topEdgeCollision;
 	bool isFirstLoad{ true };
+
+	std::mt19937 randGen{ std::random_device{}() };
+	std::bernoulli_distribution randDist{0.5};
 };

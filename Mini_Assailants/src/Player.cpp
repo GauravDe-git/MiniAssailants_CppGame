@@ -32,13 +32,13 @@ Player::Player(const glm::vec2& pos)
 
 	// 2 anims for Light Attack (On pressing H key)
 	const auto lightAtk1Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk1_Sheet.png", 153,			                                                                  127, 0, 0, BlendMode::AlphaBlend);
-	lightAtk1Sprite = SpriteAnim{ lightAtk1Sheet, 12.0f };
+	lightAtk1Sprite = SpriteAnim{ lightAtk1Sheet, 13.5f };
 
 	const auto lightAtk2Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk2_Sheet.png", 153,                                                                        127, 0, 0, BlendMode::AlphaBlend);
-	lightAtk2Sprite = SpriteAnim{ lightAtk2Sheet, 14.0f };
+	lightAtk2Sprite = SpriteAnim{ lightAtk2Sheet, 15.0f };
 
 	const auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153,                                                                                 127, 0, 0, BlendMode::AlphaBlend);
-	special1Sprite = SpriteAnim{ special1Sheet, 12.0f };
+	special1Sprite = SpriteAnim{ special1Sheet, 15.0f };
 
 	attackDmg[AttackType::Light1] = 1;
 	attackDmg[AttackType::Light2] = 2;
