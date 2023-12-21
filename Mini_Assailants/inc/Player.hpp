@@ -54,7 +54,12 @@ public:
 	const Math::AABB getAABB() const { return  transform * aabb; }
 	const Math::Circle& getAttackCircle() const { return attackCircle; }
 	int getHP() const { return hp; }
-	void reduceHP(int damage) { hp -= damage; }
+	int getMaxHP() const { return maxHp; }
+	//void reduceHP(int damage) { hp -= damage; }
+	void setHP(int hp) { this->hp = hp; }
+	int getMP() const { return mp; }
+	int getMaxMP() const { return maxMp; }
+	void setMP(int mp) { this->mp = mp; }
 	int getAtkDmg(AttackType type) const { return attackDmg.at(type); }
 	AttackType getCurrentAtkType() const { return currentAtkType; }
 
@@ -76,14 +81,18 @@ private:
 	void doSpecial1(float deltaTime);
 	void doHurt(float deltaTime);
 
-	UiBar healthBar{};
+	UiBar healthBar{ 100, 12, {0, -20} };
+	UiBar mpBar{ 80, 12, {0, -20} };
 
 	glm::vec2 velocity{ 0 };
 	float speed{ 185.0f };
 	int topEdgeCollision{ 0 };
 
 	Math::AABB aabb;
-	int hp{30};
+	int hp{15};
+	int maxHp = hp;
+	int mp{ 20 };
+	int maxMp = mp;
 	std::map<AttackType, int> attackDmg;
 	Math::Circle attackCircle{};
 	float timeSinceLastAtk{ 0.f };

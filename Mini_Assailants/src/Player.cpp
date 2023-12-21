@@ -21,7 +21,7 @@ static std::map<Player::State, std::string> g_stateNames =
 Player::Player() = default;
 
 Player::Player(const glm::vec2& pos)
-	:Entity{ pos } , healthBar{100, 12, {0, -20}},
+	:Entity{ pos } , 
 	 aabb{{9, 65, 0}, {31, 117, 0}}
 {
 	const auto idleSheet = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
@@ -55,6 +55,7 @@ void Player::setTopEdgeCollision(int top)
 
 void Player::update(float deltaTime)
 {
+	//Logic for light attack 2 
 	hitCounter -= deltaTime;
 	if (isAttacking())
 	{
@@ -95,9 +96,14 @@ void Player::update(float deltaTime)
 void Player::draw(Image& image, const Camera& camera)
 {
 	//Draw the health bar
-	const float healthPercent = static_cast<float>(hp) / 30;
+	const float healthPercent = static_cast<float>(hp) / maxHp;
 	const Color healthColor = healthPercent > 0.5f ? Color::Green : (healthPercent > 0.25f ? Color::Yellow : Color::Red);
-	healthBar.Draw(image, hp, 30, glm::vec2{10,25}, healthColor);
+	healthBar.Draw(image, hp, maxHp, glm::vec2{10,25}, healthColor);
+
+	//Draw the magic bar
+	const float magicPercent = static_cast<float>(mp) / maxMp;
+	const Color magicColor = magicPercent > 0.5f ? Color::Blue : Color::Cyan;
+	mpBar.Draw(image, mp, maxMp, glm::vec2{ 10, 40 }, magicColor);
 
 	//Logic to flash the player sprite upon damage
 	//Solution using Sin wave shown by Jeremiah
@@ -138,6 +144,7 @@ void Player::draw(Image& image, const Camera& camera)
 	image.drawAABB(getAABB() + glm::vec3{ camera.getViewPosition(), 0}, Color::Yellow, {}, FillMode::WireFrame);
 	image.drawText(Font::Default, g_stateNames[state], transform.getPosition() + camera.getViewPosition() + glm::vec2{-20, -65}, Color::Yellow);
 	image.drawText(Font::Default,"HP: " + std::to_string(hp), transform.getPosition() + camera.getViewPosition() + glm::vec2{-17, -78}, Color::Green);
+	image.drawText(Font::Default, "MP: " + std::to_string(mp), transform.getPosition() + camera.getViewPosition() + glm::vec2{ -17, -90 }, Color::Blue);
 	if (isAttacking())
 	{
 		image.drawCircle(attackCircle.center + camera.getViewPosition(), attackCircle.radius, Color::Red, {}, FillMode::WireFrame);
@@ -239,14 +246,18 @@ void Player::doMovement(float deltaTime)
 
 void Player::doCombat()
 {
+	if (mp < 0)
+		mp = 0;
+
 	if (Input::getKeyDown(KeyCode::H))
 	{
 		setState(State::LightAtk1);
 		timeSinceLastAtk = 0.f;
 	}
-	else if (Input::getKeyDown(KeyCode::Y))
+	else if (Input::getKeyDown(KeyCode::Y) && mp >= 5 && !isAttacking())
 	{
 		setState(State::Special1);
+		mp -= 5;
 	}
 }
 

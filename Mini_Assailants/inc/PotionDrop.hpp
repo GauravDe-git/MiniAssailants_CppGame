@@ -2,7 +2,8 @@
 
 #include <Entity.hpp>
 
-#include "Graphics/Sprite.hpp"
+#include <Graphics/Sprite.hpp>
+#include <Graphics/Timer.hpp>
 
 class PotionDrop : public Entity
 {
@@ -14,15 +15,18 @@ public:
 	PotionDrop(const glm::vec2& pos, Type _type);
 
 	void draw(Graphics::Image& image, const Camera& camera) override;
-	void update(float deltaTime) override {}
+	void update(float deltaTime) override;
 
 	Type getType() const { return type; }
 	int getValue() const { return value; }
+	Math::AABB getAABB() const { return  transform * aabb; }
 
+	bool canPickUp() const;
 private:
 	Type type{};
 	Graphics::Sprite sprite{};
 	int value;
 
 	Math::AABB aabb{};
+	Graphics::Timer pickupDelay{};
 };

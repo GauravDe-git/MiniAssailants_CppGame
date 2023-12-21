@@ -1,11 +1,11 @@
 #include <Constants.hpp>
 #include <Level.hpp>
 
-#include <Graphics/Window.hpp>
+#include <Graphics/Input.hpp>
+#include <Graphics/ResourceManager.hpp>
+#include <Graphics/Timer.hpp>
 #include <Graphics/Image.hpp>
-#include "Graphics/ResourceManager.hpp"
-#include "Graphics/Timer.hpp"
-#include "Graphics/Input.hpp"
+#include <Graphics/Window.hpp>
 
 #include <fmt/core.h>
 

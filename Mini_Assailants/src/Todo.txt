@@ -2,22 +2,22 @@
 
 4. Wave of enemies:
     - Spawn multiple enemies using vectors. (Done)
-	- Change camera state to arena during combat.
+	- Change camera state to arena during combat. ***
 	- Switch back to scrolling after enemies defeated.
 
-4.5: Enemy Steering Behaviour Ai, when multiple enemies on screen together
+4.5: Enemy Steering Behaviour Ai, when multiple enemies on screen together (Done)
 
 5. Add a main menu:
-	- Using a Button class.
+	- Using a Button class. ***
 
 ---------------------------
 6:
-	- Add hp/mp bar- (image-drawQuad??)
-	- Use the level class to add more levels.
-	- Add more enemy types.
+	- Add hp/mp bar- (image-drawQuad??) (Done)
+	- Use the level class to add more levels. ***
+	- Add more enemy types.                   ***
 
 For intake:
-- add hp/mp item drops to collect
+- add hp/mp item drops to collect  (Done)
 
 	- Add Bosses.(what)
 
@@ -37,3 +37,9 @@ QOL:
  Different Music for Menu,Levels 1,2,3, and sound for win,GameOver.
  Floating damage numbers.
 
+ Add a coin pickup option as well,with sfx, when enemy die(just like hp/mp a random chance)
+ and a coin ui, showing coins collected
+ Player Face Portrait
+
+ Change the stats like player hp,mp,dmg,enemy- hp,dmg using JSON instead 
+ of hardcoding

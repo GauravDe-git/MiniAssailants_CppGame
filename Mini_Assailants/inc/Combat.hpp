@@ -24,7 +24,8 @@ namespace Combat
 		if (!player.isHurt() && !player.isAttacking())
 		{
 			const int damage = enemy.getAtkDmg();
-			player.reduceHP(damage);
+			//player.reduceHP(damage);
+			player.setHP(player.getHP() - damage);
 			player.setState(Player::State::Hurt);
 		}
 	}

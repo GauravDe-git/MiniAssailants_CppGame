@@ -163,9 +163,10 @@ void Level::endState(GameState oldState)
         break;
     case GameState::Playing:
         entities.clear();
-        enemies.clear();
+        //enemies.clear();
         break;
     case GameState::GameOver:
+		enemies.clear();
         break;
     case GameState::Win:
         break;
@@ -231,7 +232,7 @@ void Level::doPlaying(float deltaTime)
         {
             setState(GameState::GameOver);
             std::erase(entities, &player);
-            enemy->setTarget(nullptr);
+            //enemy->setTarget(nullptr);
         }
         else {
             if (player.isAttacking() && enemy->getState() != Enemy::State::Hurt
@@ -247,6 +248,31 @@ void Level::doPlaying(float deltaTime)
                 swordSlash.play();
             }
         }
+    }
+
+    // Picking up the Potions dropped by Enemies
+    for (const auto entity : entities)
+    {
+		// Check if the entity is a potion
+		if (PotionDrop* potion = dynamic_cast<PotionDrop*>(entity))
+		{
+            potion->update(deltaTime);
+
+			if (potion->canPickUp() && player.getAABB().intersect(potion->getAABB()))
+			{
+				switch (potion->getType())
+				{
+				case PotionDrop::Type::HP:
+                    player.setHP(std::min(player.getHP() + potion->getValue(), player.getMaxHP()));
+					break;
+				case PotionDrop::Type::MP:
+					player.setMP(std::min(player.getMP() + potion->getValue(), player.getMaxMP()));
+					break;
+				}
+                std::erase(entities, potion);
+                delete potion;
+			}
+		}
     }
 
     // Removing Enemies when they are in none state.
@@ -274,6 +300,11 @@ void Level::doPlaying(float deltaTime)
 void Level::doGameOver()
 {
     // Any logic that needs to happen when the game is over
+    for (const auto enemy : enemies)
+    {
+        enemy->setTarget(nullptr);
+    }
+
     if (Graphics::Input::getKeyDown(Graphics::KeyCode::Enter))
         setState(GameState::Menu);
 }
