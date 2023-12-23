@@ -41,5 +41,8 @@ QOL:
  and a coin ui, showing coins collected
  Player Face Portrait
 
+ Add a pause menu. Maybe a button on top right, can be clicked, or press esc/p to go menu,
+ with options to go back to main menu or quit.
+
  Change the stats like player hp,mp,dmg,enemy- hp,dmg using JSON instead 
  of hardcoding

@@ -14,6 +14,12 @@ Math::AABB Camera::getScreenBounds() const
 
 void Camera::update(float deltaTime, const glm::vec2& playerPos, const glm::vec2& playerVelocity,bool isPlayerAttacking)
 {
+	//prevent camera from going out of bounds from game world
+	if (position.x < 0)
+	{
+		position.x = 0;
+	}
+
 	switch (state)
 	{
 	case State::scrolling:

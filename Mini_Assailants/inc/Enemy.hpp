@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Entity.hpp"
+#include <Entity.hpp>
 
 #include <Graphics/SpriteAnim.hpp>
 #include <glm/vec2.hpp>
@@ -33,11 +33,12 @@ public:
 	virtual void update(float deltaTime) override;
 	virtual void draw(Graphics::Image& image, const Camera& camera) override;
 
+	//---------Getters/Setters-------------// 
 	void setFacingDirection(const glm::vec2& direction);
 	void setTarget(Entity* _target) { target = _target; }
+	Entity* getTarget() const { return target; }
 	Math::AABB getAABB() const;
 
-	//---------Getters/Setters-------------// 
 	Math::Circle getAttackCircle() const;
 	int getHp() const { return hp; }
 	void setHp(int hp) { this->hp = hp; }

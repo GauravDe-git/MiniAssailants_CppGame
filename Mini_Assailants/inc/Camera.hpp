@@ -23,10 +23,8 @@ public:
 	glm::vec2 getViewPosition() const { return -position; }
 
 	void translate(const glm::vec2& t) { position += t; }
-
-private:
 	void setState(State newState);
-
+private:
 	void doScrolling(float deltaTime, const glm::vec2& playerVelocity, const glm::vec2& playerPos);
 	void doArena(const glm::vec2& playerPos);
 

@@ -22,7 +22,7 @@ void Level::loadLevelAssets()
 {
     //Load level-specific assets
     background = Background(backgroundPath);
-    player = Player{ {SCREEN_WIDTH / 2 -200,(SCREEN_HEIGHT - 10)} };
+    player = Player{ {SCREEN_WIDTH / 2 -200,(SCREEN_HEIGHT - 10)}};
 
     player.setTopEdgeCollision(topEdgeCollision);
     entities.push_back(&player);
@@ -206,12 +206,24 @@ void Level::doPlaying(float deltaTime)
     camera.update(deltaTime, player.getPosition(), player.getVelocity(), player.isAttacking());
     player.update(deltaTime);
 
+    bool isEnemyAggroing = false;
+
     // Using iterator based loop, instead of range based loop due to some bug
     // That was preventing proper deletion of enemies 
     for (auto enemy_iter = enemies.begin(); enemy_iter != enemies.end(); ++enemy_iter)
     {
 	    const auto& enemy = *enemy_iter;
-        enemy->setTarget(&player);
+
+	    const float distanceToPlayer = distance(player.getPosition(), enemy->getPosition());
+        if (distanceToPlayer <= 300.f)
+        {
+            enemy->setTarget(&player);
+            isEnemyAggroing = true;
+        }
+        else
+        {
+            enemy->setTarget(nullptr);
+        }
 
         enemySteerAi(enemy);
 
@@ -249,6 +261,16 @@ void Level::doPlaying(float deltaTime)
             }
         }
     }
+
+    //Switch Camera state based on Enemy aggro
+	if (isEnemyAggroing)
+	{
+		camera.setState(Camera::State::arena);
+	}
+	else
+	{
+		camera.setState(Camera::State::scrolling);
+	}
 
     // Picking up the Potions dropped by Enemies
     for (const auto entity : entities)
