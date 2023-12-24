@@ -23,6 +23,7 @@ void Level::loadLevelAssets()
     //Load level-specific assets
     background = Background(backgroundPath);
     player = Player{ {SCREEN_WIDTH / 2 -200,(SCREEN_HEIGHT - 10)}};
+    player.setCamera(&camera);
 
     player.setTopEdgeCollision(topEdgeCollision);
     entities.push_back(&player);
@@ -215,7 +216,7 @@ void Level::doPlaying(float deltaTime)
 	    const auto& enemy = *enemy_iter;
 
 	    const float distanceToPlayer = distance(player.getPosition(), enemy->getPosition());
-        if (distanceToPlayer <= 300.f)
+        if (distanceToPlayer <= 250.f)
         {
             enemy->setTarget(&player);
             isEnemyAggroing = true;
@@ -267,7 +268,7 @@ void Level::doPlaying(float deltaTime)
 	{
 		camera.setState(Camera::State::arena);
 	}
-	else
+	else if (player.getPosition().x > 240.f)
 	{
 		camera.setState(Camera::State::scrolling);
 	}

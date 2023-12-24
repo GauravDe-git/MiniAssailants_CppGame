@@ -234,9 +234,13 @@ void Player::doMovement(float deltaTime)
 	{
 		position.y = topEdgeCollision;
 	}
-	if (position.x < 0) // left edge collision
+	if (position.x < camera->getScreenBounds().left()) // left edge collision
 	{
-		position.x = 0;
+		position.x = camera->getScreenBounds().left();
+	}
+	if (position.x > camera->getScreenBounds().right()) // right edge collision
+	{
+		position.x = camera->getScreenBounds().right();
 	}
 
 	velocity = (position - initialPos) / deltaTime;

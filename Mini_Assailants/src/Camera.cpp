@@ -50,7 +50,8 @@ void Camera::setState(State newState)
 }
 
 void Camera::doScrolling(float deltaTime, const glm::vec2& playerVelocity, const glm::vec2& playerPos)
-{	
+{
+	
 	//Calculate the center of the screen
 	const float screenCenterX = position.x + SCREEN_WIDTH / 2;
 
@@ -58,7 +59,7 @@ void Camera::doScrolling(float deltaTime, const glm::vec2& playerVelocity, const
 	const float distanceFromCenter = playerPos.x - screenCenterX;
 
 	//Now calculate the scrollSpeed factor based on distanceFromCenter
-	float scrollSpeed = 1 + std::abs(distanceFromCenter) / (SCREEN_WIDTH/2);
+	float scrollSpeed = 1 + std::abs(distanceFromCenter) / (SCREEN_WIDTH / 2);
 
 	//adjustments for direction
 	if (playerVelocity.x < 0 && distanceFromCenter > 0)
@@ -77,6 +78,7 @@ void Camera::doScrolling(float deltaTime, const glm::vec2& playerVelocity, const
 	{
 		setState(State::arena);
 	}
+	
 }
 
 void Camera::doArena(const glm::vec2& playerPos)

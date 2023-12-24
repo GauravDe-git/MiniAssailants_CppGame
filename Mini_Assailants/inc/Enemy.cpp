@@ -27,7 +27,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			aabbs[State::Idle] = { {75,62,0},{94,102,0} };
 			aabbs[State::Attack] = { {65,62,0},{94,102,0} };
 			attackDistance = 55.0f;
-			speed = 78.0f;
+			speed = 90.0f;
 			hp = 10;
 			attackDmg = 1;
 			attackFrame = 2;
@@ -44,7 +44,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		case Type::Skeleton:
 			aabbs[State::Idle] = { {41,46,0},{64,102,0} };
 			attackDistance = 55.0f;
-			speed = 78.0f;
+			speed = 90.0f;
 			hp = 30;
 			attackDmg = 1;
 			attackFrame = 2;

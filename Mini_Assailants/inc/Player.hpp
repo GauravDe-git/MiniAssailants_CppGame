@@ -67,8 +67,8 @@ public:
 
 	void setState(State newState);
 	State getState() const { return state; }
+	void setCamera(Camera* camera) { this->camera = camera; }
 private:
-	
 	void beginState(State newState);
 	void endState(State oldState);
 
@@ -84,8 +84,10 @@ private:
 	UiBar healthBar{ 100, 12, {0, -20} };
 	UiBar mpBar{ 80, 12, {0, -20} };
 
+	Camera* camera;
+
 	glm::vec2 velocity{ 0 };
-	float speed{ 185.0f };
+	float speed{ 100.0f };
 	int topEdgeCollision{ 0 };
 
 	Math::AABB aabb;

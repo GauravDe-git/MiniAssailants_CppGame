@@ -27,7 +27,6 @@ public:
 	void loadLevelAssets();
 	void setLevel(int levelNumber);
 
-
 	void update(float deltaTime);
 	void draw(Graphics::Image& image);
 
