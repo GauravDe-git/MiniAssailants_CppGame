@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Curve.hpp"
+
 #include <Graphics/Events.hpp>
 #include <Graphics/Image.hpp>
 #include <Graphics/SpriteSheet.hpp>
@@ -32,7 +34,6 @@ public:
     /// <param name="transform">The transform to place the button on the screen.</param>
     /// <param name="onClick">The callback function to invoke when the button is clicked.</param>
     Button(const Graphics::SpriteSheet& sheet, const Math::Transform2D& transform = Math::Transform2D{}, const std::function<void()>& onClick = {});
-    Button(const std::string& label, const Math::Transform2D& transform = Math::Transform2D{}, const std::function<void()>& onClick = {});
 
     void setTransform(const Math::Transform2D& transform) noexcept
     {
@@ -84,11 +85,6 @@ public:
         return { getWidth(), getHeight() };
     }
 
-    const std::string& getLabel() const noexcept
-    {
-        return label;
-    }
-
     /// <summary>
     /// Forward any window events to the button. This allows the button to handle mouse over/mouse clicked events.
     /// </summary>
@@ -106,11 +102,11 @@ private:
     void endState(State oldState);
     void startState(State newState);
 
-    std::string label;
-    Graphics::SpriteSheet       spriteSheet;
+    Graphics::SpriteSheet spriteSheet;
     Math::Transform2D     transform;
     Math::AABB            aabb;
-    Graphics::Timer             animTimer;
+    Graphics::Timer       animTimer;
+    Curve<float>          animCurve;
     std::function<void()> onClick;
     State                 state = State::Default;
     bool                  enabled = true;

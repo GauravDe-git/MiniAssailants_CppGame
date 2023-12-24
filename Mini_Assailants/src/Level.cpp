@@ -91,14 +91,13 @@ void Level::update(float deltaTime)
 void Level::draw(Graphics::Image& image)
 {
     // Draw level-specific elements (bg, player, enemies, etc.)
-    background.draw(image, camera);
-
     switch (gameState)
     {
     case GameState::Menu:
         image.copy(*startScreen, 0, 0);
         break;
     case GameState::Playing:
+        background.draw(image, camera);
         //sorting order of drawing player/enemy based on their Y position
         // Solution using std::sort and lambda fn. suggested by Jeremiah
         //** ranges algorithm suggested by resharper over the normal std::sort
@@ -109,6 +108,7 @@ void Level::draw(Graphics::Image& image)
         }
         break;
     case GameState::GameOver:
+        background.draw(image, camera);
         for(auto& enemy : enemies)
         {
             enemy->draw(image, camera);
@@ -117,6 +117,7 @@ void Level::draw(Graphics::Image& image)
         image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Graphics::Color::Red);
         break;
     case GameState::Win:
+        background.draw(image, camera);
         player.draw(image, camera);
         image.drawText(Graphics::Font::Default, "You Win", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Graphics::Color::Black);
         image.drawText(Graphics::Font::Default, "You Win", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Graphics::Color::Green);

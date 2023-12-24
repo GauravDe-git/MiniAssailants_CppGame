@@ -23,15 +23,13 @@ Button::Button(const Graphics::SpriteSheet& sheet, const Math::Transform2D& tran
     aabb = AABB::fromRect(spriteSheet[0].getRect());
     aabb *= transform;
 
-}
-
-Button::Button(const std::string& label, const Math::Transform2D& transform, const std::function<void()>& onClick)
-    : label{ label }
-    , transform{ transform }
-    , onClick{ onClick }
-{
-    aabb = AABB::fromRect(spriteSheet[0].getRect());
-    aabb *= transform;
+    // A simple animation curve when the button changes state.
+    animCurve = Curve<float>([](float x) {
+        const float p = 0.2f;
+        if (x < p)
+            return 2.0f * std::abs(x / p - std::floor(x / p + 0.5f));
+        return 0.0f;
+        });
 }
 
 void Button::processEvents(const Graphics::Event& event)
@@ -79,6 +77,14 @@ void Button::draw(Graphics::Image& image)
             spriteToDraw = &spriteSheet[2];
         break;
     }
+
+    // Button animation.
+    animTimer.tick();
+    const float animTime = static_cast<float>(animTimer.totalSeconds());
+    const float yOffset = animCurve(animTime);
+
+    if (spriteToDraw)
+        image.drawSprite(*spriteToDraw, transform - glm::vec2{ 0, state == State::Pressed ? -yOffset : yOffset });
 
     // image.drawAABB( aabb, Color::Red, {}, FillMode::WireFrame );
 }

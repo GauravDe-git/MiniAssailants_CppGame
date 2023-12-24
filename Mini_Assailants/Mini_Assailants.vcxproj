@@ -15,6 +15,7 @@
     <ClCompile Include="src\Background.cpp" />
     <ClCompile Include="src\Camera.cpp" />
     <ClCompile Include="src\Entity.cpp" />
+    <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\Level.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Player.cpp" />
@@ -28,6 +29,7 @@
     <ClInclude Include="inc\Constants.hpp" />
     <ClInclude Include="inc\Enemy.hpp" />
     <ClInclude Include="inc\Entity.hpp" />
+    <ClInclude Include="inc\Game.hpp" />
     <ClInclude Include="inc\Level.hpp" />
     <ClInclude Include="inc\Player.hpp" />
     <ClInclude Include="inc\PotionDrop.hpp" />

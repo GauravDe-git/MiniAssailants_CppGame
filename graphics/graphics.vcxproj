@@ -13,6 +13,7 @@
   <ItemGroup>
     <ClInclude Include="inc\aligned_unique_ptr.hpp" />
     <ClInclude Include="inc\Button.hpp" />
+    <ClInclude Include="inc\Curve.hpp" />
     <ClInclude Include="inc\Graphics\BlendMode.hpp" />
     <ClInclude Include="inc\Graphics\Color.hpp" />
     <ClInclude Include="inc\Graphics\Config.hpp" />
