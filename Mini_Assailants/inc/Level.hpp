@@ -10,6 +10,8 @@
 
 #include <vector>
 
+#include "Button.hpp"
+
 //Level class: Responsible for both loading/changing levels
 //			   and changing between Game States.
 
@@ -32,6 +34,8 @@ public:
 
 	GameState getGameState() const { return gameState; }
 	void setState(GameState newState);
+
+	void processEvents(const Graphics::Event& e);
 private:
 	struct EnemyInfo
 	{
@@ -67,4 +71,7 @@ private:
 
 	std::mt19937 randGen{ std::random_device{}() };
 	std::bernoulli_distribution randDist{0.5};
+
+	//buttons
+	Button playButton{};
 };

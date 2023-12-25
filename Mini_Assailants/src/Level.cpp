@@ -9,13 +9,19 @@
 
 #include <algorithm>
 
+using namespace Graphics;
+using namespace Math;
+
 Level::Level()
     : gameState{GameState::Menu},
       camera{ glm::vec2{0,0} }, topEdgeCollision{0}
 {
     punch = Audio::Sound("assets/sounds/punch.wav");
     swordSlash = Audio::Sound("assets/sounds/swordSlash.wav");
-    startScreen = Graphics::ResourceManager::loadImage("assets/textures/startScreen.png");
+
+    startScreen = ResourceManager::loadImage("assets/textures/startScreen.png");
+    SpriteSheet playBtnSheet{ "assets/textures/play_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
+    playButton = Button{ playBtnSheet/*, Transform2D{ glm::vec2{ 240, 135 },glm::vec2{0.8f,0.8f} }*/};
 }
 
 void Level::loadLevelAssets()
@@ -88,13 +94,14 @@ void Level::update(float deltaTime)
     }
 }
 
-void Level::draw(Graphics::Image& image)
+void Level::draw(Image& image)
 {
     // Draw level-specific elements (bg, player, enemies, etc.)
     switch (gameState)
     {
     case GameState::Menu:
         image.copy(*startScreen, 0, 0);
+        playButton.draw(image);
         break;
     case GameState::Playing:
         background.draw(image, camera);
@@ -113,14 +120,14 @@ void Level::draw(Graphics::Image& image)
         {
             enemy->draw(image, camera);
         }
-        image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Graphics::Color::Black);
-        image.drawText(Graphics::Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Graphics::Color::Red);
+        image.drawText(Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Color::Black);
+        image.drawText(Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Color::Red);
         break;
     case GameState::Win:
         background.draw(image, camera);
         player.draw(image, camera);
-        image.drawText(Graphics::Font::Default, "You Win", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Graphics::Color::Black);
-        image.drawText(Graphics::Font::Default, "You Win", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Graphics::Color::Green);
+        image.drawText(Font::Default, "You Win", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Color::Black);
+        image.drawText(Font::Default, "You Win", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Color::Green);
         break;
     }
 }
@@ -133,6 +140,14 @@ void Level::setState(GameState newState)
         endState(gameState);
         gameState = newState;
     }
+}
+
+void Level::processEvents(const Event& e)
+{
+	if (gameState == GameState::Menu)
+	{
+        playButton.processEvents(e);
+	}
 }
 
 void Level::beginState(GameState newState)
@@ -177,8 +192,9 @@ void Level::endState(GameState oldState)
 
 void Level::doMenu()
 {
-    if (Graphics::Input::getKeyDown(Graphics::KeyCode::Enter))
+    if (Input::getKeyDown(KeyCode::Enter))
         setState(GameState::Playing);
+    playButton.setCallback([this] {setState(GameState::Playing); });
 }
 
 void Level::enemySteerAi(Enemy* enemy) const

@@ -41,5 +41,6 @@ void Game::play()
 
 void Game::processEvent(const Event& e) {
     // Handle game-specific events here
+    level.processEvents(e);
 }
 
