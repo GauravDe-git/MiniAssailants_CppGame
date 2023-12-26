@@ -1,5 +1,4 @@
 #include <Game.hpp>
-#include <iostream>
 
 #include "fmt/format.h"
 #include "Graphics/Font.hpp"
@@ -26,7 +25,7 @@ void Game::play()
     {
         fps = fmt::format("FPS:{:.2f}", static_cast<double>(frameCount) / totalTime);
 
-        std::cout << fps << '\n';
+        //std::cout << fps << '\n';
 
         frameCount = 0;
         totalTime = 0.0;

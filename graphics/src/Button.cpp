@@ -1,7 +1,5 @@
 #include "Button.hpp"
 
-#include <iostream>
-
 using namespace Graphics;
 using namespace Math;
 
@@ -42,7 +40,6 @@ void Button::processEvents(const Graphics::Event& event)
     switch (event.type)
     {
     case Event::MouseMoved:
-		//std::cout << event.mouseMove.x << ", " << event.mouseMove.y << std::endl; added for debugging
         if (aabb.contains({ event.mouseMove.x, event.mouseMove.y, 0 }))
             setState(State::Hover);
         else
@@ -89,7 +86,7 @@ void Button::draw(Graphics::Image& image)
     if (spriteToDraw)
         image.drawSprite(*spriteToDraw, transform - glm::vec2{ 0, state == State::Pressed ? -yOffset : yOffset });
 
-     image.drawAABB( aabb, Color::Red, {}, FillMode::WireFrame );
+     //image.drawAABB( aabb, Color::Red, {}, FillMode::WireFrame );
 }
 
 void Button::setState(State newState)

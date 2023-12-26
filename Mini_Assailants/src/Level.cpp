@@ -20,8 +20,14 @@ Level::Level()
     swordSlash = Audio::Sound("assets/sounds/swordSlash.wav");
 
     startScreen = ResourceManager::loadImage("assets/textures/startScreen.png");
-    SpriteSheet playBtnSheet{ "assets/textures/play_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
-    playButton = Button{ playBtnSheet/*, Transform2D{ glm::vec2{ 240, 135 },glm::vec2{0.8f,0.8f} }*/};
+
+    //Buttons
+
+	SpriteSheet playBtnSheet{ "assets/textures/play_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
+    playButton = Button{ playBtnSheet};
+
+    SpriteSheet quitBtnSheet{ "assets/textures/quit_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
+    quitButton = Button{ quitBtnSheet };
 }
 
 void Level::loadLevelAssets()
@@ -75,6 +81,8 @@ void Level::updateEnemies(float deltaTime) const
 
 void Level::update(float deltaTime)
 {
+	/*std::cout << gameRect.width << " " << gameRect.height << std::endl;
+    std::cout << SCREEN_WIDTH << " " << SCREEN_HEIGHT << std::endl;*/
     switch (gameState)
     {
     case GameState::Menu:
@@ -102,6 +110,7 @@ void Level::draw(Image& image)
     case GameState::Menu:
         image.copy(*startScreen, 0, 0);
         playButton.draw(image);
+		quitButton.draw(image);
         break;
     case GameState::Playing:
         background.draw(image, camera);
@@ -144,10 +153,73 @@ void Level::setState(GameState newState)
 
 void Level::processEvents(const Event& e)
 {
+    // Copy the event so you can modify it.
+    Event event = e;
+
+    switch (event.type)
+    {
+    case Event::MouseMoved:
+        onMouseMoved(event.mouseMove);
+        break;
+    case Event::Resize:
+        onResized(event.resize);
+        break;
+    }
+
 	if (gameState == GameState::Menu)
 	{
-        playButton.processEvents(e);
+        playButton.processEvents(event);
+		quitButton.processEvents(event);
 	}
+}
+
+void Level::onMouseMoved(MouseMovedEventArgs& args)
+{
+    // Compute the mouse position relative to the game screen.
+    const glm::vec2 scale{
+        static_cast<float>(SCREEN_WIDTH) / static_cast<float>(gameRect.width),
+        static_cast<float>(SCREEN_HEIGHT) / static_cast<float>(gameRect.height)
+    };
+    const glm::vec2 offset{ gameRect.topLeft() };
+
+    args.x = std::lround((static_cast<float>(args.x) - offset.x) * scale.x);
+    args.y = std::lround((static_cast<float>(args.y) - offset.y) * scale.y);
+
+    mousePos = { args.x, args.y };
+}
+
+void Level::onResized(ResizeEventArgs& args)
+{
+    // Implement the logic to update gameRect based on the new window size.
+    const float aspectRatio = static_cast<float>(SCREEN_WIDTH) / static_cast<float>(SCREEN_HEIGHT);
+    const float scaleWidth = static_cast<float>(args.width) / static_cast<float>(SCREEN_WIDTH);
+    const float scaleHeight = static_cast<float>(args.height) / static_cast<float>(SCREEN_HEIGHT);
+
+    int width;
+    int height;
+
+    //logic for updating width and height based on aspect ratio and scaling.
+    if (scaleWidth < scaleHeight)
+    {
+        width = args.width;
+        height = static_cast<int>(static_cast<float>(width) / aspectRatio);
+    }
+    else
+    {
+        height = args.height;
+        width = static_cast<int>(static_cast<float>(height) * aspectRatio);
+    }
+
+    gameRect = {
+        (args.width - width) / 2,
+        (args.height - height) / 2,
+        width, height
+    };
+
+    // Update any UI elements or positions that depend on the game rectangle.
+    
+    playButton.setTransform(Transform2D{ { 100, 100 },{0.8f,0.8f} });
+    quitButton.setTransform(Transform2D{ { 100, 200 },{0.8f,0.8f} });
 }
 
 void Level::beginState(GameState newState)

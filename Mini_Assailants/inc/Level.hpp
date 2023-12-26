@@ -36,6 +36,8 @@ public:
 	void setState(GameState newState);
 
 	void processEvents(const Graphics::Event& e);
+	void onMouseMoved(Graphics::MouseMovedEventArgs& args);
+	void onResized(Graphics::ResizeEventArgs& args);
 private:
 	struct EnemyInfo
 	{
@@ -72,6 +74,14 @@ private:
 	std::mt19937 randGen{ std::random_device{}() };
 	std::bernoulli_distribution randDist{0.5};
 
+	// The game rectangle in the Window's coordinate frame.
+	// Used for translating mouse coordinates.
+	Math::RectI gameRect;
+
+	// Translated mouse position.
+	glm::ivec2 mousePos;
+
 	//buttons
 	Button playButton{};
+	Button quitButton{};
 };
