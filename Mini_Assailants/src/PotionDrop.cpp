@@ -17,7 +17,7 @@ PotionDrop::PotionDrop(const glm::vec2& pos, Type _type)
 	}
 
 	//Set the value based on the type
-	value = (type == Type::HP) ? 10 : 5;
+	value = (type == Type::HP) ? 5 : 8;
 
 	pickupDelay.reset(); //start the timer when a potion is created
 }

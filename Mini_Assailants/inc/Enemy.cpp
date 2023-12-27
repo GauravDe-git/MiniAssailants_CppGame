@@ -1,5 +1,4 @@
 #include "Enemy.hpp"
-#include "Enemy.hpp"
 
 #include <Graphics/ResourceManager.hpp>
 
@@ -77,6 +76,23 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 
 		state = State::Idle;
 		transform.setAnchor(glm::vec2{ 67.0f,77.0f });
+		break;
+	case Type::Harpy:
+		aabbs[State::Idle] = { { 17,16,0 },{ 41,57,0 } };
+		attackDistance = 40.0f;
+		speed = 90.0f;
+		hp = 20;
+		attackDmg = 0;
+		attackFrame = 3;
+
+		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Harpy_IdleChase.png", 87, 78, 0, 0, BlendMode::AlphaBlend), 7.f };
+		chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Harpy_IdleChase.png", 87, 78, 0, 0, BlendMode::AlphaBlend), 8.f };
+		attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Harpy_Atk.png", 87, 78, 0, 0, BlendMode::AlphaBlend), 11.f };
+		hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Harpy_Hurt.png", 87, 78, 0, 0, BlendMode::AlphaBlend), 7.f };
+		deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Harpy_Dead.png", 87, 78, 0, 0, BlendMode::AlphaBlend), 5.f };
+
+		state = State::Idle;
+		transform.setAnchor(glm::vec2{ 27.0f,60.0f });
 		break;
 		//Handle Other enemy types
 	}
@@ -165,6 +181,8 @@ Math::Circle Enemy::getAttackCircle() const
 		return {{transform.getPosition() + glm::vec2{ 34.f, 30.f } * -transform.getScale() }, 12.f};
 	case Type::Golem:
 		return { {transform.getPosition() + glm::vec2{ 34.f, 5.f } *-transform.getScale() }, 13.f };
+	case Type::Harpy:
+		return { {transform.getPosition() + glm::vec2{ 30.f, 7.f } *-transform.getScale() }, 8.f };
 	}
 	return {};
 }

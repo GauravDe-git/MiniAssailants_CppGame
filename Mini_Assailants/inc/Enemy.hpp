@@ -15,6 +15,7 @@ public:
 		Goblin,
 		Skeleton,
 		Golem,
+		Harpy,
 	};
 
 	enum class State
