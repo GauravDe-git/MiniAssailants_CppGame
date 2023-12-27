@@ -9,11 +9,14 @@
 
 #include <algorithm>
 
+#include "Graphics/Window.hpp"
+
 using namespace Graphics;
 using namespace Math;
 
-Level::Level()
-    : gameState{GameState::Menu},
+Level::Level(Window& _window)
+	: window{ _window },
+      gameState{GameState::Menu},
       camera{ glm::vec2{0,0} }, topEdgeCollision{0}
 {
     punch = Audio::Sound("assets/sounds/punch.wav");
@@ -28,6 +31,9 @@ Level::Level()
 
     SpriteSheet quitBtnSheet{ "assets/textures/quit_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
     quitButton = Button{ quitBtnSheet };
+
+    SpriteSheet changelvlBtnSheet{ "assets/textures/changelvl_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
+    changelvlButton = Button{ changelvlBtnSheet };
 }
 
 void Level::loadLevelAssets()
@@ -111,6 +117,7 @@ void Level::draw(Image& image)
         image.copy(*startScreen, 0, 0);
         playButton.draw(image);
 		quitButton.draw(image);
+		changelvlButton.draw(image);
         break;
     case GameState::Playing:
         background.draw(image, camera);
@@ -170,6 +177,7 @@ void Level::processEvents(const Event& e)
 	{
         playButton.processEvents(event);
 		quitButton.processEvents(event);
+		changelvlButton.processEvents(event);
 	}
 }
 
@@ -220,6 +228,7 @@ void Level::onResized(ResizeEventArgs& args)
     
     playButton.setTransform(Transform2D{ { 100, 100 },{0.8f,0.8f} });
     quitButton.setTransform(Transform2D{ { 100, 200 },{0.8f,0.8f} });
+	changelvlButton.setTransform(Transform2D{ { 100, 150 },{0.8f,0.8f} });
 }
 
 void Level::beginState(GameState newState)
@@ -267,6 +276,7 @@ void Level::doMenu()
     if (Input::getKeyDown(KeyCode::Enter))
         setState(GameState::Playing);
     playButton.setCallback([this] {setState(GameState::Playing); });
+    quitButton.setCallback([this] {window.destroy(); });
 }
 
 void Level::enemySteerAi(Enemy* enemy) const
@@ -417,13 +427,13 @@ void Level::doGameOver()
         enemy->setTarget(nullptr);
     }
 
-    if (Graphics::Input::getKeyDown(Graphics::KeyCode::Enter))
+    if (Input::getKeyDown(KeyCode::Enter))
         setState(GameState::Menu);
 }
 
 void Level::doWin()
 {
     // Any logic that needs to happen when the player wins the level
-    if (Graphics::Input::getKeyDown(Graphics::KeyCode::Enter))
+    if (Input::getKeyDown(KeyCode::Enter))
         setState(GameState::Menu);
 }

@@ -9,7 +9,7 @@ int main()
 {
 	Window window{ L"Mini Assailants", SCREEN_WIDTH, SCREEN_HEIGHT };
 
-	Game game{ SCREEN_WIDTH, SCREEN_HEIGHT };
+	Game game{ SCREEN_WIDTH, SCREEN_HEIGHT, window };
 
 	window.show();
 	window.setFullscreen(true);

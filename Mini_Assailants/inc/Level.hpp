@@ -15,6 +15,11 @@
 //Level class: Responsible for both loading/changing levels
 //			   and changing between Game States.
 
+namespace Graphics
+{
+	class Window; //Forward declaration to get reference to window
+}
+
 class Level {
 public:
 	enum class GameState
@@ -24,7 +29,7 @@ public:
 		Win,
 		GameOver
 	};
-	Level();
+	Level(Graphics::Window& _window);
 
 	void loadLevelAssets();
 	void setLevel(int levelNumber);
@@ -55,6 +60,7 @@ private:
 	void doGameOver();
 	void doWin();
 
+	Graphics::Window& window;
 	GameState gameState{};
 	Background background{};
 	Player player{};
@@ -84,4 +90,5 @@ private:
 	//buttons
 	Button playButton{};
 	Button quitButton{};
+	Button changelvlButton{};
 };

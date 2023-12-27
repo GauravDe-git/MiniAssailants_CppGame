@@ -6,7 +6,8 @@
 using namespace Graphics;
 using namespace Math;
 
-Game::Game(int width, int height)
+Game::Game(int width, int height, Window& _window)
+	: window {_window}
 {
 	level.setLevel(1);
 	image.resize(width, height);

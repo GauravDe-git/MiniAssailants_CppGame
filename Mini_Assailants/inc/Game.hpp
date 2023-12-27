@@ -10,7 +10,7 @@ class Game
 {
 public:
 
-	Game(int width, int height);
+	Game(int width, int height, Graphics::Window& _window);
 
 	void play();
 	void processEvent(const Graphics::Event& e);
@@ -20,5 +20,6 @@ private:
 	Graphics::Image image{};
 	Graphics::Timer timer{};
 
-	Level level{};
+	Graphics::Window& window;
+	Level level{window};
 };
