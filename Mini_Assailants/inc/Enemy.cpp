@@ -1,4 +1,5 @@
 #include "Enemy.hpp"
+#include "Enemy.hpp"
 
 #include <Graphics/ResourceManager.hpp>
 
@@ -45,7 +46,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			aabbs[State::Idle] = { {41,46,0},{64,102,0} };
 			attackDistance = 55.0f;
 			speed = 90.0f;
-			hp = 30;
+			hp = 20;
 			attackDmg = 1;
 			attackFrame = 2;
 
@@ -58,6 +59,25 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			state = State::Idle;
 			transform.setAnchor(glm::vec2{ 55.0f,99.0f });
 			break;
+	case Type::Golem:
+		aabbs[State::Idle] = { { 33,13,0 },{ 81,78,0 } };
+		aabbs[State::Chase] = { { 37,16,0 },{ 85,79,0 } };
+		aabbs[State::Attack] = { { 44,16,0 },{ 85,79,0 } };
+		attackDistance = 50.0f;
+		speed = 90.0f;
+		hp = 30;
+		attackDmg = 2;
+		attackFrame = 6;
+
+		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Idle.png", 111, 80, 0, 0, BlendMode::AlphaBlend), 7.f };
+		chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Chase.png", 111, 80, 0, 0, BlendMode::AlphaBlend), 8.f };
+		attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Atk.png", 111, 80, 0, 0, BlendMode::AlphaBlend), 11.f };
+		hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Hurt.png", 111, 80, 0, 0, BlendMode::AlphaBlend), 7.f };
+		deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Dead.png", 111, 80, 0, 0, BlendMode::AlphaBlend), 7.f };
+
+		state = State::Idle;
+		transform.setAnchor(glm::vec2{ 57.0f,77.0f });
+		break;
 		//Handle Other enemy types
 	}
 }
@@ -86,7 +106,7 @@ void Enemy::update(float deltaTime)
 	}
 }
 
-void Enemy::draw(Graphics::Image& image, const Camera& camera)
+void Enemy::draw(Image& image, const Camera& camera)
 {
 	Math::Transform2D tempTransform = transform;
 	tempTransform.translate(camera.getViewPosition());
@@ -143,6 +163,8 @@ Math::Circle Enemy::getAttackCircle() const
 		return {{transform.getPosition() + glm::vec2{ 44.f, 30.f } * -transform.getScale() }, 11.f};
 	case Type::Skeleton:
 		return {{transform.getPosition() + glm::vec2{ 34.f, 30.f } * -transform.getScale() }, 12.f};
+	case Type::Golem:
+		return { {transform.getPosition() + glm::vec2{ 34.f, 15.f } *-transform.getScale() }, 13.f };
 	}
 	return {};
 }
@@ -242,12 +264,6 @@ void Enemy::doChase(float deltaTime)
 			setState(State::Idle);
 		}
 	}
-	//If player goes far away from enemy then set enemy back to Idle
-	// Buggy
-	/*if(target && glm::distance(transform.getPosition(), target->getPosition()) > chaseDistance)
-	{
-		setState(State::Idle);
-	}*/
 	chaseAnim.update(deltaTime);
 }
 
@@ -267,6 +283,7 @@ void Enemy::doAttack(float deltaTime)
 		if (attackAnim.isDone())
 		{
 			attackAnim.reset();
+			if (!target)
 			setState(State::Idle);
 		}
 	}

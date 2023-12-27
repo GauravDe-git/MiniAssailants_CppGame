@@ -13,7 +13,8 @@ public:
 	enum class Type
 	{
 		Goblin,
-		Skeleton
+		Skeleton,
+		Golem,
 	};
 
 	enum class State
