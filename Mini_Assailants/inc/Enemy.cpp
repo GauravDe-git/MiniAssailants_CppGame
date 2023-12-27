@@ -25,22 +25,22 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 	switch (type)
 	{
 		case Type::Goblin:
-			aabbs[State::Idle] = { {75,62,0},{94,102,0} };
-			aabbs[State::Attack] = { {65,62,0},{94,102,0} };
+			aabbs[State::Idle] = { {65,30,0},{80,70,0} };
+			aabbs[State::Attack] = { {52,33,0},{80,70,0} };
 			attackDistance = 55.0f;
 			speed = 90.0f;
 			hp = 10;
 			attackDmg = 1;
 			attackFrame = 2;
 
-			idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
-			chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Chase.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 8.f };
-			attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Atk.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 10.f };
-			hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Hurt.png", 150, 125, 0, 0, BlendMode::AlphaBlend), 7.f };
-			deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Dead.png",150,125,0,0,BlendMode::AlphaBlend),6.5f };
+			idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Idle.png", 123, 82, 0, 0, BlendMode::AlphaBlend), 7.f };
+			chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Chase.png", 123, 82, 0, 0, BlendMode::AlphaBlend), 8.f };
+			attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Atk.png", 123, 82, 0, 0, BlendMode::AlphaBlend), 10.f };
+			hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Hurt.png", 123, 82, 0, 0, BlendMode::AlphaBlend), 7.f };
+			deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Goblin_Dead.png",123,82,0,0,BlendMode::AlphaBlend),4.f };
 
 			state = State::Idle;
-			transform.setAnchor(glm::vec2{ 84.0f,103.0f });
+			transform.setAnchor(glm::vec2{ 71.0f,69.0f });
 			break;
 		case Type::Skeleton:
 			aabbs[State::Idle] = { {41,46,0},{64,102,0} };
@@ -54,29 +54,29 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Chase.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 8.f };
 			attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Atk.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 11.f };
 			hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Hurt.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 7.f };
-			deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Dead.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 7.f };
+			deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Skeleton_Dead.png", 110, 120, 0, 0, BlendMode::AlphaBlend), 4.f };
 
 			state = State::Idle;
 			transform.setAnchor(glm::vec2{ 55.0f,99.0f });
 			break;
 	case Type::Golem:
-		aabbs[State::Idle] = { { 33,13,0 },{ 81,78,0 } };
-		aabbs[State::Chase] = { { 37,16,0 },{ 85,79,0 } };
-		aabbs[State::Attack] = { { 44,16,0 },{ 85,79,0 } };
+		aabbs[State::Idle] = { { 38,18,0 },{ 78,79,0 } };
+		aabbs[State::Chase] = { { 44,16,0 },{ 81,79,0 } };
+		aabbs[State::Attack] = { { 55,17,0 },{ 96,75,0 } };
 		attackDistance = 50.0f;
 		speed = 90.0f;
 		hp = 30;
 		attackDmg = 2;
 		attackFrame = 6;
 
-		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Idle.png", 111, 80, 0, 0, BlendMode::AlphaBlend), 7.f };
-		chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Chase.png", 111, 80, 0, 0, BlendMode::AlphaBlend), 8.f };
-		attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Atk.png", 111, 80, 0, 0, BlendMode::AlphaBlend), 11.f };
-		hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Hurt.png", 111, 80, 0, 0, BlendMode::AlphaBlend), 7.f };
-		deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Dead.png", 111, 80, 0, 0, BlendMode::AlphaBlend), 7.f };
+		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Idle.png", 116, 80, 0, 0, BlendMode::AlphaBlend), 7.f };
+		chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Chase.png", 116, 80, 0, 0, BlendMode::AlphaBlend), 8.f };
+		attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Atk.png", 116, 80, 0, 0, BlendMode::AlphaBlend), 11.f };
+		hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Hurt.png", 116, 80, 0, 0, BlendMode::AlphaBlend), 7.f };
+		deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Dead.png", 116, 80, 0, 0, BlendMode::AlphaBlend), 5.f };
 
 		state = State::Idle;
-		transform.setAnchor(glm::vec2{ 57.0f,77.0f });
+		transform.setAnchor(glm::vec2{ 67.0f,77.0f });
 		break;
 		//Handle Other enemy types
 	}
@@ -164,7 +164,7 @@ Math::Circle Enemy::getAttackCircle() const
 	case Type::Skeleton:
 		return {{transform.getPosition() + glm::vec2{ 34.f, 30.f } * -transform.getScale() }, 12.f};
 	case Type::Golem:
-		return { {transform.getPosition() + glm::vec2{ 34.f, 15.f } *-transform.getScale() }, 13.f };
+		return { {transform.getPosition() + glm::vec2{ 34.f, 5.f } *-transform.getScale() }, 13.f };
 	}
 	return {};
 }
@@ -310,7 +310,6 @@ void Enemy::doDead(float deltaTime)
 	if (deadAnim.isDone())
 	{
 		deadAnim.reset();
-		//setState(State::None);
 		setState(State::JustDefeated);
 	}
 }

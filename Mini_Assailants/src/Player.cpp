@@ -314,7 +314,7 @@ void Player::doLightAtk2(float deltaTime)
 {
 	lightAtk2Sprite.update(deltaTime);
 
-	if (lightAtk2Sprite.getCurrentFrame() >= 3)
+	if (lightAtk2Sprite.getCurrentFrame() >= 3 && lightAtk2Sprite.getCurrentFrame() <= 4)
 		attackCircle = { transform.getPosition() + glm::vec2{ 32.f, -30.f } *transform.getScale(),11.f };
 
 	if (lightAtk2Sprite.isDone())
