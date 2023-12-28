@@ -49,3 +49,5 @@ QOL:
 
  Change the stats like player hp,mp,dmg,enemy- hp,dmg using JSON instead 
  of hardcoding
+
+ Player and enemy sprite reflections. (Flip,reduce alpha values,etc)

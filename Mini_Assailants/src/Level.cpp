@@ -69,7 +69,20 @@ void Level::setLevel(int levelNumber)
                         {Enemy::Type::Skeleton, {820,250}},
         {Enemy::Type::Goblin, {1020,250}},};
         break;
-        
+    case 2:
+        backgroundPath = "assets/textures/stage2.png";
+        topEdgeCollision = 237;
+        enemyInfos = { {Enemy::Type::FlyingEye, {420,250}},
+                        {Enemy::Type::Skeleton, {820,250}},
+        {Enemy::Type::Goblin, {1020,250}}, };
+        break;
+    case 3:
+        backgroundPath = "assets/textures/stage3.png";
+        topEdgeCollision = 210;
+        enemyInfos = { {Enemy::Type::FlyingEye, {420,250}},
+                        {Enemy::Type::Skeleton, {820,250}},
+        {Enemy::Type::Goblin, {1020,250}}, };
+        break;
     // Add more cases for different levels
     }
 
