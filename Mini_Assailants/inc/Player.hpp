@@ -22,6 +22,8 @@ public:
 		Walking,
 		LightAtk1,
 		LightAtk2,
+		HeavyAtk1,
+		HeavyAtk2,
 		Special1,
 		Hurt
 	};
@@ -48,7 +50,7 @@ public:
 
 	const glm::vec2& getVelocity() const { return velocity; }
 	bool isAttacking() const { return state == State::Special1 ||state == State::LightAtk1
-							  || state == State::LightAtk2; }
+							  || state == State::LightAtk2 || state == State::HeavyAtk1 || state == State::HeavyAtk2; }
 
 	//---Combat related functions---//
 	const Math::AABB getAABB() const { return  transform * aabb; }
@@ -78,6 +80,8 @@ private:
 	void doWalk(float deltaTime);
 	void doLightAtk1(float deltaTime);
 	void doLightAtk2(float deltaTime);
+	void doHeavyAtk1(float deltaTime);
+	void doHeavyAtk2(float deltaTime);
 	void doSpecial1(float deltaTime);
 	void doHurt(float deltaTime);
 
@@ -107,6 +111,8 @@ private:
 	Graphics::SpriteAnim walkSprite;
 	Graphics::SpriteAnim lightAtk1Sprite;
 	Graphics::SpriteAnim lightAtk2Sprite;
+	Graphics::SpriteAnim heavyAtk1Sprite;
+	Graphics::SpriteAnim heavyAtk2Sprite;
 	Graphics::SpriteAnim special1Sprite;
 	Graphics::SpriteAnim hurtSprite;
 };

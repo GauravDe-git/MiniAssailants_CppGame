@@ -14,6 +14,8 @@ static std::map<Player::State, std::string> g_stateNames =
 	{Player::State::Walking, "Walking"},
 	{Player::State::LightAtk1, "LightAtk1"},
 	{Player::State::LightAtk2, "LightAtk2"},
+	{Player::State::HeavyAtk1, "HeavyAtk1"},
+	{Player::State::HeavyAtk2, "HeavyAtk2"},
 	{Player::State::Special1, "Special1"},
 	{Player::State::Hurt, "Hurt"},
 };
@@ -37,11 +39,20 @@ Player::Player(const glm::vec2& pos)
 	const auto lightAtk2Sheet = ResourceManager::loadSpriteSheet("assets/textures/LightAtk2_Sheet.png", 153,                                                                        127, 0, 0, BlendMode::AlphaBlend);
 	lightAtk2Sprite = SpriteAnim{ lightAtk2Sheet, 15.0f };
 
+	//2 anims for Heavy Attack (On pressing J key)
+	const auto heavyAtk1Sheet = ResourceManager::loadSpriteSheet("assets/textures/HeavyAtk1_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	heavyAtk1Sprite = SpriteAnim{ heavyAtk1Sheet, 13.5f };
+
+	const auto heavyAtk2Sheet = ResourceManager::loadSpriteSheet("assets/textures/HeavyAtk2_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	heavyAtk2Sprite = SpriteAnim{ heavyAtk2Sheet, 15.0f };
+
 	const auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153,                                                                                 127, 0, 0, BlendMode::AlphaBlend);
 	special1Sprite = SpriteAnim{ special1Sheet, 15.0f };
 
 	attackDmg[AttackType::Light1] = 1;
 	attackDmg[AttackType::Light2] = 2;
+	attackDmg[AttackType::Heavy1] = 3;
+	attackDmg[AttackType::Heavy2] = 4;
 	attackDmg[AttackType::Special1] = 5;
 
 	transform.setAnchor(glm::vec2{ 21.0f,116.0f });
@@ -55,7 +66,7 @@ void Player::setTopEdgeCollision(int top)
 
 void Player::update(float deltaTime)
 {
-	//Logic for light attack 2 
+	//Logic for light/heavy attack 2 
 	hitCounter -= deltaTime;
 	if (isAttacking())
 	{
@@ -83,6 +94,12 @@ void Player::update(float deltaTime)
 		break;
 	case State::LightAtk2:
 		doLightAtk2(deltaTime);
+		break;
+	case State::HeavyAtk1:
+		doHeavyAtk1(deltaTime);
+		break;
+	case State::HeavyAtk2:
+		doHeavyAtk2(deltaTime);
 		break;
 	case State::Special1:
 		doSpecial1(deltaTime);
@@ -132,6 +149,12 @@ void Player::draw(Image& image, const Camera& camera)
 	case State::LightAtk2:
 		image.drawSprite(lightAtk2Sprite, tempTransform, color);
 		break;
+	case State::HeavyAtk1:
+		image.drawSprite(heavyAtk1Sprite, tempTransform, color);
+		break;
+	case State::HeavyAtk2:
+		image.drawSprite(heavyAtk2Sprite, tempTransform, color);
+		break;
 	case State::Special1:
 		image.drawSprite(special1Sprite, tempTransform, color);
 		break;
@@ -178,6 +201,16 @@ void Player::beginState(State newState)
 		currentAtkType = AttackType::Light2;
 		lightAtk2Sprite.reset();
 		break;
+	case State::HeavyAtk1:
+		currentAtkType = AttackType::Heavy1;
+		mp -= 1;
+		heavyAtk1Sprite.reset();
+		break;
+	case State::HeavyAtk2:
+		currentAtkType = AttackType::Heavy2;
+		mp -= 1;
+		heavyAtk2Sprite.reset();
+		break;
 	case State::Special1:
 		currentAtkType = AttackType::Special1;
 		special1Sprite.reset();
@@ -201,6 +234,10 @@ void Player::endState(State oldState)
 	case State::LightAtk1:
 		break;
 	case State::LightAtk2:
+		break;
+	case State::HeavyAtk1:
+		break;
+	case State::HeavyAtk2:
 		break;
 	case State::Special1:
 		{
@@ -258,6 +295,11 @@ void Player::doCombat()
 		setState(State::LightAtk1);
 		timeSinceLastAtk = 0.f;
 	}
+	else if (Input::getKeyDown(KeyCode::J) && mp>= 1 && !isAttacking()) //need to modify this more
+	{
+		setState(State::HeavyAtk1);
+		timeSinceLastAtk = 0.f;
+	}
 	else if (Input::getKeyDown(KeyCode::Y) && mp >= 5 && !isAttacking())
 	{
 		setState(State::Special1);
@@ -300,7 +342,7 @@ void Player::doLightAtk1(float deltaTime)
 
 		if (lightAtk1Sprite.getCurrentFrame() >= 3)
 		{
-			attackCircle = { transform.getPosition() + glm::vec2{ 32.f, -30.f } *transform.getScale(),10.f };
+			attackCircle = { transform.getPosition() + glm::vec2{ 32.f, -25.f } *transform.getScale(),8.5f };
 		}
 
 		if (lightAtk1Sprite.isDone())
@@ -318,6 +360,43 @@ void Player::doLightAtk2(float deltaTime)
 		attackCircle = { transform.getPosition() + glm::vec2{ 32.f, -30.f } *transform.getScale(),11.f };
 
 	if (lightAtk2Sprite.isDone())
+	{
+		setState(State::Idle);
+	}
+}
+
+void Player::doHeavyAtk1(float deltaTime)
+{
+		if (Input::getKeyDown(KeyCode::J) && mp >= 2 && timeSinceLastAtk < 2.f)
+		{
+			setState(State::HeavyAtk2);
+		}
+		else
+		{
+			heavyAtk1Sprite.update(deltaTime);
+
+			if (heavyAtk1Sprite.getCurrentFrame() >= 3)
+			{
+				//need to fix this attack circle
+				attackCircle = { transform.getPosition() + glm::vec2{ 42.f, -30.f } *transform.getScale(),12.f };
+			}
+
+			if (heavyAtk1Sprite.isDone())
+			{
+				setState(State::Idle);
+			}
+		}
+	
+}
+
+void Player::doHeavyAtk2(float deltaTime)
+{
+	heavyAtk2Sprite.update(deltaTime);
+
+	if (heavyAtk2Sprite.getCurrentFrame() >= 3 && heavyAtk2Sprite.getCurrentFrame() <= 4) //need to fix this frame too
+		attackCircle = { transform.getPosition() + glm::vec2{ 52.f, -30.f } *transform.getScale(),13.f };
+
+	if (heavyAtk2Sprite.isDone())
 	{
 		setState(State::Idle);
 	}

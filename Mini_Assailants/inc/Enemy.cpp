@@ -27,7 +27,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 	{
 		case Type::Goblin:
 			aabbs[State::Idle] = { {65,30,0},{80,70,0} };
-			aabbs[State::Attack] = { {52,33,0},{80,70,0} };
+			aabbs[State::Attack] = { {56,33,0},{80,70,0} };
 			attackDistance = 55.0f;
 			speed = 90.0f;
 			hp = 10;

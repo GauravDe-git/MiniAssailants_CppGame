@@ -91,19 +91,19 @@ void Level::setLevel(int levelNumber)
         backgroundPath = "assets/textures/stage1.png";
         topEdgeCollision = 225;
         enemyInfos =  {
-        {Enemy::Type::Goblin, {102,250}},};
+        {Enemy::Type::Goblin, {502,250}},};
         break;
     case 2:
         backgroundPath = "assets/textures/stage2.png";
         topEdgeCollision = 237;
         enemyInfos = {
-        {Enemy::Type::Goblin, {102,250}}, };
+        {Enemy::Type::Goblin, {502,250}}, };
         break;
     case 3:
         backgroundPath = "assets/textures/stage3.png";
         topEdgeCollision = 210;
         enemyInfos = {
-        {Enemy::Type::Goblin, {102,250}}, };
+        {Enemy::Type::Goblin, {502,250}}, };
         break;
     // Add more cases for different levels
     }
@@ -273,7 +273,7 @@ void Level::onResized(ResizeEventArgs& args)
     // Update any UI elements or positions that depend on the game rectangle.
     
     playButton.setTransform(Transform2D{ { 100, 100 },{0.8f,0.8f} });
-    quitButton.setTransform(Transform2D{ { -100, 200 },{0.8f,0.8f} });
+    quitButton.setTransform(Transform2D{ { 100, 0 },{0.8f,0.8f} });
 	changelvlButton.setTransform(Transform2D{ { 100, 150 },{0.8f,0.8f} });
     for (int i = 0; i < 3; ++i)
     {
