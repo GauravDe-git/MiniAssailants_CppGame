@@ -91,4 +91,7 @@ private:
 	Button playButton{};
 	Button quitButton{};
 	Button changelvlButton{};
+	std::vector<Button> levelButtons{};
+
+	int currentLevel = 1;
 };

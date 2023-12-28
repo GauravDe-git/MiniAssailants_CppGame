@@ -34,10 +34,34 @@ Level::Level(Window& _window)
 
     SpriteSheet changelvlBtnSheet{ "assets/textures/changelvl_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
     changelvlButton = Button{ changelvlBtnSheet };
+
+    SpriteSheet lvl1BtnSheet{ "assets/textures/lvl1_btn_sheet.png",46,52,0,0,BlendMode::AlphaBlend };
+    SpriteSheet lvl2BtnSheet{ "assets/textures/lvl2_btn_sheet.png",46,52,0,0,BlendMode::AlphaBlend };
+    SpriteSheet lvl3BtnSheet{ "assets/textures/lvl3_btn_sheet.png",46,52,0,0,BlendMode::AlphaBlend };
+	std::vector lvlBtnSheets{ lvl1BtnSheet, lvl2BtnSheet, lvl3BtnSheet }; /*Deduce type using CTAD C++17 */
+
+    for (int i = 0; i < 3; ++i)
+    {
+        levelButtons.emplace_back(lvlBtnSheets[i], Transform2D{}, [this, i]{
+            this->setLevel(i + 1);
+            for (auto& lvlbtn : levelButtons)
+                lvlbtn.setState(Button::State::Default);
+            levelButtons[i].setState(Button::State::Selected);
+            });
+    }
 }
 
 void Level::loadLevelAssets()
 {
+    // Delete old enemies at start
+    for (auto enemy : enemies)
+    {
+        delete enemy;
+    }
+    // Clear old entities and enemies
+    entities.clear();
+    enemies.clear();
+
     //Load level-specific assets
     background = Background(backgroundPath);
     player = Player{ {SCREEN_WIDTH / 2 -200,(SCREEN_HEIGHT - 10)}};
@@ -59,29 +83,27 @@ void Level::loadLevelAssets()
 
 void Level::setLevel(int levelNumber)
 {
+	currentLevel = levelNumber;
     // Define different levels
     switch (levelNumber)
     {
     case 1:
         backgroundPath = "assets/textures/stage1.png";
         topEdgeCollision = 225;
-        enemyInfos =  { {Enemy::Type::FlyingEye, {420,250}},
-                        {Enemy::Type::Skeleton, {820,250}},
-        {Enemy::Type::Goblin, {1020,250}},};
+        enemyInfos =  {
+        {Enemy::Type::Goblin, {102,250}},};
         break;
     case 2:
         backgroundPath = "assets/textures/stage2.png";
         topEdgeCollision = 237;
-        enemyInfos = { {Enemy::Type::FlyingEye, {420,250}},
-                        {Enemy::Type::Skeleton, {820,250}},
-        {Enemy::Type::Goblin, {1020,250}}, };
+        enemyInfos = {
+        {Enemy::Type::Goblin, {102,250}}, };
         break;
     case 3:
         backgroundPath = "assets/textures/stage3.png";
         topEdgeCollision = 210;
-        enemyInfos = { {Enemy::Type::FlyingEye, {420,250}},
-                        {Enemy::Type::Skeleton, {820,250}},
-        {Enemy::Type::Goblin, {1020,250}}, };
+        enemyInfos = {
+        {Enemy::Type::Goblin, {102,250}}, };
         break;
     // Add more cases for different levels
     }
@@ -100,8 +122,6 @@ void Level::updateEnemies(float deltaTime) const
 
 void Level::update(float deltaTime)
 {
-	/*std::cout << gameRect.width << " " << gameRect.height << std::endl;
-    std::cout << SCREEN_WIDTH << " " << SCREEN_HEIGHT << std::endl;*/
     switch (gameState)
     {
     case GameState::Menu:
@@ -131,6 +151,10 @@ void Level::draw(Image& image)
         playButton.draw(image);
 		quitButton.draw(image);
 		changelvlButton.draw(image);
+        for (auto& lvlbtn : levelButtons)
+        {
+            lvlbtn.draw(image);
+        }
         break;
     case GameState::Playing:
         background.draw(image, camera);
@@ -155,8 +179,13 @@ void Level::draw(Image& image)
     case GameState::Win:
         background.draw(image, camera);
         player.draw(image, camera);
-        image.drawText(Font::Default, "You Win", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Color::Black);
-        image.drawText(Font::Default, "You Win", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Color::Green);
+        std::string winText = "You Win";
+        if (currentLevel < 3)
+        {
+            winText = "Congrats on clearing level " + std::to_string(currentLevel) + ", press Enter to go to level " + std::to_string(currentLevel + 1);
+        }
+        image.drawText(Font::Default, winText, glm::vec2{ SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT / 2 + 1.5f }, Color::Black);
+        image.drawText(Font::Default, winText, glm::vec2{ SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT / 2 }, Color::Green);
         break;
     }
 }
@@ -191,6 +220,10 @@ void Level::processEvents(const Event& e)
         playButton.processEvents(event);
 		quitButton.processEvents(event);
 		changelvlButton.processEvents(event);
+        for (auto& lvlbtn : levelButtons)
+        {
+            lvlbtn.processEvents(event);
+        }
 	}
 }
 
@@ -240,8 +273,12 @@ void Level::onResized(ResizeEventArgs& args)
     // Update any UI elements or positions that depend on the game rectangle.
     
     playButton.setTransform(Transform2D{ { 100, 100 },{0.8f,0.8f} });
-    quitButton.setTransform(Transform2D{ { 100, 200 },{0.8f,0.8f} });
+    quitButton.setTransform(Transform2D{ { -100, 200 },{0.8f,0.8f} });
 	changelvlButton.setTransform(Transform2D{ { 100, 150 },{0.8f,0.8f} });
+    for (int i = 0; i < 3; ++i)
+    {
+        levelButtons[i].setTransform(Transform2D{ { 100 + i * 30, 200},{0.8f,0.8f} });
+    }
 }
 
 void Level::beginState(GameState newState)
@@ -286,9 +323,7 @@ void Level::endState(GameState oldState)
 
 void Level::doMenu()
 {
-    if (Input::getKeyDown(KeyCode::Enter))
-        setState(GameState::Playing);
-    playButton.setCallback([this] {setState(GameState::Playing); });
+	playButton.setCallback([this] {setState(GameState::Playing); });
     quitButton.setCallback([this] {window.destroy(); });
 }
 
@@ -428,7 +463,7 @@ void Level::doPlaying(float deltaTime)
 
     if (enemies.empty())
     {
-        setState(GameState::Win);
+    	setState(GameState::Win);
     }
 }
 
@@ -448,5 +483,15 @@ void Level::doWin()
 {
     // Any logic that needs to happen when the player wins the level
     if (Input::getKeyDown(KeyCode::Enter))
-        setState(GameState::Menu);
+    {
+        if(currentLevel >= 3)
+        {
+            setState(GameState::Menu);
+        }
+        else
+        {
+            setLevel(++currentLevel);
+            setState(GameState::Playing);
+        }
+    }
 }

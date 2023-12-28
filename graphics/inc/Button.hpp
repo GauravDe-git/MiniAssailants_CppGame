@@ -23,6 +23,7 @@ public:
         Default,  ///< The button is in it's default state.
         Hover,    ///< The mouse is over the button.
         Pressed,  ///< The mouse button is pressed over the button.
+		Selected, ///< The button is selected.
     };
 
     Button() = default;
@@ -96,9 +97,8 @@ public:
     /// </summary>
     /// <param name="image">The image to draw this button to.</param>
     void draw(Graphics::Image& image);
-
-private:
     void setState(State newState);
+private:
     void endState(State oldState);
     void startState(State newState);
 

@@ -34,7 +34,7 @@ Button::Button(const Graphics::SpriteSheet& sheet, const Math::Transform2D& tran
 
 void Button::processEvents(const Graphics::Event& event)
 {
-    if (!enabled)
+    if (!enabled || state == State::Selected)
         return;
 
     switch (event.type)
@@ -73,6 +73,10 @@ void Button::draw(Graphics::Image& image)
             spriteToDraw = &spriteSheet[1];
         break;
     case State::Pressed:
+        if (spriteSheet.getNumSprites() > 2)
+            spriteToDraw = &spriteSheet[2];
+        break;
+    case State::Selected:
         if (spriteSheet.getNumSprites() > 2)
             spriteToDraw = &spriteSheet[2];
         break;
