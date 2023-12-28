@@ -4,6 +4,8 @@
 
 #include <map>
 
+#include "Constants.hpp"
+
 using namespace Graphics;
 
 static std::map<Enemy::State, std::string> g_stateNames =
@@ -94,6 +96,40 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		state = State::Idle;
 		transform.setAnchor(glm::vec2{ 27.0f,60.0f });
 		break;
+	case Type::Centaur:
+		aabbs[State::Idle] = { { 39,7,0 },{ 71,57,0 } };
+		attackDistance = 52.0f;
+		speed = 90.0f;
+		hp = 20;
+		attackDmg = 0;
+		attackFrame = 3;
+
+		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Centaur_Idle.png", 89, 59, 0, 0, BlendMode::AlphaBlend), 7.f };
+		chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Centaur_Chase.png", 89, 59, 0, 0, BlendMode::AlphaBlend), 8.f };
+		attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Centaur_Atk.png", 89, 59, 0, 0, BlendMode::AlphaBlend), 11.f };
+		hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Centaur_Hurt.png", 89, 59, 0, 0, BlendMode::AlphaBlend), 7.f };
+		deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Centaur_Dead.png", 89, 59, 0, 0, BlendMode::AlphaBlend), 5.f };
+
+		state = State::Idle;
+		transform.setAnchor(glm::vec2{ 57.0f,55.0f });
+		break;
+	case Type::Gargoyle:
+		aabbs[State::Idle] = { { 35,55,0 },{ 67,104,0 } };
+		attackDistance = 57.0f;
+		speed = 90.0f;
+		hp = 20;
+		attackDmg = 0;
+		attackFrame = 3;
+
+		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Gargoyle_Idle.png", 125, 115, 0, 0, BlendMode::AlphaBlend), 7.f };
+		chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Gargoyle_Chase.png", 125, 115, 0, 0, BlendMode::AlphaBlend), 8.f };
+		attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Gargoyle_Atk.png",125, 115, 0, 0, BlendMode::AlphaBlend), 11.f };
+		hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Gargoyle_Hurt.png", 125, 115, 0, 0, BlendMode::AlphaBlend), 7.f };
+		deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Gargoyle_Dead.png", 125, 115, 0, 0, BlendMode::AlphaBlend), 5.f };
+
+		state = State::Idle;
+		transform.setAnchor(glm::vec2{ 62.0f,102.0f });
+		break;
 		//Handle Other enemy types
 	}
 }
@@ -183,6 +219,10 @@ Math::Circle Enemy::getAttackCircle() const
 		return { {transform.getPosition() + glm::vec2{ 34.f, 5.f } *-transform.getScale() }, 13.f };
 	case Type::Harpy:
 		return { {transform.getPosition() + glm::vec2{ 30.f, 7.f } *-transform.getScale() }, 8.f };
+	case Type::Centaur:
+		return { {transform.getPosition() + glm::vec2{ 35.f, 17.f } *-transform.getScale() }, 9.f };
+	case Type::Gargoyle:
+		return { {transform.getPosition() + glm::vec2{ 40.f, 17.f } *-transform.getScale() }, 9.f };
 	}
 	return {};
 }
@@ -246,6 +286,11 @@ void Enemy::doMovement(float deltaTime)
 	initialPos += velocity * deltaTime;
 
 	transform.setPosition(initialPos);
+
+	if (transform.getPosition().y > SCREEN_HEIGHT)
+	{
+		transform.setPosition({ transform.getPosition().x, SCREEN_HEIGHT });
+	}
 }
 
 void Enemy::doIdle(float deltaTime)

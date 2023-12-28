@@ -16,6 +16,8 @@ public:
 		Skeleton,
 		Golem,
 		Harpy,
+		Centaur,
+		Gargoyle,
 	};
 
 	enum class State
