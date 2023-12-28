@@ -130,6 +130,23 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		state = State::Idle;
 		transform.setAnchor(glm::vec2{ 62.0f,102.0f });
 		break;
+	case Type::Cerberus:
+		aabbs[State::Idle] = { { 18,19,0 },{ 63,57,0 } };
+		attackDistance = 50.0f;
+		speed = 90.0f;
+		hp = 20;
+		attackDmg = 0;
+		attackFrame = 3;
+
+		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Cerberus_Idle.png", 96, 61, 0, 0, BlendMode::AlphaBlend), 7.f };
+		chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Cerberus_Chase.png", 96, 61, 0, 0, BlendMode::AlphaBlend), 8.f };
+		attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Cerberus_Atk.png",96, 61, 0, 0, BlendMode::AlphaBlend), 11.f };
+		hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Cerberus_Hurt.png", 96, 61, 0, 0, BlendMode::AlphaBlend), 7.f };
+		deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Cerberus_Dead.png", 96, 61, 0, 0, BlendMode::AlphaBlend), 5.f };
+
+		state = State::Idle;
+		transform.setAnchor(glm::vec2{ 49.0f,56.0f });
+		break;
 		//Handle Other enemy types
 	}
 }
@@ -222,6 +239,8 @@ Math::Circle Enemy::getAttackCircle() const
 	case Type::Centaur:
 		return { {transform.getPosition() + glm::vec2{ 35.f, 17.f } *-transform.getScale() }, 9.f };
 	case Type::Gargoyle:
+		return { {transform.getPosition() + glm::vec2{ 40.f, 17.f } *-transform.getScale() }, 9.f };
+	case Type::Cerberus:
 		return { {transform.getPosition() + glm::vec2{ 40.f, 17.f } *-transform.getScale() }, 9.f };
 	}
 	return {};

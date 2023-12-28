@@ -18,6 +18,7 @@ public:
 		Harpy,
 		Centaur,
 		Gargoyle,
+		Cerberus,
 	};
 
 	enum class State
