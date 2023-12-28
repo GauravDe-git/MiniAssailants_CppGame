@@ -25,6 +25,7 @@ public:
 		HeavyAtk1,
 		HeavyAtk2,
 		Special1,
+		Special2,
 		Hurt
 	};
 
@@ -50,14 +51,13 @@ public:
 
 	const glm::vec2& getVelocity() const { return velocity; }
 	bool isAttacking() const { return state == State::Special1 ||state == State::LightAtk1
-							  || state == State::LightAtk2 || state == State::HeavyAtk1 || state == State::HeavyAtk2; }
+							  || state == State::LightAtk2 || state == State::HeavyAtk1 || state == State::HeavyAtk2 || state == State::Special2;}
 
 	//---Combat related functions---//
 	const Math::AABB getAABB() const { return  transform * aabb; }
 	const Math::Circle& getAttackCircle() const { return attackCircle; }
 	int getHP() const { return hp; }
 	int getMaxHP() const { return maxHp; }
-	//void reduceHP(int damage) { hp -= damage; }
 	void setHP(int hp) { this->hp = hp; }
 	int getMP() const { return mp; }
 	int getMaxMP() const { return maxMp; }
@@ -83,6 +83,7 @@ private:
 	void doHeavyAtk1(float deltaTime);
 	void doHeavyAtk2(float deltaTime);
 	void doSpecial1(float deltaTime);
+	void doSpecial2(float deltaTime);
 	void doHurt(float deltaTime);
 
 	UiBar healthBar{ 100, 12, {0, -20} };
@@ -114,5 +115,6 @@ private:
 	Graphics::SpriteAnim heavyAtk1Sprite;
 	Graphics::SpriteAnim heavyAtk2Sprite;
 	Graphics::SpriteAnim special1Sprite;
+	Graphics::SpriteAnim special2Sprite;
 	Graphics::SpriteAnim hurtSprite;
 };

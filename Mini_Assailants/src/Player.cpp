@@ -17,6 +17,7 @@ static std::map<Player::State, std::string> g_stateNames =
 	{Player::State::HeavyAtk1, "HeavyAtk1"},
 	{Player::State::HeavyAtk2, "HeavyAtk2"},
 	{Player::State::Special1, "Special1"},
+	{Player::State::Special2, "Special2"},
 	{Player::State::Hurt, "Hurt"},
 };
 
@@ -49,11 +50,15 @@ Player::Player(const glm::vec2& pos)
 	const auto special1Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special1_Sheet.png", 153,                                                                                 127, 0, 0, BlendMode::AlphaBlend);
 	special1Sprite = SpriteAnim{ special1Sheet, 15.0f };
 
+	const auto special2Sheet = ResourceManager::loadSpriteSheet("assets/textures/Special2_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
+	special2Sprite = SpriteAnim{ special2Sheet, 13.0f };
+
 	attackDmg[AttackType::Light1] = 1;
 	attackDmg[AttackType::Light2] = 2;
 	attackDmg[AttackType::Heavy1] = 3;
 	attackDmg[AttackType::Heavy2] = 4;
 	attackDmg[AttackType::Special1] = 5;
+	attackDmg[AttackType::Special2] = 5;
 
 	transform.setAnchor(glm::vec2{ 21.0f,116.0f });
 	setState(State::Idle);
@@ -103,6 +108,9 @@ void Player::update(float deltaTime)
 		break;
 	case State::Special1:
 		doSpecial1(deltaTime);
+		break;
+	case State::Special2:
+		doSpecial2(deltaTime);
 		break;
 	case State::Hurt:
 		doHurt(deltaTime);
@@ -157,6 +165,9 @@ void Player::draw(Image& image, const Camera& camera)
 		break;
 	case State::Special1:
 		image.drawSprite(special1Sprite, tempTransform, color);
+		break;
+	case State::Special2:
+		image.drawSprite(special2Sprite, tempTransform, color);
 		break;
 	case State::Hurt:
 		image.drawSprite(idleSprite, tempTransform, color);
@@ -215,6 +226,10 @@ void Player::beginState(State newState)
 		currentAtkType = AttackType::Special1;
 		special1Sprite.reset();
 		break;
+	case State::Special2:
+		currentAtkType = AttackType::Special2;
+		special2Sprite.reset();
+		break;
 	case State::Hurt:
 		idleSprite.reset();
 		hitCounter = 0.5f;
@@ -242,10 +257,18 @@ void Player::endState(State oldState)
 	case State::Special1:
 		{
 		//Displacement of player pos upon landing
-		glm::vec2 displacement{26.f, 0};
+		constexpr glm::vec2 displacement{26.f, 0};
 		// If the player is facing left, negate the displacement
 		transform.translate(displacement * transform.getScale());
 		}
+	break;
+	case State::Special2:
+	{
+		//Displacement of player pos upon landing
+		constexpr glm::vec2 displacement{ 82.f, 0 };
+		// If the player is facing left, negate the displacement
+		transform.translate(displacement * transform.getScale());
+	}
 	break;
 	case State::Hurt:
 		break;
@@ -303,6 +326,11 @@ void Player::doCombat()
 	else if (Input::getKeyDown(KeyCode::Y) && mp >= 5 && !isAttacking())
 	{
 		setState(State::Special1);
+		mp -= 5;
+	}
+	else if (Input::getKeyDown(KeyCode::U) && mp >= 5 && !isAttacking())
+	{
+		setState(State::Special2);
 		mp -= 5;
 	}
 }
@@ -412,6 +440,25 @@ void Player::doSpecial1(float deltaTime)
 	}
 
 	if (special1Sprite.isDone())
+	{
+		setState(State::Idle);
+	}
+}
+
+void Player::doSpecial2(float deltaTime)
+{
+	special2Sprite.update(deltaTime);
+
+	if (special2Sprite.getCurrentFrame() >= 9) //fix this
+	{
+		attackCircle = { transform.getPosition() + glm::vec2{ 80.f, -10.f } *transform.getScale(),15.f };
+	}
+	else if (special2Sprite.getCurrentFrame() >= 4)
+	{
+		attackCircle = { transform.getPosition() + glm::vec2{ 40.f, -40.f } *transform.getScale(),15.f };
+	}
+
+	if (special2Sprite.isDone())
 	{
 		setState(State::Idle);
 	}

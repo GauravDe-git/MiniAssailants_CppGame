@@ -103,7 +103,7 @@ void Level::setLevel(int levelNumber)
         backgroundPath = "assets/textures/stage3.png";
         topEdgeCollision = 210;
         enemyInfos = {
-        {Enemy::Type::Goblin, {502,250}}, };
+        {Enemy::Type::Cerberus, {502,250}}, };
         break;
     // Add more cases for different levels
     }
