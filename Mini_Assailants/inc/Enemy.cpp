@@ -147,6 +147,23 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		state = State::Idle;
 		transform.setAnchor(glm::vec2{ 49.0f,56.0f });
 		break;
+	case Type::FlyingEye:
+		aabbs[State::Idle] = { { 32,39,0 },{ 59,84,0 } };
+		attackDistance = 39.0f;
+		speed = 90.0f;
+		hp = 20;
+		attackDmg = 0;
+		attackFrame = 5;
+
+		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/FlyingEye_IdleChase.png", 108, 117, 0, 0, BlendMode::AlphaBlend), 7.f };
+		chaseAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/FlyingEye_IdleChase.png", 108, 117, 0, 0, BlendMode::AlphaBlend), 8.f };
+		attackAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/FlyingEye_Atk.png",108, 117, 0, 0, BlendMode::AlphaBlend), 11.f };
+		hurtAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/FlyingEye_Hurt.png", 108, 117, 0, 0, BlendMode::AlphaBlend), 7.f };
+		deadAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/FlyingEye_Dead.png", 108, 117, 0, 0, BlendMode::AlphaBlend), 5.f };
+
+		state = State::Idle;
+		transform.setAnchor(glm::vec2{ 43.0f,89.0f });
+		break;
 		//Handle Other enemy types
 	}
 }
@@ -242,6 +259,8 @@ Math::Circle Enemy::getAttackCircle() const
 		return { {transform.getPosition() + glm::vec2{ 40.f, 17.f } *-transform.getScale() }, 9.f };
 	case Type::Cerberus:
 		return { {transform.getPosition() + glm::vec2{ 40.f, 17.f } *-transform.getScale() }, 9.f };
+	case Type::FlyingEye:
+		return { {transform.getPosition() + glm::vec2{ 35.f, 45.f } *-transform.getScale() }, 6.f };
 	}
 	return {};
 }

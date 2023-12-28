@@ -19,6 +19,7 @@ public:
 		Centaur,
 		Gargoyle,
 		Cerberus,
+		FlyingEye,
 	};
 
 	enum class State
