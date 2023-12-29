@@ -3,13 +3,11 @@
 #include "Combat.hpp"
 #include "PotionDrop.hpp"
 
-#include <Graphics/Font.hpp>
+#include "Graphics/Window.hpp"
 #include <Graphics/ResourceManager.hpp>
 #include "Graphics/Input.hpp"
 
 #include <algorithm>
-
-#include "Graphics/Window.hpp"
 
 using namespace Graphics;
 using namespace Math;
@@ -17,7 +15,8 @@ using namespace Math;
 Level::Level(Window& _window)
 	: window{ _window },
       gameState{GameState::Menu},
-      camera{ glm::vec2{0,0} }, topEdgeCollision{0}
+      camera{ glm::vec2{0,0} }, topEdgeCollision{0},
+      tafelSans("assets/fonts/TafelSansPro-Bold.ttf", 20.0f)
 {
     punch = Audio::Sound("assets/sounds/punch.wav");
     swordSlash = Audio::Sound("assets/sounds/swordSlash.wav");
@@ -184,8 +183,8 @@ void Level::draw(Image& image)
         {
             winText = "Congrats on clearing level " + std::to_string(currentLevel) + ", press Enter to go to level " + std::to_string(currentLevel + 1);
         }
-        image.drawText(Font::Default, winText, glm::vec2{ SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT / 2 + 1.5f }, Color::Black);
-        image.drawText(Font::Default, winText, glm::vec2{ SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT / 2 }, Color::Green);
+        image.drawText(tafelSans, winText, glm::vec2{ SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT / 2 + 2.5f }, Color::Black);
+        image.drawText(tafelSans, winText, glm::vec2{ SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT / 2 }, Color::Green);
         break;
     }
 }

@@ -4,13 +4,13 @@
 #include <Camera.hpp>
 #include <Player.hpp>
 #include <Enemy.hpp>
-#include <random>
 
+#include <Button.hpp>
+#include <Graphics/Font.hpp>
 #include <Audio/Sound.hpp>
 
 #include <vector>
-
-#include "Button.hpp"
+#include <random>
 
 //Level class: Responsible for both loading/changing levels
 //			   and changing between Game States.
@@ -80,6 +80,7 @@ private:
 	std::mt19937 randGen{ std::random_device{}() };
 	std::bernoulli_distribution randDist{0.5};
 
+	Graphics::Font tafelSans;
 	// The game rectangle in the Window's coordinate frame.
 	// Used for translating mouse coordinates.
 	Math::RectI gameRect;

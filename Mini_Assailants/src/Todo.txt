@@ -1,49 +1,19 @@
-1,2,3-player and enemy collision/combat, add sound effects- (Done)
+Must:
+ Make Proper menu image, and adjust button positions.
+ Make a 'Help' Gamestate, and help button. Just make an image and load it in that state.
+(Image will contain controls, how to play game,i.e.beat enemies,collect pickups, moveforward)
 
-4. Wave of enemies:
-    - Spawn multiple enemies using vectors. (Done)
-	- Change camera state to arena during combat. *** (Done)
-	- Switch back to scrolling after enemies defeated. (Done)
-
-4.5: Enemy Steering Behaviour Ai, when multiple enemies on screen together (Done)
-
-5. Add a main menu:
-	- Using a Button class. ***
-
----------------------------
-6:
-	- Add hp/mp bar- (image-drawQuad??) (Done)
-	- Use the level class to add more levels. ***
-	- Add more enemy types.                   ***
-
-For intake:
-- add hp/mp item drops to collect  (Done)
-
-	- Add Bosses.(what)
-
-
-===============================================
-Bug:
- - When dying and restarting level-> 
-     more enemies spawning.
-     many random DEBUG enemy collision AABBS, and enemy hp,state(State: None) texts showing up randomly. (Fixed)
-
-QOL:
- Add ManaBar (Done) 
- and more attacks for Player that uses mana (Special Attack 2, Heavy Attack).
  Different Sound Effects for each Player attack (Light, Heavy, Special 1, Special 2).
- 
- Add more Enemy types for each level. 
- Add Level 1,2,3.
  Different Music for Menu,Levels 1,2,3, and sound for win,GameOver.
- Floating damage numbers.
-
+ 
  Go Go Text upon defeating an enemy and camera changing to scrolling.
 
  Add a coin pickup option as well,with sfx, when enemy die(just like hp/mp a random chance)
  and a coin ui, showing coins collected
  Player Face Portrait
 
+QOL:
+ Floating damage numbers.
  Add a pause menu. Maybe a button on top right, can be clicked, or press esc/p to go menu,
  with options to go back to main menu or quit.
 
