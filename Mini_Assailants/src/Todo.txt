@@ -12,6 +12,7 @@ Must:
 
  Maybe-Enemy shouldnt turn in direction of player in middle of attack
       or when dying?
+Disable the enemy's AABB when they die
 
 QOL:
  Floating damage numbers.

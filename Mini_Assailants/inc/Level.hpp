@@ -72,6 +72,7 @@ private:
 	Audio::Sound punch;
 	Audio::Sound swordSlash;
 	std::shared_ptr<Graphics::Image> startScreen{};
+	Graphics::SpriteAnim coinUiAnim{};
 
 	std::string backgroundPath;
 	int topEdgeCollision;

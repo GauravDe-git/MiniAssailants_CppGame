@@ -8,7 +8,7 @@
 class ItemDrop : public Entity
 {
 public:
-	enum class Type {HP, MP};
+	enum class Type {HP, MP, Coin};
 
 	ItemDrop() = default;
 

@@ -48,6 +48,10 @@ Level::Level(Window& _window)
             levelButtons[i].setState(Button::State::Selected);
             });
     }
+
+    //Ui
+    const auto coinSheet = ResourceManager::loadSpriteSheet("assets/textures/Coin_Sheet.png", 20, 20, 0, 0, BlendMode::AlphaBlend);
+    coinUiAnim = SpriteAnim{ coinSheet, 10.0f };
 }
 
 void Level::loadLevelAssets()
@@ -60,6 +64,8 @@ void Level::loadLevelAssets()
     // Clear old entities and enemies
     entities.clear();
     enemies.clear();
+    // Store the number of coins collected
+    int coinsCollected = player.getCoins();
 
     //Load level-specific assets
     background = Background(backgroundPath);
@@ -78,6 +84,8 @@ void Level::loadLevelAssets()
     {
         entities.push_back(enemy);
     }
+
+    player.setCoins(coinsCollected);
 }
 
 void Level::setLevel(int levelNumber)
@@ -160,6 +168,7 @@ void Level::draw(Image& image)
         break;
     case GameState::Playing:
         background.draw(image, camera);
+
         //sorting order of drawing player/enemy based on their Y position
         // Solution using std::sort and lambda fn. suggested by Jeremiah
         //** ranges algorithm suggested by resharper over the normal std::sort
@@ -168,10 +177,16 @@ void Level::draw(Image& image)
         {
             entity->draw(image, camera);
         }
+
+        //GO text
         if (goTextTimer > 0.0f)
         {
             image.drawText(tafelSans, "GO->", glm::vec2{ SCREEN_WIDTH - 50, SCREEN_HEIGHT / 2 }, Color::Yellow);
         }
+
+        // Ui Coin
+        image.drawSprite(coinUiAnim, glm::vec2{SCREEN_WIDTH - 150.f, 1.f});
+        image.drawText(Font::Default, std::to_string(player.getCoins()), glm::vec2{ SCREEN_WIDTH - 130.f, 5.f }, Color::Yellow);
         break;
     case GameState::GameOver:
         background.draw(image, camera);
@@ -292,6 +307,7 @@ void Level::beginState(GameState newState)
     switch (newState)
     {
     case GameState::Menu:
+        player.setCoins(0);
         break;
     case GameState::Playing:
         if (!isFirstLoad)
@@ -359,6 +375,7 @@ void Level::doPlaying(float deltaTime)
 {
     camera.update(deltaTime, player.getPosition(), player.getVelocity(), player.isAttacking());
     player.update(deltaTime);
+    coinUiAnim.update(deltaTime);
 
     bool isEnemyAggroing = false;
 
@@ -384,6 +401,11 @@ void Level::doPlaying(float deltaTime)
         //Enemy Potion Drop Logic
         if (enemy->getState() == Enemy::State::JustDefeated)
         {
+            //Always drop a coin when an enemy is defeated
+                ItemDrop* coin = new ItemDrop{ enemy->getPosition() + glm::vec2{0, -20}, ItemDrop::Type::Coin };  // Drop the coin a bit upward
+            entities.push_back(coin);
+
+            //Random chance to drop a potion
             if (randDist(randGen))
             {
                 const ItemDrop::Type type = randDist(randGen) ? ItemDrop::Type::HP : ItemDrop::Type::MP;
@@ -439,27 +461,30 @@ void Level::doPlaying(float deltaTime)
         goTextTimer -= deltaTime;
     }
 
-    // Picking up the Potions dropped by Enemies
+    // Picking up the Items dropped by Enemies
     for (const auto entity : entities)
     {
-		// Check if the entity is a potion
-		if (ItemDrop* potion = dynamic_cast<ItemDrop*>(entity))
+		// Check if the entity is an item
+		if (ItemDrop* item = dynamic_cast<ItemDrop*>(entity))
 		{
-            potion->update(deltaTime);
+            item->update(deltaTime);
 
-			if (potion->canPickUp() && player.getAABB().intersect(potion->getAABB()))
+			if (item->canPickUp() && player.getAABB().intersect(item->getAABB()))
 			{
-				switch (potion->getType())
+				switch (item->getType())
 				{
 				case ItemDrop::Type::HP:
-                    player.setHP(std::min(player.getHP() + potion->getValue(), player.getMaxHP()));
+                    player.setHP(std::min(player.getHP() + item->getValue(), player.getMaxHP()));
 					break;
 				case ItemDrop::Type::MP:
-					player.setMP(std::min(player.getMP() + potion->getValue(), player.getMaxMP()));
+					player.setMP(std::min(player.getMP() + item->getValue(), player.getMaxMP()));
 					break;
+				case ItemDrop::Type::Coin:
+					player.setCoins(player.getCoins() + item->getValue());
+                    break;
 				}
-                std::erase(entities, potion);
-                delete potion;
+                std::erase(entities, item);
+                delete item;
 			}
 		}
     }

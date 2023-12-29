@@ -65,6 +65,9 @@ public:
 	int getAtkDmg(AttackType type) const { return attackDmg.at(type); }
 	AttackType getCurrentAtkType() const { return currentAtkType; }
 
+	int getCoins() const { return coinsCollected; }
+	void setCoins(int coins) { coinsCollected = coins; }
+
 	bool isHurt() const { return hitCounter > 0; }
 
 	void setState(State newState);
@@ -100,6 +103,7 @@ private:
 	int maxHp = hp;
 	int mp{ 20 };
 	int maxMp = mp;
+	int coinsCollected{0};
 	std::map<AttackType, int> attackDmg;
 	Math::Circle attackCircle{};
 	float timeSinceLastAtk{ 0.f };

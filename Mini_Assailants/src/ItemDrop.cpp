@@ -1,6 +1,7 @@
 #include "ItemDrop.hpp"
 #include "Camera.hpp"
 #include "Graphics/ResourceManager.hpp"
+#include "Graphics/SpriteAnim.hpp"
 
 ItemDrop::ItemDrop(const glm::vec2& pos, Type _type)
 	:Entity{pos}, type{_type},
@@ -15,9 +16,14 @@ ItemDrop::ItemDrop(const glm::vec2& pos, Type _type)
 	{
 		sprite = Graphics::Sprite{ Graphics::ResourceManager::loadImage("assets/textures/mp_potion.png"),Graphics::BlendMode::AlphaBlend };
 	}
+	else if (type == Type::Coin)
+	{
+		sprite = Graphics::Sprite{ Graphics::ResourceManager::loadImage("assets/textures/coin.png"),Graphics::BlendMode::AlphaBlend };
+	}
 
 	//Set the value based on the type
-	value = (type == Type::HP) ? 5 : 8;
+	value = (type == Type::HP) ? 5 : ((type == Type::MP) ? 10 : 2);
+
 
 	pickupDelay.reset(); //start the timer when a potion is created
 }
