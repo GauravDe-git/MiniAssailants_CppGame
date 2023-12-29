@@ -1,0 +1,24 @@
+========= Sprites =========
+
+Player Sprites: https://sagak-art-pururu.itch.io/
+
+Enemy Sprites: https://xzany.itch.io/ @MattzArt
+
+Background Sprites: https://ansimuz.itch.io/ 
+
+Potion Sprites: https://projecttea.itch.io/potion-icons-volume-1
+Coin Sprites:  https://totuslotus.itch.io/pixel-coins
+
+Button Sprites: https://hiorespace.itch.io/buttonsanimationpack
+
+
+========= Sounds =========
+
+https://mixkit.co/free-sound-effects/punch/
+https://mixkit.co/free-sound-effects/sword/
+
+
+========= Fonts ==========
+
+Tafel Sans Pro Bold: https://en.bestfonts.pro/font/tafel-sans-pro
+Symtext Font:        https://www.dafont.com/symtext.font

@@ -9,7 +9,7 @@ using namespace Math;
 Game::Game(int width, int height, Window& _window)
 	: window {_window}
 {
-	level.setLevel(3);
+	level.setLevel(1);
 	image.resize(width, height);
 }
 

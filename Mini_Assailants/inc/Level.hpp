@@ -25,6 +25,7 @@ public:
 	enum class GameState
 	{
 		Menu,
+		HelpScreen,
 		Playing,
 		Win,
 		GameOver
@@ -55,6 +56,7 @@ private:
 	void endState(GameState oldState);
 
 	void doMenu();
+	void doHelp();
 	void enemySteerAi(Enemy* enemy) const;
 	void doPlaying(float deltaTime);
 	void doGameOver();
@@ -72,6 +74,7 @@ private:
 	Audio::Sound punch;
 	Audio::Sound swordSlash;
 	std::shared_ptr<Graphics::Image> startScreen{};
+	Graphics::Sprite helpScreen{};
 	Graphics::SpriteAnim coinUiAnim{};
 
 	std::string backgroundPath;
@@ -95,6 +98,7 @@ private:
 	Button changelvlButton{};
 	Button helpButton{};
 	std::vector<Button> levelButtons{};
+	Button backButton{};
 
 	int currentLevel = 1;
 

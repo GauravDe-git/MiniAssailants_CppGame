@@ -1,18 +1,16 @@
 Must:
- Make Proper menu image, and adjust button positions.
- Make a 'Help' Gamestate, and help button. Just make an image and load it in that state.
-(Image will contain controls, how to play game,i.e.beat enemies,collect pickups, moveforward)
 
  Different Sound Effects for each Player attack (Light, Heavy, Special 1, Special 2).
  Different Music for Menu,Levels 1,2,3, and sound for win,GameOver.
 
  Add a coin pickup sfx
- Player Face Portrait
+ 
 
  Maybe-Enemy shouldnt turn in direction of player in middle of attack
       or when dying?
 
 QOL:
+ Player Face Portrait
  Floating damage numbers.
  Add a pause menu. Maybe a button on top right, can be clicked, or press esc/p to go menu,
  with options to go back to main menu or quit.

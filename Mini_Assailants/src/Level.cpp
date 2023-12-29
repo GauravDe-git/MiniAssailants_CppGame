@@ -22,7 +22,7 @@ Level::Level(Window& _window)
     swordSlash = Audio::Sound("assets/sounds/swordSlash.wav");
 
     startScreen = ResourceManager::loadImage("assets/textures/startScreen.png");
-
+	helpScreen = Sprite(ResourceManager::loadImage("assets/textures/helpScreen.png"), BlendMode::AlphaBlend);
     //Buttons
 
 	SpriteSheet playBtnSheet{ "assets/textures/play_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
@@ -36,6 +36,9 @@ Level::Level(Window& _window)
 
     SpriteSheet helpBtnSheet{ "assets/textures/help_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
     helpButton = Button{ helpBtnSheet };
+
+    SpriteSheet backBtnSheet{ "assets/textures/back_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
+    backButton = Button{ backBtnSheet };
 
     SpriteSheet lvl1BtnSheet{ "assets/textures/lvl1_btn_sheet.png",46,52,0,0,BlendMode::AlphaBlend };
     SpriteSheet lvl2BtnSheet{ "assets/textures/lvl2_btn_sheet.png",46,52,0,0,BlendMode::AlphaBlend };
@@ -102,7 +105,7 @@ void Level::setLevel(int levelNumber)
         topEdgeCollision = 225;
         enemyInfos =  {
         {Enemy::Type::Goblin, {502,250}},
-        {Enemy::Type::Golem, {902,250}}, };
+        };
         break;
     case 2:
         backgroundPath = "assets/textures/stage2.png";
@@ -140,6 +143,9 @@ void Level::update(float deltaTime)
     case GameState::Menu:
         doMenu();
         break;
+    case GameState::HelpScreen:
+		doHelp();
+		break;
     case GameState::Playing:
         updateEnemies(deltaTime);
         doPlaying(deltaTime);
@@ -170,6 +176,10 @@ void Level::draw(Image& image)
             lvlbtn.draw(image);
         }
         break;
+    case GameState::HelpScreen:
+        image.drawSprite(helpScreen,{0,0});
+		backButton.draw(image);
+        break;
     case GameState::Playing:
         background.draw(image, camera);
 
@@ -198,19 +208,31 @@ void Level::draw(Image& image)
         {
             enemy->draw(image, camera);
         }
-        image.drawText(Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 + 1.5f }, Color::Black);
-        image.drawText(Font::Default, "Game Over", glm::vec2{ SCREEN_WIDTH / 2 - 70, SCREEN_HEIGHT / 2 }, Color::Red);
+        image.drawText(tafelSans, "Game Over, press Enter to Continue", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 - 1.5f }, Color::Black);
+        image.drawText(tafelSans, "Game Over, press Enter to Continue", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 + 3.5f }, Color::Black);
+        image.drawText(tafelSans, "Game Over, press Enter to Continue", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 }, Color::Red);
+
+        image.drawText(tafelSans, "Collected " + std::to_string(player.getCoins()) + " coins", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 + 23.f }, Color::Black);
+        image.drawText(tafelSans, "Collected " + std::to_string(player.getCoins()) + " coins", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 + 20.f }, Color::Yellow);
         break;
     case GameState::Win:
         background.draw(image, camera);
         player.draw(image, camera);
-        std::string winText = "You Win";
+        std::string winText = "Congrats on clearing game!";
+		std::string winText2 = "Press Enter to go back";
         if (currentLevel < 3)
         {
-            winText = "Congrats on clearing level " + std::to_string(currentLevel) + ", press Enter to go to level " + std::to_string(currentLevel + 1);
+            winText = "Congrats on clearing level " + std::to_string(currentLevel) /*+ ", press Enter to go to level " + std::to_string(currentLevel + 1)*/;
+			winText2 = "Press Enter to go to next level";
         }
-        image.drawText(tafelSans, winText, glm::vec2{ SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT / 2 + 2.5f }, Color::Black);
-        image.drawText(tafelSans, winText, glm::vec2{ SCREEN_WIDTH / 2 - 170, SCREEN_HEIGHT / 2 }, Color::Green);
+        image.drawText(tafelSans, winText, glm::vec2{ SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 3.5f }, Color::Black);
+        image.drawText(tafelSans, winText, glm::vec2{ SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 }, Color::Green);
+
+        image.drawText(tafelSans, winText2, glm::vec2{ SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 23.5f }, Color::Black);
+        image.drawText(tafelSans, winText2, glm::vec2{ SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 20.f }, Color::Green);
+
+        image.drawText(tafelSans, "Collected " + std::to_string(player.getCoins()) + " coins", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 + 43.f }, Color::Black);
+        image.drawText(tafelSans, "Collected " + std::to_string(player.getCoins()) + " coins", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 + 40.f }, Color::Yellow);
         break;
     }
 }
@@ -240,17 +262,19 @@ void Level::processEvents(const Event& e)
         break;
     }
 
-	if (gameState == GameState::Menu)
-	{
+    if (gameState == GameState::Menu)
+    {
         playButton.processEvents(event);
-		quitButton.processEvents(event);
-		changelvlButton.processEvents(event);
-		helpButton.processEvents(event);
+        quitButton.processEvents(event);
+        changelvlButton.processEvents(event);
+        helpButton.processEvents(event);
         for (auto& lvlbtn : levelButtons)
         {
             lvlbtn.processEvents(event);
         }
-	}
+    }
+    else if(gameState == GameState::HelpScreen)
+        backButton.processEvents(event);
 }
 
 void Level::onMouseMoved(MouseMovedEventArgs& args)
@@ -306,6 +330,7 @@ void Level::onResized(ResizeEventArgs& args)
     {
         levelButtons[i].setTransform(Transform2D{ { 230 + i * 40, 215},{0.8f,0.8f} });
     }
+    backButton.setTransform(Transform2D{ { 285, 1 },{0.7f,0.7f} });
 }
 
 void Level::beginState(GameState newState)
@@ -352,7 +377,13 @@ void Level::endState(GameState oldState)
 void Level::doMenu()
 {
 	playButton.setCallback([this] {setState(GameState::Playing); });
+	helpButton.setCallback([this] {setState(GameState::HelpScreen); });
     quitButton.setCallback([this] {window.destroy(); });
+}
+
+void Level::doHelp()
+{
+	backButton.setCallback([this] {setState(GameState::Menu); });
 }
 
 void Level::enemySteerAi(Enemy* enemy) const
