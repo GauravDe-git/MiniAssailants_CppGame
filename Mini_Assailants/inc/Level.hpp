@@ -95,4 +95,8 @@ private:
 	std::vector<Button> levelButtons{};
 
 	int currentLevel = 1;
+
+	//variables for 'Go' Text indicator
+	float goTextTimer = 0.f;
+	bool wasArena = false;
 };

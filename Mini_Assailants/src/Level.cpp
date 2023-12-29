@@ -90,19 +90,22 @@ void Level::setLevel(int levelNumber)
         backgroundPath = "assets/textures/stage1.png";
         topEdgeCollision = 225;
         enemyInfos =  {
-        {Enemy::Type::Goblin, {502,250}},};
+        {Enemy::Type::Goblin, {502,250}},
+        {Enemy::Type::Golem, {902,250}}, };
         break;
     case 2:
         backgroundPath = "assets/textures/stage2.png";
         topEdgeCollision = 237;
         enemyInfos = {
-        {Enemy::Type::Goblin, {502,250}}, };
+        {Enemy::Type::Goblin, {502,250}},
+        {Enemy::Type::Golem, {902,250}}, };
         break;
     case 3:
         backgroundPath = "assets/textures/stage3.png";
         topEdgeCollision = 210;
         enemyInfos = {
-        {Enemy::Type::Cerberus, {502,250}}, };
+        {Enemy::Type::Cerberus, {502,250}},
+        {Enemy::Type::Golem, {902,250}}, };
         break;
     // Add more cases for different levels
     }
@@ -164,6 +167,10 @@ void Level::draw(Image& image)
         for (const auto entity : entities)
         {
             entity->draw(image, camera);
+        }
+        if (goTextTimer > 0.0f)
+        {
+            image.drawText(tafelSans, "GO->", glm::vec2{ SCREEN_WIDTH - 50, SCREEN_HEIGHT / 2 }, Color::Yellow);
         }
         break;
     case GameState::GameOver:
@@ -413,11 +420,24 @@ void Level::doPlaying(float deltaTime)
 	if (isEnemyAggroing)
 	{
 		camera.setState(Camera::State::arena);
+        wasArena = true;
 	}
 	else if (player.getPosition().x > 240.f)
 	{
 		camera.setState(Camera::State::scrolling);
+
+        // If the camera just switched from the arena mode to the scrolling state
+        if (wasArena)
+        {
+            goTextTimer = 3.0f;
+        }
+        wasArena = false;
 	}
+    // Decrease the 'Go' Text timer
+    if (goTextTimer > 0.0f)
+    {
+        goTextTimer -= deltaTime;
+    }
 
     // Picking up the Potions dropped by Enemies
     for (const auto entity : entities)
