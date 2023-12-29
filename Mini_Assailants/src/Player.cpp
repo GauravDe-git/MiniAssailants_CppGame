@@ -27,6 +27,23 @@ Player::Player(const glm::vec2& pos)
 	:Entity{ pos } ,
 	 aabb{{9, 65, 0}, {31, 117, 0}}
 {
+	//Audio
+	lightAtk1SFX = Audio::Sound("assets/sounds/lightatk1.wav");
+	lightAtk1SFX.setVolume(0.3f);
+	lightAtk2SFX = Audio::Sound("assets/sounds/lightatk2.wav");
+	lightAtk2SFX.setVolume(0.3f);
+
+	heavyAtk1SFX = Audio::Sound("assets/sounds/heavyatk1.wav");
+	heavyAtk1SFX.setVolume(0.3f);
+	heavyAtk2SFX = Audio::Sound("assets/sounds/heavyatk2.wav");
+	heavyAtk2SFX.setVolume(0.3f);
+
+	specialAtk1SFX = Audio::Sound("assets/sounds/special1.wav");
+	specialAtk1SFX.setVolume(0.1f);
+	specialAtk2SFX = Audio::Sound("assets/sounds/special2.wav");
+	specialAtk2SFX.setVolume(0.1f);
+
+	//Sprites
 	const auto idleSheet = ResourceManager::loadSpriteSheet("assets/textures/Idle_Sheet.png", 153, 127, 0, 0, BlendMode::AlphaBlend);
 	idleSprite = SpriteAnim{ idleSheet, 10.0f };
 
@@ -206,28 +223,34 @@ void Player::beginState(State newState)
 		break;
 	case State::LightAtk1:
 		currentAtkType = AttackType::Light1;
+		lightAtk1SFX.play();
 		lightAtk1Sprite.reset();
 		break;
 	case State::LightAtk2:
 		currentAtkType = AttackType::Light2;
+		lightAtk2SFX.play();
 		lightAtk2Sprite.reset();
 		break;
 	case State::HeavyAtk1:
 		currentAtkType = AttackType::Heavy1;
+		heavyAtk1SFX.play();
 		mp -= 1;
 		heavyAtk1Sprite.reset();
 		break;
 	case State::HeavyAtk2:
 		currentAtkType = AttackType::Heavy2;
+		heavyAtk2SFX.play();
 		mp -= 1;
 		heavyAtk2Sprite.reset();
 		break;
 	case State::Special1:
 		currentAtkType = AttackType::Special1;
+		specialAtk1SFX.play();
 		special1Sprite.reset();
 		break;
 	case State::Special2:
 		currentAtkType = AttackType::Special2;
+		specialAtk2SFX.play();
 		special2Sprite.reset();
 		break;
 	case State::Hurt:
@@ -366,6 +389,7 @@ void Player::doLightAtk1(float deltaTime)
 	}
 	else
 	{
+		
 		lightAtk1Sprite.update(deltaTime);
 
 		if (lightAtk1Sprite.getCurrentFrame() >= 3)
@@ -382,6 +406,7 @@ void Player::doLightAtk1(float deltaTime)
 
 void Player::doLightAtk2(float deltaTime)
 {
+	
 	lightAtk2Sprite.update(deltaTime);
 
 	if (lightAtk2Sprite.getCurrentFrame() >= 3 && lightAtk2Sprite.getCurrentFrame() <= 4)
@@ -405,7 +430,6 @@ void Player::doHeavyAtk1(float deltaTime)
 
 			if (heavyAtk1Sprite.getCurrentFrame() >= 3)
 			{
-				//need to fix this attack circle
 				attackCircle = { transform.getPosition() + glm::vec2{ 42.f, -30.f } *transform.getScale(),12.f };
 			}
 
@@ -449,7 +473,7 @@ void Player::doSpecial2(float deltaTime)
 {
 	special2Sprite.update(deltaTime);
 
-	if (special2Sprite.getCurrentFrame() >= 9) //fix this
+	if (special2Sprite.getCurrentFrame() >= 9) 
 	{
 		attackCircle = { transform.getPosition() + glm::vec2{ 80.f, -10.f } *transform.getScale(),15.f };
 	}

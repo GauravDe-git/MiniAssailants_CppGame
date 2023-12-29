@@ -2,11 +2,12 @@
 
 #include "Entity.hpp"
 #include <Camera.hpp>
-#include "UiBar.hpp"
+#include <UiBar.hpp>
 
 #include <Graphics/SpriteAnim.hpp>
 #include <Math/AABB.hpp>
 #include <Math/Transform2D.hpp>
+#include <Audio/Sound.hpp>
 
 #include <glm/vec2.hpp>
 
@@ -121,4 +122,11 @@ private:
 	Graphics::SpriteAnim special1Sprite;
 	Graphics::SpriteAnim special2Sprite;
 	Graphics::SpriteAnim hurtSprite;
+
+	Audio::Sound lightAtk1SFX{};
+	Audio::Sound lightAtk2SFX{};
+	Audio::Sound heavyAtk1SFX{};
+	Audio::Sound heavyAtk2SFX{};
+	Audio::Sound specialAtk1SFX{};
+	Audio::Sound specialAtk2SFX{};
 };
