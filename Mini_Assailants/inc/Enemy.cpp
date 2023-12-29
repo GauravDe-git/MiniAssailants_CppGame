@@ -33,7 +33,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			aabbs[State::None] = { {0,0,0},{0,0,0} };
 			attackDistance = 55.0f;
 			speed = 90.0f;
-			hp = 10;
+			hp = 12;
 			attackDmg = 1;
 			attackFrame = 2;
 
@@ -74,7 +74,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		attackDistance = 50.0f;
 		speed = 90.0f;
 		hp = 30;
-		attackDmg = 2;
+		attackDmg = 1;
 		attackFrame = 6;
 
 		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Golem_Idle.png", 116, 80, 0, 0, BlendMode::AlphaBlend), 7.f };
@@ -92,8 +92,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		aabbs[State::None] = { {0,0,0},{0,0,0} };
 		attackDistance = 40.0f;
 		speed = 90.0f;
-		hp = 20;
-		attackDmg = 0;
+		hp = 15;
+		attackDmg = 1;
 		attackFrame = 3;
 
 		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Harpy_IdleChase.png", 87, 78, 0, 0, BlendMode::AlphaBlend), 7.f };
@@ -112,7 +112,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		attackDistance = 52.0f;
 		speed = 90.0f;
 		hp = 20;
-		attackDmg = 0;
+		attackDmg = 2;
 		attackFrame = 3;
 
 		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Centaur_Idle.png", 89, 59, 0, 0, BlendMode::AlphaBlend), 7.f };
@@ -130,8 +130,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		aabbs[State::None] = { {0,0,0},{0,0,0} };
 		attackDistance = 57.0f;
 		speed = 90.0f;
-		hp = 20;
-		attackDmg = 0;
+		hp = 30;
+		attackDmg = 2;
 		attackFrame = 3;
 
 		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Gargoyle_Idle.png", 125, 115, 0, 0, BlendMode::AlphaBlend), 7.f };
@@ -149,8 +149,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		aabbs[State::None] = { {0,0,0},{0,0,0} };
 		attackDistance = 50.0f;
 		speed = 90.0f;
-		hp = 20;
-		attackDmg = 0;
+		hp = 15;
+		attackDmg = 3;
 		attackFrame = 3;
 
 		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/Cerberus_Idle.png", 96, 61, 0, 0, BlendMode::AlphaBlend), 7.f };
@@ -168,8 +168,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		aabbs[State::None] = { {0,0,0},{0,0,0} };
 		attackDistance = 39.0f;
 		speed = 90.0f;
-		hp = 20;
-		attackDmg = 0;
+		hp = 40;
+		attackDmg = 3;
 		attackFrame = 5;
 
 		idleAnim = SpriteAnim{ ResourceManager::loadSpriteSheet("assets/textures/FlyingEye_IdleChase.png", 108, 117, 0, 0, BlendMode::AlphaBlend), 7.f };

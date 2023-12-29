@@ -71,11 +71,19 @@ private:
 	std::vector<Entity*> entities;
 	std::vector<EnemyInfo> enemyInfos;
 
-	Audio::Sound punch;
-	Audio::Sound swordSlash;
 	std::shared_ptr<Graphics::Image> startScreen{};
 	Graphics::Sprite helpScreen{};
 	Graphics::SpriteAnim coinUiAnim{};
+
+	Audio::Sound punch;
+	Audio::Sound hurtSFX;
+	Audio::Sound coinSFX;
+	Audio::Sound hpSFX;
+	Audio::Sound mpSFX;
+
+	Audio::Sound bgm1;
+	Audio::Sound bgm2;
+	Audio::Sound bgm3;
 
 	std::string backgroundPath;
 	int topEdgeCollision;

@@ -341,20 +341,20 @@ void Player::doCombat()
 		setState(State::LightAtk1);
 		timeSinceLastAtk = 0.f;
 	}
-	else if (Input::getKeyDown(KeyCode::J) && mp>= 1 && !isAttacking()) //need to modify this more
+	else if (Input::getKeyDown(KeyCode::J) && mp>= 1 && !isAttacking()) 
 	{
 		setState(State::HeavyAtk1);
 		timeSinceLastAtk = 0.f;
 	}
-	else if (Input::getKeyDown(KeyCode::Y) && mp >= 5 && !isAttacking())
+	else if (Input::getKeyDown(KeyCode::Y) && mp >= 4 && !isAttacking())
 	{
 		setState(State::Special1);
-		mp -= 5;
+		mp -= 4;
 	}
-	else if (Input::getKeyDown(KeyCode::U) && mp >= 5 && !isAttacking())
+	else if (Input::getKeyDown(KeyCode::U) && mp >= 6 && !isAttacking())
 	{
 		setState(State::Special2);
-		mp -= 5;
+		mp -= 6;
 	}
 }
 

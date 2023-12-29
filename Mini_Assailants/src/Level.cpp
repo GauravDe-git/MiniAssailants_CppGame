@@ -18,13 +18,31 @@ Level::Level(Window& _window)
       camera{ glm::vec2{0,0} }, topEdgeCollision{0},
       tafelSans("assets/fonts/TafelSansPro-Bold.ttf", 20.0f)
 {
+    //Audio
     punch = Audio::Sound("assets/sounds/punch.wav");
-    swordSlash = Audio::Sound("assets/sounds/swordSlash.wav");
+    hurtSFX = Audio::Sound("assets/sounds/hurt.wav");
+	hurtSFX.setVolume(0.5f);
+	coinSFX = Audio::Sound("assets/sounds/coinpickup.wav");
+    coinSFX.setVolume(0.5f);
+    hpSFX = Audio::Sound("assets/sounds/hppickup.wav");
+    hpSFX.setVolume(0.5f);
+    mpSFX = Audio::Sound("assets/sounds/mppickup.wav");
+    mpSFX.setVolume(0.5f);
+
+    bgm1 = Audio::Sound("assets/sounds/stage1.ogg");
+    bgm1.setVolume(0.1f);
+    bgm1.setLooping(true);
+    bgm2 = Audio::Sound("assets/sounds/stage2.ogg");
+    bgm2.setVolume(0.1f);
+    bgm2.setLooping(true);
+    bgm3 = Audio::Sound("assets/sounds/stage3.ogg");
+    bgm3.setVolume(0.1f);
+    bgm3.setLooping(true);
 
     startScreen = ResourceManager::loadImage("assets/textures/startScreen.png");
 	helpScreen = Sprite(ResourceManager::loadImage("assets/textures/helpScreen.png"), BlendMode::AlphaBlend);
-    //Buttons
 
+    //Buttons
 	SpriteSheet playBtnSheet{ "assets/textures/play_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
     playButton = Button{ playBtnSheet};
 
@@ -62,6 +80,10 @@ Level::Level(Window& _window)
 
 void Level::loadLevelAssets()
 {
+    // Stop any music
+    bgm1.stop();
+	bgm2.stop();
+	bgm3.stop();
     // Delete old enemies at start
     for (auto enemy : enemies)
     {
@@ -104,22 +126,38 @@ void Level::setLevel(int levelNumber)
         backgroundPath = "assets/textures/stage1.png";
         topEdgeCollision = 225;
         enemyInfos =  {
-        {Enemy::Type::Goblin, {502,250}},
+        {Enemy::Type::Goblin, {510,250}},
+            {Enemy::Type::Goblin, {900,250}},
+            {Enemy::Type::Goblin, {910,240}},
+            {Enemy::Type::Goblin, {1300,250}},
+            {Enemy::Type::Goblin, {1310,240}},
+            {Enemy::Type::Skeleton, {1320,230}},
+            {Enemy::Type::Golem, {1620,250}},
         };
         break;
     case 2:
         backgroundPath = "assets/textures/stage2.png";
         topEdgeCollision = 237;
         enemyInfos = {
-        {Enemy::Type::Goblin, {502,250}},
-        {Enemy::Type::Golem, {902,250}}, };
+        {Enemy::Type::Harpy, {510,250}},
+            {Enemy::Type::Harpy, {900,250}},
+            {Enemy::Type::Centaur, {910,240}},
+            {Enemy::Type::Centaur, {1310,240}},
+            {Enemy::Type::Skeleton, {1320,230}},
+            {Enemy::Type::Gargoyle, {1620,250}},
+        };
         break;
     case 3:
         backgroundPath = "assets/textures/stage3.png";
         topEdgeCollision = 210;
         enemyInfos = {
-        {Enemy::Type::Cerberus, {502,250}},
-        {Enemy::Type::Golem, {902,250}}, };
+        {Enemy::Type::Cerberus, {510,250}},
+            {Enemy::Type::Cerberus, {900,250}},
+            {Enemy::Type::Cerberus, {910,240}},
+            {Enemy::Type::Golem, {1310,240}},
+            {Enemy::Type::Gargoyle, {1320,230}},
+            {Enemy::Type::FlyingEye, {1620,250}},
+        };
         break;
     // Add more cases for different levels
     }
@@ -200,7 +238,7 @@ void Level::draw(Image& image)
 
         // Ui Coin
         image.drawSprite(coinUiAnim, glm::vec2{SCREEN_WIDTH - 150.f, 1.f});
-        image.drawText(Font::Default, std::to_string(player.getCoins()), glm::vec2{ SCREEN_WIDTH - 130.f, 5.f }, Color::Yellow);
+        image.drawText(Font::Default, std::to_string(player.getCoins()), glm::vec2{ SCREEN_WIDTH - 115.f, 5.f }, Color::Yellow);
         break;
     case GameState::GameOver:
         background.draw(image, camera);
@@ -338,6 +376,11 @@ void Level::beginState(GameState newState)
     switch (newState)
     {
     case GameState::Menu:
+        // Stop any music
+        bgm1.stop();
+        bgm2.stop();
+        bgm3.stop();
+        //Reset coins
         player.setCoins(0);
         break;
     case GameState::Playing:
@@ -410,6 +453,22 @@ void Level::enemySteerAi(Enemy* enemy) const
 
 void Level::doPlaying(float deltaTime)
 {
+    switch (currentLevel)
+    {
+    case 1:
+        if(!bgm1.isPlaying())
+			bgm1.play();
+        break;
+    case 2:
+        if (!bgm2.isPlaying())
+            bgm2.play();
+        break;
+    case 3:
+        if (!bgm3.isPlaying())
+            bgm3.play();
+        break;
+    }
+
     camera.update(deltaTime, player.getPosition(), player.getVelocity(), player.isAttacking());
     player.update(deltaTime);
     coinUiAnim.update(deltaTime);
@@ -457,7 +516,6 @@ void Level::doPlaying(float deltaTime)
         {
             setState(GameState::GameOver);
             std::erase(entities, &player);
-            //enemy->setTarget(nullptr);
         }
         else {
             if (player.isAttacking() && enemy->getState() != Enemy::State::Hurt
@@ -470,7 +528,7 @@ void Level::doPlaying(float deltaTime)
                 && player.getAABB().intersect(enemy->getAttackCircle()))
             {
                 Combat::attack(*enemy, player);
-                swordSlash.play();
+                hurtSFX.play();
             }
         }
     }
@@ -511,12 +569,15 @@ void Level::doPlaying(float deltaTime)
 				switch (item->getType())
 				{
 				case ItemDrop::Type::HP:
+					hpSFX.play();
                     player.setHP(std::min(player.getHP() + item->getValue(), player.getMaxHP()));
 					break;
 				case ItemDrop::Type::MP:
+					mpSFX.play();
 					player.setMP(std::min(player.getMP() + item->getValue(), player.getMaxMP()));
 					break;
 				case ItemDrop::Type::Coin:
+                    coinSFX.play();
 					player.setCoins(player.getCoins() + item->getValue());
                     break;
 				}
