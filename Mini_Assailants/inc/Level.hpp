@@ -1,5 +1,10 @@
 #pragma once
 
+//Description: Responsible for loading and changing levels.. and ... basically most gameplay logic.
+//				(Most of the code here should have been part of game class,
+//              but some wrong technical design choices by me led them to here)
+
+
 #include <Background.hpp>
 #include <Camera.hpp>
 #include <Player.hpp>

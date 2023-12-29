@@ -1,5 +1,8 @@
 #pragma once
 
+//Description: Doing damage calculation between player and enemy in this namespace.
+//			   (I didn't do these directly in player/enemy because I felt that would break the SOLID principle rules)
+
 #include "Player.hpp"
 #include "Enemy.hpp"
 

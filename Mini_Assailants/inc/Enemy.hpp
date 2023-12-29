@@ -1,5 +1,9 @@
 #pragma once
 
+//Description: Single enemy class holding information for all types of enemy in the game.
+//			   (Behaviour of all enemies are same, so didn't find the need to create separate classes for each enemy.)
+
+
 #include <Entity.hpp>
 
 #include <Graphics/SpriteAnim.hpp>

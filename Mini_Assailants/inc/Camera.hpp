@@ -1,4 +1,8 @@
 #pragma once
+
+//Description: Custom Camera class for the horizontal scrolling game.
+//			   Allows to switch between scrolling and arena mode.
+
 #include <glm/vec2.hpp>
 #include <Math/AABB.hpp>
 

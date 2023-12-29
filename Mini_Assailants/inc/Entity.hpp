@@ -1,5 +1,9 @@
 #pragma once
 
+//Description: Entity base class for any entity/gameobjects in the game.
+//			   (Ideally the aabb should have been here too, but had to exclude it due to different way of using aabbs
+//              in the enemy class.)
+
 #include <Camera.hpp>
 
 #include <Graphics/Image.hpp>

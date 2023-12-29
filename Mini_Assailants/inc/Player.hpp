@@ -1,5 +1,7 @@
 #pragma once
 
+//Description: Contains all info related to the player character.
+
 #include "Entity.hpp"
 #include <Camera.hpp>
 #include <UiBar.hpp>

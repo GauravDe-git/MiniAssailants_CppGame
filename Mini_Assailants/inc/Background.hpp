@@ -1,5 +1,8 @@
 #pragma once
 
+//Description: Responsible for loading and drawing a background image
+
+
 #include <Graphics/Image.hpp>
 #include <Camera.hpp>
 

@@ -1,5 +1,7 @@
 #pragma once
 
+//Description: For the item pickups in the game. (Coins and potions)
+
 #include <Entity.hpp>
 
 #include <Graphics/Sprite.hpp>
