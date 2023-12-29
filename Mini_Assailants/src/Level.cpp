@@ -1,7 +1,7 @@
 #include "Level.hpp"
 #include "Constants.hpp"
 #include "Combat.hpp"
-#include "PotionDrop.hpp"
+#include "ItemDrop.hpp"
 
 #include "Graphics/Window.hpp"
 #include <Graphics/ResourceManager.hpp>
@@ -386,8 +386,8 @@ void Level::doPlaying(float deltaTime)
         {
             if (randDist(randGen))
             {
-                const PotionDrop::Type type = randDist(randGen) ? PotionDrop::Type::HP : PotionDrop::Type::MP;
-                PotionDrop* potion = new PotionDrop{ enemy->getPosition(), type };
+                const ItemDrop::Type type = randDist(randGen) ? ItemDrop::Type::HP : ItemDrop::Type::MP;
+                ItemDrop* potion = new ItemDrop{ enemy->getPosition(), type };
                 entities.push_back(potion);
             }
             enemy->setState(Enemy::State::None);
@@ -443,7 +443,7 @@ void Level::doPlaying(float deltaTime)
     for (const auto entity : entities)
     {
 		// Check if the entity is a potion
-		if (PotionDrop* potion = dynamic_cast<PotionDrop*>(entity))
+		if (ItemDrop* potion = dynamic_cast<ItemDrop*>(entity))
 		{
             potion->update(deltaTime);
 
@@ -451,10 +451,10 @@ void Level::doPlaying(float deltaTime)
 			{
 				switch (potion->getType())
 				{
-				case PotionDrop::Type::HP:
+				case ItemDrop::Type::HP:
                     player.setHP(std::min(player.getHP() + potion->getValue(), player.getMaxHP()));
 					break;
-				case PotionDrop::Type::MP:
+				case ItemDrop::Type::MP:
 					player.setMP(std::min(player.getMP() + potion->getValue(), player.getMaxMP()));
 					break;
 				}

@@ -5,14 +5,14 @@
 #include <Graphics/Sprite.hpp>
 #include <Graphics/Timer.hpp>
 
-class PotionDrop : public Entity
+class ItemDrop : public Entity
 {
 public:
 	enum class Type {HP, MP};
 
-	PotionDrop() = default;
+	ItemDrop() = default;
 
-	PotionDrop(const glm::vec2& pos, Type _type);
+	ItemDrop(const glm::vec2& pos, Type _type);
 
 	void draw(Graphics::Image& image, const Camera& camera) override;
 	void update(float deltaTime) override;

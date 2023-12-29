@@ -39,7 +39,7 @@
     <ClCompile Include="src\UiBar.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\PotionDrop.cpp">
+    <ClCompile Include="src\ItemDrop.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\Game.cpp">
@@ -74,7 +74,7 @@
     <ClInclude Include="inc\UiBar.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\PotionDrop.hpp">
+    <ClInclude Include="inc\ItemDrop.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="inc\Game.hpp">

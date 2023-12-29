@@ -1,8 +1,8 @@
-#include "PotionDrop.hpp"
+#include "ItemDrop.hpp"
 #include "Camera.hpp"
 #include "Graphics/ResourceManager.hpp"
 
-PotionDrop::PotionDrop(const glm::vec2& pos, Type _type)
+ItemDrop::ItemDrop(const glm::vec2& pos, Type _type)
 	:Entity{pos}, type{_type},
 	aabb{{0,-12,0},{19,10,0}}
 {
@@ -22,7 +22,7 @@ PotionDrop::PotionDrop(const glm::vec2& pos, Type _type)
 	pickupDelay.reset(); //start the timer when a potion is created
 }
 
-void PotionDrop::draw(Graphics::Image& image, const Camera& camera)
+void ItemDrop::draw(Graphics::Image& image, const Camera& camera)
 {
 	image.drawSprite(sprite, transform.getPosition() + camera.getViewPosition() + glm::vec2{0,-15});
 
@@ -31,12 +31,12 @@ void PotionDrop::draw(Graphics::Image& image, const Camera& camera)
 	#endif	
 }
 
-void PotionDrop::update(float deltaTime)
+void ItemDrop::update(float deltaTime)
 {
 	pickupDelay.tick();
 }
 
-bool PotionDrop::canPickUp() const
+bool ItemDrop::canPickUp() const
 {
 	// Adding half a second delay before the potion can be picked up.
 	return pickupDelay.totalSeconds() >= 0.5f; 
