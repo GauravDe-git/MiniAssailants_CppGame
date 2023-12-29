@@ -31,8 +31,11 @@ Level::Level(Window& _window)
     SpriteSheet quitBtnSheet{ "assets/textures/quit_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
     quitButton = Button{ quitBtnSheet };
 
-    SpriteSheet changelvlBtnSheet{ "assets/textures/changelvl_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
+    SpriteSheet changelvlBtnSheet{ "assets/textures/changelvl_btn.png",136,52,0,0,BlendMode::AlphaBlend };
     changelvlButton = Button{ changelvlBtnSheet };
+
+    SpriteSheet helpBtnSheet{ "assets/textures/help_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
+    helpButton = Button{ helpBtnSheet };
 
     SpriteSheet lvl1BtnSheet{ "assets/textures/lvl1_btn_sheet.png",46,52,0,0,BlendMode::AlphaBlend };
     SpriteSheet lvl2BtnSheet{ "assets/textures/lvl2_btn_sheet.png",46,52,0,0,BlendMode::AlphaBlend };
@@ -161,6 +164,7 @@ void Level::draw(Image& image)
         playButton.draw(image);
 		quitButton.draw(image);
 		changelvlButton.draw(image);
+        helpButton.draw(image);
         for (auto& lvlbtn : levelButtons)
         {
             lvlbtn.draw(image);
@@ -241,6 +245,7 @@ void Level::processEvents(const Event& e)
         playButton.processEvents(event);
 		quitButton.processEvents(event);
 		changelvlButton.processEvents(event);
+		helpButton.processEvents(event);
         for (auto& lvlbtn : levelButtons)
         {
             lvlbtn.processEvents(event);
@@ -293,12 +298,13 @@ void Level::onResized(ResizeEventArgs& args)
 
     // Update any UI elements or positions that depend on the game rectangle.
     
-    playButton.setTransform(Transform2D{ { 100, 100 },{0.8f,0.8f} });
-    quitButton.setTransform(Transform2D{ { 100, 0 },{0.8f,0.8f} });
-	changelvlButton.setTransform(Transform2D{ { 100, 150 },{0.8f,0.8f} });
+    playButton.setTransform(Transform2D{ { 100, 170 },{0.8f,0.8f} });
+    helpButton.setTransform(Transform2D{ { 230, 170 },{0.8f,0.8f} });
+    quitButton.setTransform(Transform2D{ { 355, 170 },{0.8f,0.8f} });
+	changelvlButton.setTransform(Transform2D{ { 100, 215 },{0.8f,0.8f} });
     for (int i = 0; i < 3; ++i)
     {
-        levelButtons[i].setTransform(Transform2D{ { 100 + i * 30, 200},{0.8f,0.8f} });
+        levelButtons[i].setTransform(Transform2D{ { 230 + i * 40, 215},{0.8f,0.8f} });
     }
 }
 

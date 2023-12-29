@@ -1,4 +1,5 @@
 #include "Enemy.hpp"
+#include "Enemy.hpp"
 
 #include <Graphics/ResourceManager.hpp>
 
@@ -28,6 +29,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		case Type::Goblin:
 			aabbs[State::Idle] = { {65,30,0},{80,70,0} };
 			aabbs[State::Attack] = { {56,33,0},{80,70,0} };
+			aabbs[State::Dead] = { {0,0,0},{0,0,0} };
+			aabbs[State::None] = { {0,0,0},{0,0,0} };
 			attackDistance = 55.0f;
 			speed = 90.0f;
 			hp = 10;
@@ -45,6 +48,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 			break;
 		case Type::Skeleton:
 			aabbs[State::Idle] = { {41,46,0},{64,102,0} };
+			aabbs[State::Dead] = { {0,0,0},{0,0,0} };
+			aabbs[State::None] = { {0,0,0},{0,0,0} };
 			attackDistance = 55.0f;
 			speed = 90.0f;
 			hp = 20;
@@ -64,6 +69,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		aabbs[State::Idle] = { { 38,18,0 },{ 78,79,0 } };
 		aabbs[State::Chase] = { { 44,16,0 },{ 81,79,0 } };
 		aabbs[State::Attack] = { { 55,17,0 },{ 96,75,0 } };
+		aabbs[State::Dead] = { {0,0,0},{0,0,0} };
+		aabbs[State::None] = { {0,0,0},{0,0,0} };
 		attackDistance = 50.0f;
 		speed = 90.0f;
 		hp = 30;
@@ -81,6 +88,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		break;
 	case Type::Harpy:
 		aabbs[State::Idle] = { { 17,16,0 },{ 41,57,0 } };
+		aabbs[State::Dead] = { {0,0,0},{0,0,0} };
+		aabbs[State::None] = { {0,0,0},{0,0,0} };
 		attackDistance = 40.0f;
 		speed = 90.0f;
 		hp = 20;
@@ -98,6 +107,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		break;
 	case Type::Centaur:
 		aabbs[State::Idle] = { { 39,7,0 },{ 71,57,0 } };
+		aabbs[State::Dead] = { {0,0,0},{0,0,0} };
+		aabbs[State::None] = { {0,0,0},{0,0,0} };
 		attackDistance = 52.0f;
 		speed = 90.0f;
 		hp = 20;
@@ -115,6 +126,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		break;
 	case Type::Gargoyle:
 		aabbs[State::Idle] = { { 35,55,0 },{ 67,104,0 } };
+		aabbs[State::Dead] = { {0,0,0},{0,0,0} };
+		aabbs[State::None] = { {0,0,0},{0,0,0} };
 		attackDistance = 57.0f;
 		speed = 90.0f;
 		hp = 20;
@@ -132,6 +145,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		break;
 	case Type::Cerberus:
 		aabbs[State::Idle] = { { 18,19,0 },{ 63,57,0 } };
+		aabbs[State::Dead] = { {0,0,0},{0,0,0} };
+		aabbs[State::None] = { {0,0,0},{0,0,0} };
 		attackDistance = 50.0f;
 		speed = 90.0f;
 		hp = 20;
@@ -149,6 +164,8 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 		break;
 	case Type::FlyingEye:
 		aabbs[State::Idle] = { { 32,39,0 },{ 59,84,0 } };
+		aabbs[State::Dead] = { {0,0,0},{0,0,0} };
+		aabbs[State::None] = { {0,0,0},{0,0,0} };
 		attackDistance = 39.0f;
 		speed = 90.0f;
 		hp = 20;

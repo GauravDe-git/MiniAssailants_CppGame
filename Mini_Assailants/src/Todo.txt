@@ -6,13 +6,11 @@ Must:
  Different Sound Effects for each Player attack (Light, Heavy, Special 1, Special 2).
  Different Music for Menu,Levels 1,2,3, and sound for win,GameOver.
 
- Add a coin pickup option as well,with sfx, when enemy die(just like hp/mp a random chance)
- and a coin ui, showing coins collected
+ Add a coin pickup sfx
  Player Face Portrait
 
  Maybe-Enemy shouldnt turn in direction of player in middle of attack
       or when dying?
-Disable the enemy's AABB when they die
 
 QOL:
  Floating damage numbers.

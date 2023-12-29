@@ -93,6 +93,7 @@ private:
 	Button playButton{};
 	Button quitButton{};
 	Button changelvlButton{};
+	Button helpButton{};
 	std::vector<Button> levelButtons{};
 
 	int currentLevel = 1;
