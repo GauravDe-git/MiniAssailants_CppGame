@@ -32,12 +32,12 @@ public:
 		Idle,
 		Chase,
 		Attack,
+		Reposition,
 		Hurt,
 		Dead,
 		JustDefeated
 	};
 
-	Enemy();
 	explicit Enemy(const glm::vec2& pos, Type type);
 
 	virtual void update(float deltaTime) override;
@@ -72,6 +72,7 @@ private:
 	void doIdle(float deltaTime);
 	void doChase(float deltaTime);
 	void doAttack(float deltaTime);
+	void doReposition(float deltaTime);
 	void doHurt(float deltaTime);
 	void doDead(float deltaTime);
 

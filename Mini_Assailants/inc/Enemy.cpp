@@ -1,5 +1,4 @@
 #include "Enemy.hpp"
-#include "Enemy.hpp"
 
 #include <Graphics/ResourceManager.hpp>
 
@@ -17,8 +16,6 @@ static std::map<Enemy::State, std::string> g_stateNames =
 	{Enemy::State::Attack, "Attack"},
 	{Enemy::State::Hurt, "Hurt"},
 };
-
-Enemy::Enemy() = default;
 
 Enemy::Enemy(const glm::vec2& pos,Type _type)
 	:Entity{ pos }
@@ -200,6 +197,9 @@ void Enemy::update(float deltaTime)
 	case State::Attack:
 		doAttack(deltaTime);
 		break;
+	case State::Reposition:
+		doReposition(deltaTime);
+		break;
 	case State::Hurt:
 		doHurt(deltaTime);
 		break;
@@ -224,6 +224,9 @@ void Enemy::draw(Image& image, const Camera& camera)
 		break;
 	case State::Attack:
 		image.drawSprite(attackAnim, tempTransform);
+		break;
+	case State::Reposition:
+		image.drawSprite(chaseAnim, tempTransform);
 		break;
 	case State::Hurt:
 		image.drawSprite(hurtAnim, tempTransform);
@@ -330,7 +333,7 @@ void Enemy::endState(State oldState)
 
 void Enemy::doMovement(float deltaTime)
 {
-	auto initialPos = transform.getPosition();
+	glm::vec2 initialPos = transform.getPosition();
 	const auto targetPos = target ? target->getPosition() : initialPos;
 
 	auto direction = targetPos - initialPos;
@@ -387,11 +390,21 @@ void Enemy::doChase(float deltaTime)
 
 void Enemy::doAttack(float deltaTime)
 {
-	if (target && glm::distance(transform.getPosition(), target->getPosition()) > attackDistance)
+	if (!target)
 	{
-		setState(State::Chase);
+		setState(State::Idle);
 	}
-	else
+	glm::vec2 targetPos = target ? target->getPosition() : transform.getPosition();
+	float xDifference = std::abs(transform.getPosition().x - targetPos.x);
+	float yDifference = std::abs(transform.getPosition().y - targetPos.y);
+
+	// If the target is too close in the x direction and y direction, move away
+	if (target && xDifference < 5.f && yDifference < attackDistance)
+	{
+		setState(State::Reposition);
+	}
+	// If the target is at the right distance, attack
+	else if (target && glm::distance(transform.getPosition(), targetPos) < attackDistance)
 	{
 		attackAnim.update(deltaTime);
 		if (attackAnim.getCurrentFrame() >= attackFrame)
@@ -402,10 +415,41 @@ void Enemy::doAttack(float deltaTime)
 		{
 			attackAnim.reset();
 			if (!target)
-			setState(State::Idle);
+				setState(State::Idle);
 		}
 	}
+	// If the target is too far, chase
+	else if (target && glm::distance(transform.getPosition(), targetPos) > attackDistance)
+	{
+		setState(State::Chase);
+	}
 }
+
+void Enemy::doReposition(float deltaTime)
+{
+	if (!target)
+	{
+		setState(State::Idle);
+	}
+	chaseAnim.update(deltaTime);
+	glm::vec2 targetPos = target ? target->getPosition() : transform.getPosition();
+	float xDifference = std::abs(transform.getPosition().x - targetPos.x);
+	float yDifference = std::abs(transform.getPosition().y - targetPos.y);
+
+	// Calculate the reposition point
+	glm::vec2 repositionPoint = targetPos + glm::vec2((targetPos.x < transform.getPosition().x) ? attackDistance : -attackDistance, 0);
+
+	// Move towards the reposition point
+	glm::vec2 direction = glm::normalize(repositionPoint - transform.getPosition());
+	transform.translate(direction * speed * deltaTime);
+
+	// If the target is at the right distance, go back to attacking
+	if (glm::distance(transform.getPosition(), targetPos) >= attackDistance)
+	{
+		setState(State::Attack);
+	}
+}
+
 
 void Enemy::doHurt(float deltaTime)
 {
@@ -434,11 +478,14 @@ void Enemy::doDead(float deltaTime)
 
 void Enemy::setFacingDirection(const glm::vec2& direction)
 {
-	if (direction.x < 0) {
-		transform.setScale(glm::vec2(1.0f, 1.0f));
-	}
-	else if (direction.x > 0) {
-		transform.setScale(glm::vec2(-1.0f, 1.0f));
+	if (getState() != State::Dead)
+	{
+		if (direction.x < 0) {
+			transform.setScale(glm::vec2(1.0f, 1.0f));
+		}
+		else if (direction.x > 0) {
+			transform.setScale(glm::vec2(-1.0f, 1.0f));
+		}
 	}
 }
 

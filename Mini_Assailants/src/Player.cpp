@@ -302,7 +302,7 @@ void Player::endState(State oldState)
 
 void Player::doMovement(float deltaTime)
 {
-	const auto initialPos = transform.getPosition();
+	const glm::vec2 initialPos = transform.getPosition();
 	auto position = initialPos;
 
 	position.x += Input::getAxis("Horizontal") * speed * deltaTime;
