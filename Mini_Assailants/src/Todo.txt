@@ -2,6 +2,19 @@
  Maybe-Enemy shouldnt turn in direction of player in middle of attack
       or when dying?
 
+ - Change level looks like a button. (x)
+ - Buttons sprites look bad, have artifacts compression. (x)
+ - defender complaining about .exe .  ???? - added icon (x)
+ - sfx like the coin/hp/mp too loud/harsh. (x)
+
+ -AI, rathr than making it flinch back every time its hit, maybe have some value per monster type that makes it resistant to flinching, 
+ and only have it flinch when its hit enough (and would reset after not being hit for N amount of time)
+that would give it some resistance to the spam attack problem
+being able to block might also be a thing
+would introduce light+heavy hit mechanics
+
+- One way to improve the ai is by adding collision. Just push the player out of the enemy when inside.
+
 QOL:
  Player Face Portrait
  Floating damage numbers.

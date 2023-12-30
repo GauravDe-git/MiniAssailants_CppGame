@@ -108,7 +108,6 @@ private:
 	//buttons
 	Button playButton{};
 	Button quitButton{};
-	Button changelvlButton{};
 	Button helpButton{};
 	std::vector<Button> levelButtons{};
 	Button backButton{};

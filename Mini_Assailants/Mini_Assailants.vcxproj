@@ -34,9 +34,16 @@
     <ClInclude Include="inc\Player.hpp" />
     <ClInclude Include="inc\ItemDrop.hpp" />
     <ClInclude Include="inc\UiBar.hpp" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="src\Todo.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Mini_Assailants.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\assets\game.ico" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

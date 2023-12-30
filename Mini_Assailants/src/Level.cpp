@@ -23,11 +23,11 @@ Level::Level(Window& _window)
     hurtSFX = Audio::Sound("assets/sounds/hurt.wav");
 	hurtSFX.setVolume(0.5f);
 	coinSFX = Audio::Sound("assets/sounds/coinpickup.wav");
-    coinSFX.setVolume(0.5f);
+    coinSFX.setVolume(0.1f);
     hpSFX = Audio::Sound("assets/sounds/hppickup.wav");
-    hpSFX.setVolume(0.5f);
+    hpSFX.setVolume(0.1f);
     mpSFX = Audio::Sound("assets/sounds/mppickup.wav");
-    mpSFX.setVolume(0.5f);
+    mpSFX.setVolume(0.1f);
 
     bgm1 = Audio::Sound("assets/sounds/stage1.ogg");
     bgm1.setVolume(0.1f);
@@ -43,24 +43,21 @@ Level::Level(Window& _window)
 	helpScreen = Sprite(ResourceManager::loadImage("assets/textures/helpScreen.png"), BlendMode::AlphaBlend);
 
     //Buttons
-	SpriteSheet playBtnSheet{ "assets/textures/play_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
+	SpriteSheet playBtnSheet{ "assets/textures/play_btn_sheet.png",95,36,0,0,BlendMode::AlphaBlend };
     playButton = Button{ playBtnSheet};
 
-    SpriteSheet quitBtnSheet{ "assets/textures/quit_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
+    SpriteSheet quitBtnSheet{ "assets/textures/quit_btn_sheet.png",95,36,0,0,BlendMode::AlphaBlend };
     quitButton = Button{ quitBtnSheet };
 
-    SpriteSheet changelvlBtnSheet{ "assets/textures/changelvl_btn.png",136,52,0,0,BlendMode::AlphaBlend };
-    changelvlButton = Button{ changelvlBtnSheet };
-
-    SpriteSheet helpBtnSheet{ "assets/textures/help_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
+    SpriteSheet helpBtnSheet{ "assets/textures/help_btn_sheet.png",95,36,0,0,BlendMode::AlphaBlend };
     helpButton = Button{ helpBtnSheet };
 
     SpriteSheet backBtnSheet{ "assets/textures/back_btn_sheet.png",136,52,0,0,BlendMode::AlphaBlend };
     backButton = Button{ backBtnSheet };
 
-    SpriteSheet lvl1BtnSheet{ "assets/textures/lvl1_btn_sheet.png",46,52,0,0,BlendMode::AlphaBlend };
-    SpriteSheet lvl2BtnSheet{ "assets/textures/lvl2_btn_sheet.png",46,52,0,0,BlendMode::AlphaBlend };
-    SpriteSheet lvl3BtnSheet{ "assets/textures/lvl3_btn_sheet.png",46,52,0,0,BlendMode::AlphaBlend };
+    SpriteSheet lvl1BtnSheet{ "assets/textures/lvl1_btn_sheet.png",32,36,0,0,BlendMode::AlphaBlend };
+    SpriteSheet lvl2BtnSheet{ "assets/textures/lvl2_btn_sheet.png",32,36,0,0,BlendMode::AlphaBlend };
+    SpriteSheet lvl3BtnSheet{ "assets/textures/lvl3_btn_sheet.png",32,36,0,0,BlendMode::AlphaBlend };
 	std::vector lvlBtnSheets{ lvl1BtnSheet, lvl2BtnSheet, lvl3BtnSheet }; /*Deduce type using CTAD C++17 */
 
     for (int i = 0; i < 3; ++i)
@@ -207,12 +204,13 @@ void Level::draw(Image& image)
         image.copy(*startScreen, 0, 0);
         playButton.draw(image);
 		quitButton.draw(image);
-		changelvlButton.draw(image);
         helpButton.draw(image);
         for (auto& lvlbtn : levelButtons)
         {
             lvlbtn.draw(image);
         }
+        image.drawText(tafelSans, "LEVEL SELECT:", glm::vec2{ 103,238 }, Color::Black);
+        image.drawText(tafelSans, "LEVEL SELECT:", glm::vec2{ 103,235 }, {230,157,107});
         break;
     case GameState::HelpScreen:
         image.drawSprite(helpScreen,{0,0});
@@ -305,7 +303,6 @@ void Level::processEvents(const Event& e)
     {
         playButton.processEvents(event);
         quitButton.processEvents(event);
-        changelvlButton.processEvents(event);
         helpButton.processEvents(event);
         for (auto& lvlbtn : levelButtons)
         {
@@ -361,13 +358,12 @@ void Level::onResized(ResizeEventArgs& args)
 
     // Update any UI elements or positions that depend on the game rectangle.
     
-    playButton.setTransform(Transform2D{ { 100, 170 },{0.8f,0.8f} });
-    helpButton.setTransform(Transform2D{ { 230, 170 },{0.8f,0.8f} });
-    quitButton.setTransform(Transform2D{ { 355, 170 },{0.8f,0.8f} });
-	changelvlButton.setTransform(Transform2D{ { 100, 215 },{0.8f,0.8f} });
+    playButton.setTransform(Transform2D{ { 120, 170 }/*,{0.8f,0.8f}*/ });
+    helpButton.setTransform(Transform2D{ { 220, 170 }/*,{0.8f,0.8f}*/ });
+    quitButton.setTransform(Transform2D{ { 320, 170 }/*,{0.8f,0.8f}*/ });
     for (int i = 0; i < 3; ++i)
     {
-        levelButtons[i].setTransform(Transform2D{ { 230 + i * 40, 215},{0.8f,0.8f} });
+        levelButtons[i].setTransform(Transform2D{ { 230 + i * 35, 215}/*,{0.8f,0.8f}*/ });
     }
     backButton.setTransform(Transform2D{ { 285, 1 },{0.7f,0.7f} });
 }
