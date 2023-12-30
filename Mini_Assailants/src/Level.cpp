@@ -233,6 +233,7 @@ void Level::draw(Image& image)
         //GO text
         if (goTextTimer > 0.0f)
         {
+            image.drawText(tafelSans, "GO->", glm::vec2{ SCREEN_WIDTH - 48, SCREEN_HEIGHT / 2 + 2 }, Color::Black);
             image.drawText(tafelSans, "GO->", glm::vec2{ SCREEN_WIDTH - 50, SCREEN_HEIGHT / 2 }, Color::Yellow);
         }
 
@@ -557,34 +558,42 @@ void Level::doPlaying(float deltaTime)
     }
 
     // Picking up the Items dropped by Enemies
-    for (const auto entity : entities)
-    {
-		// Check if the entity is an item
-		if (ItemDrop* item = dynamic_cast<ItemDrop*>(entity))
-		{
+  
+    // Adding the items to remove in a vector, and delete them later.
+    // Deleting them within the iteration loop led to undefined behaviour.
+    std::vector<ItemDrop*> itemsToRemove; 
+
+    for (auto& entity : entities) {
+        if (ItemDrop* item = dynamic_cast<ItemDrop*>(entity)) {
             item->update(deltaTime);
 
-			if (item->canPickUp() && player.getAABB().intersect(item->getAABB()))
-			{
-				switch (item->getType())
-				{
-				case ItemDrop::Type::HP:
-					hpSFX.play();
+            if (item->canPickUp() && player.getAABB().intersect(item->getAABB())) {
+                switch (item->getType())
+                {
+                case ItemDrop::Type::HP:
+                    hpSFX.play();
                     player.setHP(std::min(player.getHP() + item->getValue(), player.getMaxHP()));
-					break;
-				case ItemDrop::Type::MP:
-					mpSFX.play();
-					player.setMP(std::min(player.getMP() + item->getValue(), player.getMaxMP()));
-					break;
-				case ItemDrop::Type::Coin:
-                    coinSFX.play();
-					player.setCoins(player.getCoins() + item->getValue());
                     break;
-				}
-                std::erase(entities, item);
-                delete item;
-			}
-		}
+                case ItemDrop::Type::MP:
+                    mpSFX.play();
+                    player.setMP(std::min(player.getMP() + item->getValue(), player.getMaxMP()));
+                    break;
+                case ItemDrop::Type::Coin:
+                    coinSFX.play();
+                    player.setCoins(player.getCoins() + item->getValue());
+                    break;
+                }
+                // Add to the list of items to remove
+                itemsToRemove.push_back(item);
+            }
+        }
+    }
+
+    // Remove items after iterating
+    for (ItemDrop* item : itemsToRemove) {
+        // Erase and delete the item
+        std::erase(entities, item);
+        delete item;
     }
 
     // Removing Enemies when they are in none state.
