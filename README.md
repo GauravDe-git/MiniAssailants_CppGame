@@ -1,33 +1,62 @@
-# C++ for Games
+# Mini Assailants
 
-This is a template project for the **C++ for Games** course. It contains a simple 2D game framework.
+This is my intake assignment for the BUAS intake 2024 - Programming. Initially conceived as a project for the C++ for Games Microcredentials Course at BUAS, the project's scope posed a considerable challenge for me as a beginner in C++. Regrettably, I fell short of my expectations by the end of the microcredentials course, only managing to create a rudimentary game in about a month and a half. The initial outcome featured a basic player moving forward and defeating a single enemy with a punch. Although I was far from proud of my initial work, I persevered and continued refining the project. After investing an additional month and a half, I was finally able to bring the game to a somewhat presentable state, aligning with my initial game design vision. Throughout this journey, I received invaluable assistance from various individuals, particularly Jeremiah and Beret during the microcredentials course. Subsequently, I garnered further feedback in the 3dgep server CPP Fast Track Discord events. Without their support, creating the game would have been an insurmountable task for me.
 
-## Features
+## Game Overview
+Mini Assailant's is a 2D Beat'em Up fighting game that draws inspiration from childhood favorites like Hero Fighter and Little Fighter 2, both still beloved indie games with a strong fanbase. In this game, players command a formidable fighter with special abilities such as a fire punch and uppercut. Engaging in intense button-mashing, players confront incoming enemies. Special attacks consume 'Mana Points' (MP), and defeating enemies offers a chance to obtain health (hp) or mana (mp) potions, along with collectible coins. The game spans three levels: the first set in a cyberpunk city with goblins and skeletons, leading to a powerful golem boss; the second in an abandoned industry site featuring harpies and centaurs, concluding with a formidable gargoyle boss; and the final level in an experimental lab where agile cerberus creatures culminate in a showdown with the ultimate boss, the Flying Eye. Players can select their desired level from the menu.
 
-* 2D software rasterizer in the [Image](graphics/inc/Graphics/Image.hpp) class.
-* Support for gamepads (currently using [XInput](https://learn.microsoft.com/en-us/windows/win32/xinput/getting-started-with-xinput) on Windows)
-* Spatialized [audio](audio) library with support for wav, mp3, ogg, flac audio file sources.
-* Create your own waveforms for your game using the [Waveform](audio/include/Audio/Waveform.hpp) class.
-* A few math helpers in the [math](math) library ([AABB](math/inc/Math/AABB.hpp), [Camera2D](math/inc/Math/Camera2D.hpp), [Transform2D](math/inc/Math/Transform2D.hpp), etc...)
+## Controls
 
-## Quick Start
+- Movement: WASD/Arrow keys
+- Light Attack: H (double tap for light attack 2)
+- Heavy Attack: J (double tap for heavy attack 2)
+- Special Attack 1: Y
+- Special Attack 2: U
+- Pause Game: P
+- Toggle VSync: V
+- Toggle Fullscreen/Windowed: F11
+- Quit Game: Escape
 
-Make sure you have the latest version of Visual Studio 2022 installed. Make sure you have the "Desktop Development with C++" workload checked in the Visual Studio Installer.
+## Built With
 
-To get started with your own project, click the big green "Use this template" button in GitHub to create a copy of this repo in your own GitHub workspace.
+The game is built using the C++ For Games Framework created by Jeremiah Van Oosten (@JPVanOosten). 
 
-> **Optional**: The [game-vsix/bin](game-vsix/bin) folder contains a Visual Studio extension installer that adds a new C++ project template to the `Add New Project` dialog box in Visual Studio. This extension contains a project template for creating new games that use the **C++ for Games** game framework. Run the `.vsix` file in that folder to install the extension.
+The framework includes:
 
-Open [CppForGames.sln](CppForGames.sln) in Visual Studio 2022 and run the `sample` project. You should see a bouncing ball on the screen. You should also hear a sound when the ball bounces off the edges of the screen:
+- 2D software rasterizer in the Image class.
+- Support for gamepads (currently using XInput on Windows)
+- Spatialized audio library with support for wav, mp3, ogg, flac audio file sources.
+- Waveform class for creating custom waveforms.
+- Math helpers in the math library (AABB, Camera2D, Transform2D, etc...)
 
-![Sample game](docs/images/sample.png)
+Check out the framework [here](https://github.com/jpvanoosten/SoftwareRasterizer).
 
-You can use the `sample` project as a basis for your own games:
+## Credits
 
-1. Copy the [sample](sample) folder and rename new folder to the name of your game.
-2. Rename `sample.vcxproj`, `sample.vcxproj.filters`, and `sample.vcxproj.user` to the name of your game. For example, if the name of your game is MyGame, then rename these files to `MyGame.vcxproj`, `MyGame.vcxproj.filters`, and `MyGame.vcxproj.user` respectively.
-3. Add the new project to the existing `CppForGames` solution in Visual Studio.
-4. Rename the new project in Visual Studio to the name of your game.
+### Sprites
 
-> **Optional**: If you installed the Visual Studio extension in the [game-vsix/bin](game-vsix/bin) folder, then you can use the "Add new project" command to create a new game project that uses the C++ for Games framework.
+- **Player Sprites:** [Sagak Art Pururu](https://sagak-art-pururu.itch.io/)
+- **Enemy Sprites:** [MattzArt](https://xzany.itch.io/)
+- **Background Sprites:** [Ansimuz](https://ansimuz.itch.io/)
+- **Potion Sprites:** [ProjectTea](https://projecttea.itch.io/potion-icons-volume-1)
+- **Coin Sprites:** [Totus Lotus](https://totuslotus.itch.io/pixel-coins)
+- **Button Sprites:** [Hio Respace](https://hiorespace.itch.io/buttonsanimationpack)
 
+### Sounds
+
+- [Punch Sound](https://mixkit.co/free-sound-effects/punch/)
+- [Sword Sound](https://mixkit.co/free-sound-effects/sword/)
+- [RPG Sound Pack](https://opengameart.org/content/rpg-sound-pack)
+- [Coin Sound](https://pixabay.com/sound-effects/search/game-coin/)
+- [Hits/Punches Sound](https://opengameart.org/content/37-hitspunches)
+
+### Fonts
+
+- [Tafel Sans Pro Bold](https://en.bestfonts.pro/font/tafel-sans-pro)
+- [Symtext Font](https://www.dafont.com/symtext.font)
+
+### Exe Icon
+
+- [Portable Icon](https://www.freepik.com/icon/portable_1707147#fromView=keyword&term=2d+Game&page=1&position=36&uuid=f16f4fda-a231-41fe-981d-a54735e83ee3)
+
+Feel free to explore the game, contribute, or provide feedback!
