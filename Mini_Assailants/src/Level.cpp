@@ -120,6 +120,7 @@ void Level::setLevel(int levelNumber)
     switch (levelNumber)
     {
     case 1:
+        bgm1.replay();
         backgroundPath = "assets/textures/stage1.png";
         topEdgeCollision = 225;
         enemyInfos =  {
@@ -133,6 +134,7 @@ void Level::setLevel(int levelNumber)
         };
         break;
     case 2:
+		bgm2.replay();
         backgroundPath = "assets/textures/stage2.png";
         topEdgeCollision = 237;
         enemyInfos = {
@@ -145,6 +147,7 @@ void Level::setLevel(int levelNumber)
         };
         break;
     case 3:
+		bgm3.replay();
         backgroundPath = "assets/textures/stage3.png";
         topEdgeCollision = 210;
         enemyInfos = {
@@ -401,8 +404,6 @@ void Level::beginState(GameState newState, GameState oldState)
         bgm1.stop();
         bgm2.stop();
         bgm3.stop();
-        //Reset coins
-        player.setCoins(0);
         break;
     case GameState::Playing:
         if (!isFirstLoad && oldState != GameState::Paused)
@@ -431,6 +432,8 @@ void Level::endState(GameState oldState,GameState newState)
         {
             entities.clear();
         }
+        break;
+    case GameState::Paused:
         break;
     case GameState::GameOver:
 		enemies.clear();
@@ -651,8 +654,17 @@ void Level::doPaused(float deltaTime)
 		setState(GameState::Playing);
 
     if (Input::getKeyDown(KeyCode::Q))
+    {
+        // Reset all game state variables
+        player.setPosition({ SCREEN_WIDTH / 2 - 200,(SCREEN_HEIGHT - 10) });
+		camera.setPosition(glm::vec2{0,0});
+        player.setHP(player.getMaxHP());
+        player.setMP(player.getMaxMP());
+        enemies.clear();
+        entities.clear();
+        loadLevelAssets();
         setState(GameState::Menu);
-
+    }
 }
 
 void Level::doGameOver()
