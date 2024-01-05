@@ -148,7 +148,7 @@ void Level::setLevel(int levelNumber)
         backgroundPath = "assets/textures/stage3.png";
         topEdgeCollision = 210;
         enemyInfos = {
-        {Enemy::Type::Cerberus, {510,250}},
+        {Enemy::Type::Cerberus, {530,250}},
             {Enemy::Type::Cerberus, {900,250}},
             {Enemy::Type::Cerberus, {910,240}},
             {Enemy::Type::Golem, {1310,240}},
@@ -185,6 +185,9 @@ void Level::update(float deltaTime)
         updateEnemies(deltaTime);
         doPlaying(deltaTime);
         break;
+    case GameState::Paused:
+        doPaused(deltaTime);
+        break;
     case GameState::GameOver:
         updateEnemies(deltaTime);
         doGameOver();
@@ -219,11 +222,11 @@ void Level::draw(Image& image)
     case GameState::Playing:
         background.draw(image, camera);
 
-        //sorting order of drawing player/enemy based on their Y position
-        // Solution using std::sort and lambda fn. suggested by Jeremiah
+        // Sorting order of drawing player/enemy based on their Y position
+        // Solution using std::sort and lambda fn. suggested by Jeremiah van Oosten (@jpvanoosten)
         //** ranges algorithm suggested by resharper over the normal std::sort
         std::ranges::sort(entities, [](const Entity* a, const Entity* b) {return a->getPosition().y < b->getPosition().y; });
-        for (const auto entity : entities)
+        for (auto entity : entities)
         {
             entity->draw(image, camera);
         }
@@ -238,6 +241,24 @@ void Level::draw(Image& image)
         // Ui Coin
         image.drawSprite(coinUiAnim, glm::vec2{SCREEN_WIDTH - 150.f, 1.f});
         image.drawText(Font::Default, std::to_string(player.getCoins()), glm::vec2{ SCREEN_WIDTH - 115.f, 5.f }, Color::Yellow);
+        break;
+	case GameState::Paused:
+        background.draw(image, camera);
+        player.draw(image, camera);
+        for (auto& enemy : enemies)
+        {
+            enemy->draw(image, camera);
+        }
+        image.drawSprite(coinUiAnim, glm::vec2{ SCREEN_WIDTH - 150.f, 1.f });
+        image.drawText(Font::Default, std::to_string(player.getCoins()), glm::vec2{ SCREEN_WIDTH - 115.f, 5.f }, Color::Yellow);
+
+        image.drawText(tafelSans, "Game is Paused, press P to unpause", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2.3 - 1.5f }, Color::Black);
+        image.drawText(tafelSans, "Game is Paused, press P to unpause", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2.3 + 3.5f }, Color::Black);
+        image.drawText(tafelSans, "Game is Paused, press P to unpause", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2.3 }, Color::Yellow);
+
+        image.drawText(tafelSans, "Press Q to go back to main menu", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 - 1.5f }, Color::Black);
+        image.drawText(tafelSans, "Press Q to go back to main menu", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 + 3.5f }, Color::Black);
+        image.drawText(tafelSans, "Press Q to go back to main menu", glm::vec2{ SCREEN_WIDTH / 2 - 110, SCREEN_HEIGHT / 2 }, Color::Yellow);
         break;
     case GameState::GameOver:
         background.draw(image, camera);
@@ -259,7 +280,7 @@ void Level::draw(Image& image)
 		std::string winText2 = "Press Enter to go back";
         if (currentLevel < 3)
         {
-            winText = "Congrats on clearing level " + std::to_string(currentLevel) /*+ ", press Enter to go to level " + std::to_string(currentLevel + 1)*/;
+            winText = "Congrats on clearing level " + std::to_string(currentLevel);
 			winText2 = "Press Enter to go to next level";
         }
         image.drawText(tafelSans, winText, glm::vec2{ SCREEN_WIDTH / 2 - 120, SCREEN_HEIGHT / 2 + 3.5f }, Color::Black);
@@ -278,11 +299,14 @@ void Level::setState(GameState newState)
 {
     if (newState != gameState)
     {
-        beginState(newState);
-        endState(gameState);
+        beginState(newState, gameState);
+        endState(gameState, newState);
         gameState = newState;
     }
 }
+
+// Got help to implement processEvents(),onMouseMoved(), onResized() from~
+// Source: https://github.com/jpvanoosten/SoftwareRasterizer/blob/main/samples/07-PixelAdventure/src/Game.cpp
 
 void Level::processEvents(const Event& e)
 {
@@ -358,17 +382,17 @@ void Level::onResized(ResizeEventArgs& args)
 
     // Update any UI elements or positions that depend on the game rectangle.
     
-    playButton.setTransform(Transform2D{ { 120, 170 }/*,{0.8f,0.8f}*/ });
-    helpButton.setTransform(Transform2D{ { 220, 170 }/*,{0.8f,0.8f}*/ });
-    quitButton.setTransform(Transform2D{ { 320, 170 }/*,{0.8f,0.8f}*/ });
+    playButton.setTransform(Transform2D{ { 120, 170 } });
+    helpButton.setTransform(Transform2D{ { 220, 170 } });
+    quitButton.setTransform(Transform2D{ { 320, 170 } });
     for (int i = 0; i < 3; ++i)
     {
-        levelButtons[i].setTransform(Transform2D{ { 230 + i * 35, 215}/*,{0.8f,0.8f}*/ });
+        levelButtons[i].setTransform(Transform2D{ { 230 + i * 35, 215} });
     }
-    backButton.setTransform(Transform2D{ { 285, 1 },{0.7f,0.7f} });
+    backButton.setTransform(Transform2D{ { 375, 220 },{0.7f,0.7f} });
 }
 
-void Level::beginState(GameState newState)
+void Level::beginState(GameState newState, GameState oldState)
 {
     switch (newState)
     {
@@ -381,7 +405,7 @@ void Level::beginState(GameState newState)
         player.setCoins(0);
         break;
     case GameState::Playing:
-        if (!isFirstLoad)
+        if (!isFirstLoad && oldState != GameState::Paused)
         {
             loadLevelAssets();
             camera.setPosition(glm::vec2{ 0,0 });
@@ -396,15 +420,17 @@ void Level::beginState(GameState newState)
     }
 }
 
-void Level::endState(GameState oldState)
+void Level::endState(GameState oldState,GameState newState)
 {
     switch (oldState)
     {
     case GameState::Menu:
         break;
     case GameState::Playing:
-        entities.clear();
-        //enemies.clear();
+        if (newState != GameState::Paused)
+        {
+            entities.clear();
+        }
         break;
     case GameState::GameOver:
 		enemies.clear();
@@ -607,11 +633,26 @@ void Level::doPlaying(float deltaTime)
             ++iter;
         }
     }
+    if (Input::getKeyDown(KeyCode::P))
+    {
+        setState(GameState::Paused);
+    }
 
     if (enemies.empty())
     {
     	setState(GameState::Win);
     }
+}
+
+void Level::doPaused(float deltaTime)
+{
+	// Any logic that needs to happen when the game is paused
+	if (Input::getKeyDown(KeyCode::P))
+		setState(GameState::Playing);
+
+    if (Input::getKeyDown(KeyCode::Q))
+        setState(GameState::Menu);
+
 }
 
 void Level::doGameOver()

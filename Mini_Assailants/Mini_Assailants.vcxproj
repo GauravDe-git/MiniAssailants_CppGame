@@ -37,9 +37,6 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="src\Todo.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Mini_Assailants.rc" />
   </ItemGroup>
   <ItemGroup>

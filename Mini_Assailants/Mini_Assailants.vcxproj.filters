@@ -85,11 +85,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="src\Todo.txt">
-      <Filter>Source Files</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <ResourceCompile Include="Mini_Assailants.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>

@@ -148,7 +148,7 @@ void Player::draw(Image& image, const Camera& camera)
 	mpBar.Draw(image, mp, maxMp, glm::vec2{ 10, 40 }, magicColor);
 
 	//Logic to flash the player sprite upon damage
-	//Solution using Sin wave shown by Jeremiah
+	//Solution using Sin wave shown by Jeremiah van Oosten (@jpvanoosten)
 	Color color = Color::White;
 	if (hitCounter > 0.f)
 	{
@@ -392,7 +392,7 @@ void Player::doLightAtk1(float deltaTime)
 		
 		lightAtk1Sprite.update(deltaTime);
 
-		if (lightAtk1Sprite.getCurrentFrame() >= 3)
+		if (lightAtk1Sprite.getCurrentFrame() >= 3 && lightAtk1Sprite.getCurrentFrame() <= 5)
 		{
 			attackCircle = { transform.getPosition() + glm::vec2{ 32.f, -25.f } *transform.getScale(),8.5f };
 		}
@@ -409,7 +409,7 @@ void Player::doLightAtk2(float deltaTime)
 	
 	lightAtk2Sprite.update(deltaTime);
 
-	if (lightAtk2Sprite.getCurrentFrame() >= 3 && lightAtk2Sprite.getCurrentFrame() <= 4)
+	if (lightAtk2Sprite.getCurrentFrame() == 3)
 		attackCircle = { transform.getPosition() + glm::vec2{ 32.f, -30.f } *transform.getScale(),11.f };
 
 	if (lightAtk2Sprite.isDone())

@@ -25,7 +25,7 @@ Enemy::Enemy(const glm::vec2& pos,Type _type)
 	{
 		case Type::Goblin:
 			aabbs[State::Idle] = { {65,30,0},{80,70,0} };
-			aabbs[State::Attack] = { {56,33,0},{80,70,0} };
+			aabbs[State::Attack] = { {59,33,0},{80,70,0} };
 			aabbs[State::Dead] = { {0,0,0},{0,0,0} };
 			aabbs[State::None] = { {0,0,0},{0,0,0} };
 			attackDistance = 55.0f;
@@ -280,7 +280,7 @@ Math::Circle Enemy::getAttackCircle() const
 	case Type::Cerberus:
 		return { {transform.getPosition() + glm::vec2{ 40.f, 17.f } *-transform.getScale() }, 9.f };
 	case Type::FlyingEye:
-		return { {transform.getPosition() + glm::vec2{ 35.f, 45.f } *-transform.getScale() }, 6.f };
+		return { {transform.getPosition() + glm::vec2{ 35.f, 45.f } *-transform.getScale() }, 11.f };
 	}
 	return {};
 }

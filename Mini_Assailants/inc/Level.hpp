@@ -17,8 +17,6 @@
 #include <vector>
 #include <random>
 
-//Level class: Responsible for both loading/changing levels
-//			   and changing between Game States.
 
 namespace Graphics
 {
@@ -32,6 +30,7 @@ public:
 		Menu,
 		HelpScreen,
 		Playing,
+		Paused,
 		Win,
 		GameOver
 	};
@@ -46,6 +45,9 @@ public:
 	GameState getGameState() const { return gameState; }
 	void setState(GameState newState);
 
+// Got help to implement processEvents(),onMouseMoved(), onResized() from~
+// Source: https://github.com/jpvanoosten/SoftwareRasterizer/blob/main/samples/07-PixelAdventure/src/Game.cpp
+
 	void processEvents(const Graphics::Event& e);
 	void onMouseMoved(Graphics::MouseMovedEventArgs& args);
 	void onResized(Graphics::ResizeEventArgs& args);
@@ -57,13 +59,14 @@ private:
 	};
 
 	void updateEnemies(float deltaTime) const;
-	void beginState(GameState newState);
-	void endState(GameState oldState);
+	void beginState(GameState newState,GameState oldState);
+	void endState(GameState oldState,GameState newState);
 
 	void doMenu();
 	void doHelp();
 	void enemySteerAi(Enemy* enemy) const;
 	void doPlaying(float deltaTime);
+	void doPaused(float deltaTime);
 	void doGameOver();
 	void doWin();
 

@@ -1,6 +1,6 @@
 #pragma once
 
-//Description: The Ui HP and MP bar 
+//Description: The Ui HP and MP bar
 
 #include <glm/vec2.hpp>
 
