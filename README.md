@@ -1,5 +1,7 @@
 # Mini Assailants
 
+(**NOTE** : Set 'MiniAssailants' as Start Up Project when building the solution. By default it may not be set as the startup project.)
+
 This is my intake assignment for the BUAS intake 2024 - Programming. Initially conceived as a project for the C++ for Games Microcredentials Course at BUAS, the project's scope posed a considerable challenge for me as a beginner in C++. Regrettably, I fell short of my expectations by the end of the microcredentials course, only managing to create a rudimentary game in about a month and a half. The initial outcome featured a basic player moving forward and defeating a single enemy with a punch. Although I was far from proud of my initial work, I persevered and continued refining the project. After investing an additional month and a half, I was finally able to bring the game to a somewhat presentable state, aligning with my initial game design vision. Throughout this journey, I received invaluable assistance from various individuals, particularly Jeremiah and Bert during the microcredentials course. Subsequently, I garnered further feedback in the 3dgep server CPP Fast Track Discord events. Without their support, creating the game would have been an insurmountable task for me.
 
 ## Game Overview
